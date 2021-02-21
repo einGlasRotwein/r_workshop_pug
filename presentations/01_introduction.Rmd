@@ -41,11 +41,14 @@ knitr::opts_chunk$set(echo = FALSE)
 </center>
 
 ## R is quirky
-- INSERT HEX STICKER PIC HERE
-- R is developing rapidly.
-- It's open source and there are tons of additional packages you can use.
-- You have to manage your "dependencies".
-- This can be a bit overwhelming.
+<center>
+![](pics/hex_stickers.jpg)
+
+<br><font size="3">@JonTheGeek - https://twitter.com/juli_tkotz/status/1363236862094172162</font>
+</center>
+
+- R is open source, with tons of additional packages that are developing rapidly.
+- Managing your "dependencies" can be a bit overwhelming.
 - Don't avoid updating your R and all the packages.
 - Embrace the quirkiness :-)
 
