@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Creating an R project | PuG R Workshop</title>
+  <meta name="description" content="2 Creating an R project | PuG R Workshop" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Creating an R project | PuG R Workshop" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Creating an R project | PuG R Workshop" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="1-first-things-first.html"/>
+
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="1-first-things-first.html"><a href="1-first-things-first.html"><i class="fa fa-check"></i><b>1</b> First Things First</a></li>
+<li class="chapter" data-level="2" data-path="2-creating-an-r-project.html"><a href="2-creating-an-r-project.html"><i class="fa fa-check"></i><b>2</b> Creating an R project</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="2-creating-an-r-project.html"><a href="2-creating-an-r-project.html#be-structured"><i class="fa fa-check"></i><b>2.1</b> Be structured</a></li>
+<li class="chapter" data-level="2.2" data-path="2-creating-an-r-project.html"><a href="2-creating-an-r-project.html#find-a-place-for-your-r-stuff"><i class="fa fa-check"></i><b>2.2</b> Find a place for your R stuff</a></li>
+<li class="chapter" data-level="2.3" data-path="2-creating-an-r-project.html"><a href="2-creating-an-r-project.html#create-your-first-project"><i class="fa fa-check"></i><b>2.3</b> Create your first project</a></li>
+<li class="chapter" data-level="2.4" data-path="2-creating-an-r-project.html"><a href="2-creating-an-r-project.html#project-oriented-workflow"><i class="fa fa-check"></i><b>2.4</b> Project-oriented workflow</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">PuG R Workshop</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="creating-an-r-project" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Creating an R project</h1>
+<div id="be-structured" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Be structured</h2>
+<p>We code because we want to save time and effort - we don’t want to make things harder for us.
+To achieve this, we have to be organised …
+<strong>TO DO: Elaborate</strong></p>
+</div>
+<div id="find-a-place-for-your-r-stuff" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Find a place for your R stuff</h2>
+<p>You want to be able to easily find your code on your computer.
+It sounds trivial, but you should have a folder for every project that you do.
+And by “project” I don’t necessarily mean a full-blown scientific project - it might just be some lines of code that you want to try out.
+For example, I have a little project that is called <em>toying_around</em>, where I save little bits and pieces of code that I’ve tried out and that don’t really belong anywhere.</p>
+<p>For this workshop, for example, you might want to create a folder named <em>pug_2021_r_workshop</em>.
+Get used to avoiding spaces or any other “funny characters” in your folder names (e.g. German “Umlaute”).
+We want to open these folders using R, using machine-readable commands.
+And machines are really bad at reading things that contain spaces or any other unexpected characters.</p>
+<p>Personally, I created my <em>pug_2021_r_workshop</em> in a folder named *_stuff*, because I like to keep my <code>R</code> stuff in one specific location.
+This is the default directory that my RStudio go to when I open it.
+Just do whatever suits you.</p>
+<p><img src="pics/create_folder.png" style="display: block; margin: auto;" /></p>
+</div>
+<div id="create-your-first-project" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Create your first project</h2>
+<p>Let us navigate to the folder you just created and put our first <code>R</code> script there.
+Go to <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>New Project …</strong> and this is what you should see:</p>
+<p><img src="pics/new_project.png" style="display: block; margin: auto;" /></p>
+<p>We already created a folder, so we want to set up a project in an <strong>existing directory</strong>.
+Navigate to the folder you just created to set up the project there:</p>
+<p><img src="pics/create_new_project.png" style="display: block; margin: auto;" /></p>
+<p>You will find that RStudio created an <code>R</code> project in your workshop folder.
+To see how projects work, create a little <code>R</code> script first.
+If RStudio did not open a script for you already, do so with <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>New File</strong> <span class="math inline">\(\to\)</span> <strong>R Script</strong>.
+For now, just type “Hello world” into the script and save it by clicking the little save icon.
+(Why <a href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">“Hello world”</a>, you ask?)</p>
+<p>Check the folder you just created. You will notice that your script was automatically saved in this location.
+This is because when using a project, you will always be in the location where your project file lies.
+It basically works like the “you are here” icon on a map.
+It is quite handy that we don’t have to look for the folder we want every time we create and save a new script.</p>
+<p>However, your script is now probably named <em>Untitled1.R</em>. This is not a good name because you don’t really know what it contains.
+We should have saved it using <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>Save as …</strong> (maybe under the name <em>hello_world.R</em>), but we can just rename it by clicking <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>Rename</strong>.
+Close Rstudio for now.</p>
+</div>
+<div id="project-oriented-workflow" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Project-oriented workflow</h2>
+<p>Has its merits because … mention Jenny Bryans slides:
+<a href="https://twitter.com/hadleywickham/status/940021008764846080/photo/1" class="uri">https://twitter.com/hadleywickham/status/940021008764846080/photo/1</a></p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="1-first-things-first.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": 3,
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "fixed"
+},
+"search": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
