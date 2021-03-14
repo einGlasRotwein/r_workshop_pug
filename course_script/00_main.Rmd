@@ -29,5 +29,5 @@ knitr::opts_chunk$set(echo = FALSE, include = TRUE, fig.align = "center")
 # First Things First
 Mabye some introduction here.
 
-```{r child = "01_projects.Rmd", echo = FALSE}
+```{r child = "01_installation_guide.Rmd", echo = FALSE}
 ```

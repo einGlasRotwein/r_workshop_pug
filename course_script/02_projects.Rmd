@@ -56,9 +56,19 @@ It is quite handy that we don't have to look for the folder we want every time w
 
 However, your script is now probably named *Untitled1.R*. This is not a good name because you don't really know what it contains.
 We should have saved it using **File** $\to$ **Save as ...** (maybe under the name *hello_world.R*), but we can just rename it by clicking **File** $\to$ **Rename**.
-Close Rstudio for now.
+Close RStudio for now.
+
+Head back to your project folder and double click on the Rproject file belonging to your project.
+You will notice that once again, you are in your project folder that contains the script you created earlier.
+There should be a **Files** panel in your RStudio where you can see everything that your project folder contains.
+
+```{r}
+knitr::include_graphics("./pics/files.png")
+```
 
 ## Project-oriented workflow
+
+Why a project-oriented workflow is so powerful ... bla bla. We will learn about that later.
 
 Has its merits because ... mention Jenny Bryans slides:
 https://twitter.com/hadleywickham/status/940021008764846080/photo/1
