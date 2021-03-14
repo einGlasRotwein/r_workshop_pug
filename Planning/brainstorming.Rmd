@@ -6,7 +6,7 @@ output: html_document
 ## Prologue
 - *Installation guide!* Start from scratch - maybe record a video?
 - R
-- rlang (what is that for again?!)
+- rtools
 - Get GitHub account!
 - Install git
 - Include dummy repo where they can push/pull to see whether it worked.
