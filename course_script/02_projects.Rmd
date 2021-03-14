@@ -19,7 +19,7 @@ Get used to avoiding spaces or any other "funny characters" in your folder names
 We want to open these folders using R, using machine-readable commands.
 And machines are really bad at reading things that contain spaces or any other unexpected characters.
 
-Personally, I created my *pug_2021_r_workshop* in a folder named *_stuff*, because I like to keep my `R` stuff in one specific location.
+Personally, I created my *pug_2021_r_workshop* in a folder named *r_stuff*, because I like to keep my `R` stuff in one specific location.
 This is the default directory that my RStudio go to when I open it.
 Just do whatever suits you.
 
@@ -28,6 +28,33 @@ knitr::include_graphics("./pics/create_folder.png")
 ```
 
 ## Create your first project
+
+We want to use version control (time travel) throughout this workshop, because I want you to get used to it right from the beginning.
+That means we will start by creating a new repository on GitHub.
+Everything you do will be backed up there and you will always be able to restore previous versions of your script.
+It is also a great way of tracking how much you actually achieved within these two days!
+Log in to GitHub and create a new repository with the big green "new" button.
+
+```{r}
+knitr::include_graphics("./pics/new_repo.png")
+```
+
+Choose a name for your repository, e.g. *pug_2021_r_workshop*.
+You can also provide a short description for your repository, e.g. something like "This repository contains my coding exercises at the PuG 2021 R workshop."
+Your repository can be private, which means only you will be able to see it, or public, which means everyone will be able to see it.
+If you make it public, it will be much easier for me and other participants of the workshop to collaborate with you, but of course, the decision is up to you.
+You can add a README file - this file will be shown at the front page of your repository, providing information to everyone visiting.
+By default, it will contain your repository's title and the description from above (if you made one).
+You can also add a **gitignore** - this is a very useful thing to have because it determines what you want to be on GitHub - and what not.
+You might e.g. want to tell GitHub that it should ignore the raw data file in your project, because you don't want to upload any sensitive data or simply because the file is too large to be uploaded.
+If you tick the gitignore box, you can use a gitignore template that has some default settings for `R` - just select `R` from the dropdown list.
+Lastly, you can set a licence that determines if and how other people can use your code.
+You can read up about what those licences mean later, but for our workshop, we won't use any.
+Great, now hit that create button!
+
+```{r}
+knitr::include_graphics("./pics/create_repo.png")
+```
 
 Let us navigate to the folder you just created and put our first `R` script there.
 Go to **File** $\to$ **New Project ...** and this is what you should see:

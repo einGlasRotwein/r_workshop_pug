@@ -70,7 +70,9 @@
 <li class="chapter" data-level="2" data-path="2-installation-guide.html"><a href="2-installation-guide.html"><i class="fa fa-check"></i><b>2</b> Installation Guide</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="2-installation-guide.html"><a href="2-installation-guide.html#every-computer-is-different"><i class="fa fa-check"></i><b>2.1</b> Every computer is different</a></li>
-<li class="chapter" data-level="2.2" data-path="2-installation-guide.html"><a href="2-installation-guide.html#the-wand---r"><i class="fa fa-check"></i><b>2.2</b> The Wand - R</a></li>
+<li class="chapter" data-level="2.2" data-path="2-installation-guide.html"><a href="2-installation-guide.html#your-magic-abilities---r"><i class="fa fa-check"></i><b>2.2</b> Your magic abilities - R</a></li>
+<li class="chapter" data-level="2.3" data-path="2-installation-guide.html"><a href="2-installation-guide.html#the-wand---rstudio"><i class="fa fa-check"></i><b>2.3</b> The wand - RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="2-installation-guide.html"><a href="2-installation-guide.html#zeitreisen-git"><i class="fa fa-check"></i><b>2.4</b> Zeitreisen: Git</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html"><i class="fa fa-check"></i><b>3</b> Creating an R project</a>
 <ul>
@@ -114,13 +116,32 @@ For example, I have a little project that is called <em>toying_around</em>, wher
 Get used to avoiding spaces or any other “funny characters” in your folder names (e.g. German “Umlaute”).
 We want to open these folders using R, using machine-readable commands.
 And machines are really bad at reading things that contain spaces or any other unexpected characters.</p>
-<p>Personally, I created my <em>pug_2021_r_workshop</em> in a folder named *_stuff*, because I like to keep my <code>R</code> stuff in one specific location.
+<p>Personally, I created my <em>pug_2021_r_workshop</em> in a folder named <em>r_stuff</em>, because I like to keep my <code>R</code> stuff in one specific location.
 This is the default directory that my RStudio go to when I open it.
 Just do whatever suits you.</p>
 <p><img src="pics/create_folder.png" style="display: block; margin: auto;" /></p>
 </div>
 <div id="create-your-first-project" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Create your first project</h2>
+<p>We want to use version control (time travel) throughout this workshop, because I want you to get used to it right from the beginning.
+That means we will start by creating a new repository on GitHub.
+Everything you do will be backed up there and you will always be able to restore previous versions of your script.
+It is also a great way of tracking how much you actually achieved within these two days!
+Log in to GitHub and create a new repository with the big green “new” button.</p>
+<p><img src="pics/new_repo.png" style="display: block; margin: auto;" /></p>
+<p>Choose a name for your repository, e.g. <em>pug_2021_r_workshop</em>.
+You can also provide a short description for your repository, e.g. something like “This repository contains my coding exercises at the PuG 2021 R workshop.”
+Your repository can be private, which means only you will be able to see it, or public, which means everyone will be able to see it.
+If you make it public, it will be much easier for me and other participants of the workshop to collaborate with you, but of course, the decision is up to you.
+You can add a README file - this file will be shown at the front page of your repository, providing information to everyone visiting.
+By default, it will contain your repository’s title and the description from above (if you made one).
+You can also add a <strong>gitignore</strong> - this is a very useful thing to have because it determines what you want to be on GitHub - and what not.
+You might e.g. want to tell GitHub that it should ignore the raw data file in your project, because you don’t want to upload any sensitive data or simply because the file is too large to be uploaded.
+If you tick the gitignore box, you can use a gitignore template that has some default settings for <code>R</code> - just select <code>R</code> from the dropdown list.
+Lastly, you can set a licence that determines if and how other people can use your code.
+You can read up about what those licences mean later, but for our workshop, we won’t use any.
+Great, now hit that create button!</p>
+<p><img src="pics/create_repo.png" style="display: block; margin: auto;" /></p>
 <p>Let us navigate to the folder you just created and put our first <code>R</code> script there.
 Go to <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>New Project …</strong> and this is what you should see:</p>
 <p><img src="pics/new_project.png" style="display: block; margin: auto;" /></p>

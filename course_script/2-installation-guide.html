@@ -70,7 +70,9 @@
 <li class="chapter" data-level="2" data-path="2-installation-guide.html"><a href="2-installation-guide.html"><i class="fa fa-check"></i><b>2</b> Installation Guide</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="2-installation-guide.html"><a href="2-installation-guide.html#every-computer-is-different"><i class="fa fa-check"></i><b>2.1</b> Every computer is different</a></li>
-<li class="chapter" data-level="2.2" data-path="2-installation-guide.html"><a href="2-installation-guide.html#the-wand---r"><i class="fa fa-check"></i><b>2.2</b> The Wand - R</a></li>
+<li class="chapter" data-level="2.2" data-path="2-installation-guide.html"><a href="2-installation-guide.html#your-magic-abilities---r"><i class="fa fa-check"></i><b>2.2</b> Your magic abilities - R</a></li>
+<li class="chapter" data-level="2.3" data-path="2-installation-guide.html"><a href="2-installation-guide.html#the-wand---rstudio"><i class="fa fa-check"></i><b>2.3</b> The wand - RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="2-installation-guide.html"><a href="2-installation-guide.html#zeitreisen-git"><i class="fa fa-check"></i><b>2.4</b> Zeitreisen: Git</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html"><i class="fa fa-check"></i><b>3</b> Creating an R project</a>
 <ul>
@@ -116,10 +118,10 @@ In fact, just stripped my computer of every single programme I normally use in m
 That should show you that there is no need to worry too much about installing or un-installing your <code>R</code>-stuff on your computer.
 You can’t break anything (nothing that can’t be fixed, at least).</p>
 </div>
-<div id="the-wand---r" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> The Wand - R</h2>
-<p>We’ll get our wand (<code>R</code>) first, because this is what we need to be able to do magic.
-You can download it at <a href="https://www.r-project.org/">https://www.r-project.org/</a>.
+<div id="your-magic-abilities---r" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Your magic abilities - R</h2>
+<p>Imagine <code>R</code> as your magic abilities.
+Some people might be born with it, but we need to download it at <a href="https://www.r-project.org/">https://www.r-project.org/</a>.
 Right on the start page, you can find a download link via CRAN (“The Comprehensive R Archive Network”).</p>
 <p><img src="pics/download_r.png" style="display: block; margin: auto;" /></p>
 <p>When clicking it, you will be asked to choose a CRAN mirror.
@@ -130,17 +132,71 @@ Personally, I am convinced it is an actual network of magical mirrors in a fanta
 Just pick one near you (anywhere in Germany is perfectly fine) and then download R for your operating system on the next page.
 What you want is “base <code>R</code>”.</p>
 <p><img src="pics/base.png" style="display: block; margin: auto;" /></p>
-<p>Download R and execute the installation file. At this point, it is perfectly fine to just click through everything (unless you have different preferences at some point of the procedure).
-If you have windows, it is a good idea to install Rtools as well (mac OS users don’t need it, because your operating system should cover the functionalities Rtools adds on Windows). It is not crucial, so feel free to skip this step. Briefly, Rtools provides tools that are needed on Windows if you want to build R packages. Most of the time, you just download and install the package from CRAN, where you get the “binary version” of a package that is ready to be used on your operating system. Sometimes, for some reason, the latest version of a package is not provided as a binary (yet); maybe because it’s just a few days old. In this case, R will ask you whether it should “compile” the package from source, i.e. build it on your computer. For this job, Rtools is needed on windows. However, you also have the option not to compile the package and get a (slightly) older version of the package. Which is completely fine – if you don’t want to install Rtools, just hit “no” whenever R asks you whether it should compile a package from source. From time to time, R might throw a warning that Rtools is missing, but you can just ignore that.
-If you want to have the option to compile packages and e.g. build packages on your own at some point, you can install Rtools. It can again be found on the download page just where we found base R. Only this time, we pick Rtools. It is quite likely that you want the 64 bit version. Execute the installation file and just click through.
-RStudio
-TO DO: For programming languages, we need an editor … features like saving files etc.
-You want to choose the free version of RStudio Desktop: <a href="https://rstudio.com/products/rstudio/download/" class="uri">https://rstudio.com/products/rstudio/download/</a>
+<p>Download R and execute the installation file.
+Just click through the installation, the default settings are fine.</p>
+<div id="optional-for-windows-users-rtools" class="section level3" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Optional for Windows Users: Rtools</h3>
+<p>If you have windows, it is a good idea to install Rtools as well (mac OS users don’t need it, because your operating system should cover the functionalities Rtools adds on Windows).
+It is not crucial, so feel free to skip this step.
+Briefly, Rtools provides tools that are needed on Windows if you want to build <code>R</code> packages.
+Most of the time, you just download and install the package from CRAN, where you get the “binary version” of a package that is ready to be used on your operating system.
+Sometimes, for some reason, the latest version of a package is not provided as a binary (yet); maybe because it’s just a few days old.
+In this case, <code>R</code> will ask you whether it should “compile” the package from source, i.e. build it on your computer.
+For this job, Rtools is needed on windows.
+However, you also have the option not to compile the package and get a (slightly) older version of the package.
+Which is completely fine – if you don’t want to install Rtools, just hit “no” whenever R asks you whether it should compile a package from source.
+From time to time, R might throw a warning that Rtools is missing, but no worries - you can just ignore that.
+If you want to have the option to compile packages and e.g. build packages on your own at some point, then install Rtools.
+There is no disadvantage of doing that.
+It can be found on the download page just where we found base <code>R</code>.
+Only this time, we pick Rtools.
+It is quite likely that you want the 64 bit version.
+Execute the installation file and just click through.</p>
+</div>
+</div>
+<div id="the-wand---rstudio" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> The wand - RStudio</h2>
+<p>We can’t use our magic abilities without a wand (an “editor” in our case).
+Well, we can, but it is much much less comfortable and powerful.
+I show you what I mean.
+Look at this picture: You can see the default editor your get when installing <code>R</code>.
+I’m in the middle of typing a command, and that’s it.
+<code>R</code> doesn’t help me, functionalities are limited and it all looks pretty old school.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-4"></span>
+<img src="pics/plain_r.png" alt="The default editor for R is not very comfortable to handle."  />
+<p class="caption">
+Figure 2.1: The default editor for R is not very comfortable to handle.
+</p>
+</div>
+<p>This, on the other hand, is RStudio, an editor for <code>R</code>.
+It looks a bit wild, because this is an actual screenshot of me working on this installation guide.
+But what we can see here is that RStudio offers way more than the default editor for <code>R</code>:
+We can easily manage several scripts at once (each of those would be a new window in the default editor), colours help us to read our code, we can easily open files, we can view plots, interact with version control software like GitHub and much, much more.
+You can also see that, unlike the default editor, RStudio understands that I’m about to use the <code>mean()</code> function.
+It offers me to autocomplete the function for me (so I have to type less) and shows me some information about the function while I’m typing it.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-5"></span>
+<img src="pics/rstudio.png" alt="RStudio offers us a lot of handy functionalities, like managing several scripts and files at once, viewing plots, using version control tools like Git and displaying information about R functions."  />
+<p class="caption">
+Figure 2.2: RStudio offers us a lot of handy functionalities, like managing several scripts and files at once, viewing plots, using version control tools like Git and displaying information about R functions.
+</p>
+</div>
+<p>RStudio is not the only editor we can use.
+However, it is the most popular editor for <code>R</code> and it is what we will use during the workshop.
+What you want to download is the free version of RStudio Desktop here: <a href="https://rstudio.com/products/rstudio/download/">https://rstudio.com/products/rstudio/download/</a>.
 Execute the installation file – again, you can just click through.
-Git
-TO DO: Describe git … version control, blab la
+If you open RStudio after the installation, don’t be worried when it doesn’t look like the screenshot above.
+I customised the appearance of my RStudio because this is the way I like it.
+Don’t hesitate to play around under <strong>Tools</strong> <span class="math inline">\(\to\)</span> <strong>Global Options</strong> <span class="math inline">\(\to\)</span> <strong>Appearance</strong>.</p>
+</div>
+<div id="zeitreisen-git" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Zeitreisen: Git</h2>
+<p>One of the things we will learn in our workshop is time travel.
+For this, we will need a time turn- err, Git.
+Git enables us to use “version control” (read: time travel), which basically means that every change we made in a file is saved in a history.</p>
+<p>TO DO: Describe git … version control, blab la
 Download git at <a href="https://git-scm.com/downloads" class="uri">https://git-scm.com/downloads</a>
-Again, you can just click through. TO DO: Explain</p>
+Again, you can just click through. TO DO: Explain
+Mention how to introduce yourself to GitHub.</p>
 </div>
 </div>
             </section>

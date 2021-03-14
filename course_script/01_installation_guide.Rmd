@@ -21,10 +21,10 @@ In fact, just stripped my computer of every single programme I normally use in m
 That should show you that there is no need to worry too much about installing or un-installing your `R`-stuff on your computer.
 You can't break anything (nothing that can't be fixed, at least).
 
-## The Wand - R
+## Your magic abilities - R
 
-We'll get our wand (`R`) first, because this is what we need to be able to do magic.
-You can download it at [https://www.r-project.org/](https://www.r-project.org/).
+Imagine `R` as your magic abilities.
+Some people might be born with it, but we need to download it at  [https://www.r-project.org/](https://www.r-project.org/).
 Right on the start page, you can find a download link via CRAN ("The Comprehensive R Archive Network").
 
 ```{r}
@@ -43,17 +43,70 @@ What you want is "base `R`".
 knitr::include_graphics("./pics/base.png")
 ```
 
-Download R and execute the installation file. At this point, it is perfectly fine to just click through everything (unless you have different preferences at some point of the procedure).
-If you have windows, it is a good idea to install Rtools as well (mac OS users don’t need it, because your operating system should cover the functionalities Rtools adds on Windows). It is not crucial, so feel free to skip this step. Briefly, Rtools provides tools that are needed on Windows if you want to build R packages. Most of the time, you just download and install the package from CRAN, where you get the “binary version” of a package that is ready to be used on your operating system. Sometimes, for some reason, the latest version of a package is not provided as a binary (yet); maybe because it’s just a few days old. In this case, R will ask you whether it should “compile” the package from source, i.e. build it on your computer. For this job, Rtools is needed on windows. However, you also have the option not to compile the package and get a (slightly) older version of the package. Which is completely fine – if you don’t want to install Rtools, just hit “no” whenever R asks you whether it should compile a package from source. From time to time, R might throw a warning that Rtools is missing, but you can just ignore that.
-If you want to have the option to compile packages and e.g. build packages on your own at some point, you can install Rtools. It can again be found on the download page just where we found base R. Only this time, we pick Rtools. It is quite likely that you want the 64 bit version. Execute the installation file and just click through.
-RStudio
-TO DO: For programming languages, we need an editor … features like saving files etc.
-You want to choose the free version of RStudio Desktop: https://rstudio.com/products/rstudio/download/
+Download R and execute the installation file.
+Just click through the installation, the default settings are fine.
+
+### Optional for Windows Users: Rtools
+
+If you have windows, it is a good idea to install Rtools as well (mac OS users don’t need it, because your operating system should cover the functionalities Rtools adds on Windows).
+It is not crucial, so feel free to skip this step.
+Briefly, Rtools provides tools that are needed on Windows if you want to build `R` packages.
+Most of the time, you just download and install the package from CRAN, where you get the "binary version" of a package that is ready to be used on your operating system.
+Sometimes, for some reason, the latest version of a package is not provided as a binary (yet); maybe because it’s just a few days old.
+In this case, `R` will ask you whether it should "compile" the package from source, i.e. build it on your computer.
+For this job, Rtools is needed on windows.
+However, you also have the option not to compile the package and get a (slightly) older version of the package.
+Which is completely fine – if you don’t want to install Rtools, just hit "no" whenever R asks you whether it should compile a package from source.
+From time to time, R might throw a warning that Rtools is missing, but no worries - you can just ignore that.
+If you want to have the option to compile packages and e.g. build packages on your own at some point, then install Rtools.
+There is no disadvantage of doing that.
+It can be found on the download page just where we found base `R`.
+Only this time, we pick Rtools.
+It is quite likely that you want the 64 bit version.
+Execute the installation file and just click through.
+
+## The wand - RStudio
+
+We can't use our magic abilities without a wand (an "editor" in our case).
+Well, we can, but it is much much less comfortable and powerful.
+I show you what I mean.
+Look at this picture: You can see the default editor your get when installing `R`.
+I'm in the middle of typing a command, and that's it.
+`R` doesn't help me, functionalities are limited and it all looks pretty old school.
+
+```{r fig.cap="The default editor for R is not very comfortable to handle."}
+knitr::include_graphics("./pics/plain_r.png")
+```
+
+This, on the other hand, is RStudio, an editor for `R`.
+It looks a bit wild, because this is an actual screenshot of me working on this installation guide.
+But what we can see here is that RStudio offers way more than the default editor for `R`:
+We can easily manage several scripts at once (each of those would be a new window in the default editor), colours help us to read our code, we can easily open files, we can view plots, interact with version control software like GitHub and much, much more.
+You can also see that, unlike the default editor, RStudio understands that I'm about to use the `mean()` function.
+It offers me to autocomplete the function for me (so I have to type less) and shows me some information about the function while I'm typing it.
+
+```{r fig.cap="RStudio offers us a lot of handy functionalities, like managing several scripts and files at once, viewing plots, using version control tools like Git and displaying information about R functions."}
+knitr::include_graphics("./pics/rstudio.png")
+```
+
+RStudio is not the only editor we can use.
+However, it is the most popular editor for `R` and it is what we will use during the workshop.
+What you want to download is the free version of RStudio Desktop here: [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/).
 Execute the installation file – again, you can just click through.
-Git
+If you open RStudio after the installation, don't be worried when it doesn't look like the screenshot above.
+I customised the appearance of my RStudio because this is the way I like it.
+Don't hesitate to play around under **Tools** $\to$ **Global Options** $\to$ **Appearance**.
+
+## Zeitreisen: Git
+
+One of the things we will learn in our workshop is time travel.
+For this, we will need a time turn- err, Git.
+Git enables us to use "version control" (read: time travel), which basically means that every change we made in a file is saved in a history.
+
 TO DO: Describe git … version control, blab la
 Download git at https://git-scm.com/downloads
 Again, you can just click through. TO DO: Explain
+Mention how to introduce yourself to GitHub.
 
 
 ```{r child = "02_projects.Rmd", echo = FALSE}
