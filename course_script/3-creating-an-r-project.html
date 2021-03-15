@@ -72,7 +72,7 @@
 <li class="chapter" data-level="2.1" data-path="2-installation-guide.html"><a href="2-installation-guide.html#every-computer-is-different"><i class="fa fa-check"></i><b>2.1</b> Every computer is different</a></li>
 <li class="chapter" data-level="2.2" data-path="2-installation-guide.html"><a href="2-installation-guide.html#your-magic-abilities---r"><i class="fa fa-check"></i><b>2.2</b> Your magic abilities - R</a></li>
 <li class="chapter" data-level="2.3" data-path="2-installation-guide.html"><a href="2-installation-guide.html#the-wand---rstudio"><i class="fa fa-check"></i><b>2.3</b> The wand - RStudio</a></li>
-<li class="chapter" data-level="2.4" data-path="2-installation-guide.html"><a href="2-installation-guide.html#zeitreisen-git"><i class="fa fa-check"></i><b>2.4</b> Zeitreisen: Git</a></li>
+<li class="chapter" data-level="2.4" data-path="2-installation-guide.html"><a href="2-installation-guide.html#tine-travel-git"><i class="fa fa-check"></i><b>2.4</b> Tine Travel: Git</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html"><i class="fa fa-check"></i><b>3</b> Creating an R project</a>
 <ul>
@@ -112,19 +112,21 @@ To achieve this, we have to be organised …
 It sounds trivial, but you should have a folder for every project that you do.
 And by “project” I don’t necessarily mean a full-blown scientific project - it might just be some lines of code that you want to try out.
 For example, I have a little project that is called <em>toying_around</em>, where I save little bits and pieces of code that I’ve tried out and that don’t really belong anywhere.</p>
-<p>For this workshop, for example, you might want to create a folder named <em>pug_2021_r_workshop</em>.
+<p>For example, you might want to create a folder named <em>my_r_projects</em> on your computer.
 Get used to avoiding spaces or any other “funny characters” in your folder names (e.g. German “Umlaute”).
-We want to open these folders using R, using machine-readable commands.
+We want to open these folders using <code>R</code>, using machine-readable commands.
 And machines are really bad at reading things that contain spaces or any other unexpected characters.</p>
-<p>Personally, I created my <em>pug_2021_r_workshop</em> in a folder named <em>r_stuff</em>, because I like to keep my <code>R</code> stuff in one specific location.
-This is the default directory that my RStudio go to when I open it.
-Just do whatever suits you.</p>
-<p><img src="pics/create_folder.png" style="display: block; margin: auto;" /></p>
+<p>This folder will be filled with all your <code>R</code> projects.
+You might prefer a different structure, that is completely up to you.
+However, you need to make a decision about where to put your future <code>R</code> projects - and what we will do in this workshop will live in one of these projects.</p>
+<p>By the way, you can find amazing tips for folder structure, file naming and <code>R</code> projects in these slides by <a href="https://slides.djnavarro.net/project-structure/#1">Danielle Navarro</a>.</p>
 </div>
 <div id="create-your-first-project" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Create your first project</h2>
-<p>We want to use version control (time travel) throughout this workshop, because I want you to get used to it right from the beginning.
-That means we will start by creating a new repository on GitHub.
+<p>After you decided where you want to put your <code>R</code> stuff, we should create our first project which will contain everything you do during this workshop.
+However, we will not create another folder for this workshop right away.
+Remember that we want to use version control (time travel) throughout this workshop, because I want you to get used to it right from the beginning.
+That means we will start by creating a new repository on GitHub.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
 Everything you do will be backed up there and you will always be able to restore previous versions of your script.
 It is also a great way of tracking how much you actually achieved within these two days!
 Log in to GitHub and create a new repository with the big green “new” button.</p>
@@ -142,18 +144,30 @@ Lastly, you can set a licence that determines if and how other people can use yo
 You can read up about what those licences mean later, but for our workshop, we won’t use any.
 Great, now hit that create button!</p>
 <p><img src="pics/create_repo.png" style="display: block; margin: auto;" /></p>
-<p>Let us navigate to the folder you just created and put our first <code>R</code> script there.
-Go to <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>New Project …</strong> and this is what you should see:</p>
+<p>Now let’s get this repository to your computer..
+In RStudio, go to <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>New Project …</strong> and this is what you should see:</p>
 <p><img src="pics/new_project.png" style="display: block; margin: auto;" /></p>
-<p>We already created a folder, so we want to set up a project in an <strong>existing directory</strong>.
-Navigate to the folder you just created to set up the project there:</p>
-<p><img src="pics/create_new_project.png" style="display: block; margin: auto;" /></p>
-<p>You will find that RStudio created an <code>R</code> project in your workshop folder.
-To see how projects work, create a little <code>R</code> script first.
+<p>We want to use GitHub, which is, as you know, a form of <strong>version control</strong>.
+So this is what we’ll pick.
+Next, choose <strong>Git</strong>.
+RStudio will then ask you for a repository URL and where to save the repository on your computer.
+Just put in the link to your repository (copy it from your browser) - <code>R</code> will then detect the repository name and use that name for the corresponding folder on your computer.
+You can of course change that name, but I strongly advise not to do that, because it will lead to <strong>A LOT</strong> of confusion.
+Lastly, <code>R</code> asks you in which folder your new repository folder should be saved.
+In my case, this folder is called <code>r_stuff</code>, because this is where all my <code>R</code> stuff is saved.</p>
+<p><img src="pics/create_git_project.png" style="display: block; margin: auto;" /></p>
+<p>You will find that RStudio created a folder with the same name as your repository in at the place where you told it to put it.</p>
+<p><img src="pics/repo_folder_created.png" style="display: block; margin: auto;" /></p>
+<p>Look inside.
+The folder contains a gitignore and a README file - no surprise, we created those when we created the repository.
+But there is also an <code>R</code> project file.</p>
+<p><img src="pics/repo_content.png" style="display: block; margin: auto;" /></p>
+<p>Those projects are really useful and we will always use them throughout this workshop.
+To see how projects work and why they are so powerful, we create a little <code>R</code> script first.
 If RStudio did not open a script for you already, do so with <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>New File</strong> <span class="math inline">\(\to\)</span> <strong>R Script</strong>.
 For now, just type “Hello world” into the script and save it by clicking the little save icon.
 (Why <a href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">“Hello world”</a>, you ask?)</p>
-<p>Check the folder you just created. You will notice that your script was automatically saved in this location.
+<p>Check your folder again. You will notice that your script was automatically saved there.
 This is because when using a project, you will always be in the location where your project file lies.
 It basically works like the “you are here” icon on a map.
 It is quite handy that we don’t have to look for the folder we want every time we create and save a new script.</p>
@@ -171,6 +185,18 @@ There should be a <strong>Files</strong> panel in your RStudio where you can see
 <p>Has its merits because … mention Jenny Bryans slides:
 <a href="https://twitter.com/hadleywickham/status/940021008764846080/photo/1" class="uri">https://twitter.com/hadleywickham/status/940021008764846080/photo/1</a></p>
 </div>
+</div>
+
+
+
+
+
+
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>There are other ways to use version control, e.g. you <em>could</em> start with creating a folder first, but we will not go through all the possibilities in this workshop. I think the procedure I show you is the easiest one, but it is certainly not the only way.<a href="3-creating-an-r-project.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

@@ -14,26 +14,28 @@ It sounds trivial, but you should have a folder for every project that you do.
 And by "project" I don't necessarily mean a full-blown scientific project - it might just be some lines of code that you want to try out.
 For example, I have a little project that is called *toying_around*, where I save little bits and pieces of code that I've tried out and that don't really belong anywhere.
 
-For this workshop, for example, you might want to create a folder named *pug_2021_r_workshop*.
+For example, you might want to create a folder named *my_r_projects* on your computer.
 Get used to avoiding spaces or any other "funny characters" in your folder names (e.g. German "Umlaute").
-We want to open these folders using R, using machine-readable commands.
+We want to open these folders using `R`, using machine-readable commands.
 And machines are really bad at reading things that contain spaces or any other unexpected characters.
 
-Personally, I created my *pug_2021_r_workshop* in a folder named *r_stuff*, because I like to keep my `R` stuff in one specific location.
-This is the default directory that my RStudio go to when I open it.
-Just do whatever suits you.
+This folder will be filled with all your `R` projects.
+You might prefer a different structure, that is completely up to you.
+However, you need to make a decision about where to put your future `R` projects - and what we will do in this workshop will live in one of these projects.
 
-```{r}
-knitr::include_graphics("./pics/create_folder.png")
-```
+By the way, you can find amazing tips for folder structure, file naming and `R` projects in these slides by [Danielle Navarro](https://slides.djnavarro.net/project-structure/#1).
 
 ## Create your first project
 
-We want to use version control (time travel) throughout this workshop, because I want you to get used to it right from the beginning.
-That means we will start by creating a new repository on GitHub.
+After you decided where you want to put your `R` stuff, we should create our first project which will contain everything you do during this workshop.
+However, we will not create another folder for this workshop right away.
+Remember that we want to use version control (time travel) throughout this workshop, because I want you to get used to it right from the beginning.
+That means we will start by creating a new repository on GitHub.[^1]
 Everything you do will be backed up there and you will always be able to restore previous versions of your script.
 It is also a great way of tracking how much you actually achieved within these two days!
 Log in to GitHub and create a new repository with the big green "new" button.
+
+[^1]: There are other ways to use version control, e.g. you *could* start with creating a folder first, but we will not go through all the possibilities in this workshop. I think the procedure I show you is the easiest one, but it is certainly not the only way.
 
 ```{r}
 knitr::include_graphics("./pics/new_repo.png")
@@ -56,27 +58,47 @@ Great, now hit that create button!
 knitr::include_graphics("./pics/create_repo.png")
 ```
 
-Let us navigate to the folder you just created and put our first `R` script there.
-Go to **File** $\to$ **New Project ...** and this is what you should see:
+Now let's get this repository to your computer..
+In RStudio, go to **File** $\to$ **New Project ...** and this is what you should see:
 
 ```{r}
 knitr::include_graphics("./pics/new_project.png")
 ```
 
-We already created a folder, so we want to set up a project in an **existing directory**.
-Navigate to the folder you just created to set up the project there:
+We want to use GitHub, which is, as you know, a form of **version control**.
+So this is what we'll pick.
+Next, choose **Git**.
+RStudio will then ask you for a repository URL and where to save the repository on your computer.
+Just put in the link to your repository (copy it from your browser) - `R` will then detect the repository name and use that name for the corresponding folder on your computer.
+You can of course change that name, but I strongly advise not to do that, because it will lead to **A LOT** of confusion.
+Lastly, `R` asks you in which folder your new repository folder should be saved.
+In my case, this folder is called `r_stuff`, because this is where all my `R` stuff is saved.
 
 ```{r}
-knitr::include_graphics("./pics/create_new_project.png")
+knitr::include_graphics("./pics/create_git_project.png")
 ```
 
-You will find that RStudio created an `R` project in your workshop folder.
-To see how projects work, create a little `R` script first.
+You will find that RStudio created a folder with the same name as your repository in at the place where you told it to put it.
+
+```{r}
+knitr::include_graphics("./pics/repo_folder_created.png")
+```
+
+Look inside.
+The folder contains a gitignore and a README file - no surprise, we created those when we created the repository.
+But there is also an `R` project file.
+
+```{r}
+knitr::include_graphics("./pics/repo_content.png")
+```
+
+Those projects are really useful and we will always use them throughout this workshop.
+To see how projects work and why they are so powerful, we create a little `R` script first.
 If RStudio did not open a script for you already, do so with **File** $\to$ **New File** $\to$ **R Script**.
 For now, just type "Hello world" into the script and save it by clicking the little save icon.
 (Why ["Hello world"](https://en.wikipedia.org/wiki/%22Hello,_World!%22_program), you ask?)
 
-Check the folder you just created. You will notice that your script was automatically saved in this location.
+Check your folder again. You will notice that your script was automatically saved there.
 This is because when using a project, you will always be in the location where your project file lies.
 It basically works like the "you are here" icon on a map.
 It is quite handy that we don't have to look for the folder we want every time we create and save a new script.

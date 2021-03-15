@@ -97,7 +97,7 @@ If you open RStudio after the installation, don't be worried when it doesn't loo
 I customised the appearance of my RStudio because this is the way I like it.
 Don't hesitate to play around under **Tools** $\to$ **Global Options** $\to$ **Appearance**.
 
-## Zeitreisen: Git
+## Tine Travel: Git
 
 One of the things we will learn in our workshop is time travel.
 For this, we will need a time turn- err, Git.
