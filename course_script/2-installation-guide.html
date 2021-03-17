@@ -72,7 +72,8 @@
 <li class="chapter" data-level="2.1" data-path="2-installation-guide.html"><a href="2-installation-guide.html#every-computer-is-different"><i class="fa fa-check"></i><b>2.1</b> Every computer is different</a></li>
 <li class="chapter" data-level="2.2" data-path="2-installation-guide.html"><a href="2-installation-guide.html#your-magic-abilities---r"><i class="fa fa-check"></i><b>2.2</b> Your magic abilities - R</a></li>
 <li class="chapter" data-level="2.3" data-path="2-installation-guide.html"><a href="2-installation-guide.html#the-wand---rstudio"><i class="fa fa-check"></i><b>2.3</b> The wand - RStudio</a></li>
-<li class="chapter" data-level="2.4" data-path="2-installation-guide.html"><a href="2-installation-guide.html#tine-travel-git"><i class="fa fa-check"></i><b>2.4</b> Tine Travel: Git</a></li>
+<li class="chapter" data-level="2.4" data-path="2-installation-guide.html"><a href="2-installation-guide.html#time-travel-git"><i class="fa fa-check"></i><b>2.4</b> Time Travel: Git</a></li>
+<li class="chapter" data-level="2.5" data-path="2-installation-guide.html"><a href="2-installation-guide.html#aaaaand-were-done"><i class="fa fa-check"></i><b>2.5</b> Aaaaand we’re done!</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html"><i class="fa fa-check"></i><b>3</b> Creating an R project</a>
 <ul>
@@ -188,15 +189,85 @@ If you open RStudio after the installation, don’t be worried when it doesn’t
 I customised the appearance of my RStudio because this is the way I like it.
 Don’t hesitate to play around under <strong>Tools</strong> <span class="math inline">\(\to\)</span> <strong>Global Options</strong> <span class="math inline">\(\to\)</span> <strong>Appearance</strong>.</p>
 </div>
-<div id="tine-travel-git" class="section level2" number="2.4">
-<h2><span class="header-section-number">2.4</span> Tine Travel: Git</h2>
+<div id="time-travel-git" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Time Travel: Git</h2>
 <p>One of the things we will learn in our workshop is time travel.
 For this, we will need a time turn- err, Git.
-Git enables us to use “version control” (read: time travel), which basically means that every change we made in a file is saved in a history.</p>
-<p>TO DO: Describe git … version control, blab la
-Download git at <a href="https://git-scm.com/downloads" class="uri">https://git-scm.com/downloads</a>
-Again, you can just click through. TO DO: Explain
-Mention how to introduce yourself to GitHub.</p>
+Git enables us to use “version control” (read: time travel), which basically means that every change we made in a file is saved in a history.
+That does not only allow us to document the things we have changed, we can also go back in time to previous versions of our work in case we messed up.
+We will learn more about how Git works during the workshop.
+For now, I just want you to get everything ready so you will be able to use it later.</p>
+<p>First of all, create an account on <a href="https://github.com/">https://github.com/</a>.
+Next, download Git at <a href="https://git-scm.com/downloads">https://git-scm.com/downloads</a>.
+You can mostly click through the installation process.
+However, there is one option in the dialogue that might need some explaining:</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-6"></span>
+<img src="pics/main_master.png" alt="The main branch of a GitHub repository used to be called &quot;master&quot;. However, acknowledging the racist history behind a lot of terms used in coding, the name has now been changed to &quot;main&quot;."  />
+<p class="caption">
+Figure 2.3: The main branch of a GitHub repository used to be called “master”. However, acknowledging the racist history behind a lot of terms used in coding, the name has now been changed to “main”.
+</p>
+</div>
+<p>On GitHub, you can work on “branches” (read: alternative timelines) containing different versions/stages of your project.
+The main branch where the stable (or final) product is stored used to be called “master”.
+During the Black Lives Matter movement, tech companies around the world started <a href="https://www.allaboutcircuits.com/news/how-master-slave-terminology-reexamined-in-electrical-engineering/">replacing the “master/slave” terminology</a> widely used in computer science.
+When you install Git, it now lets you choose the default name of the main branch.</p>
+<p>When your installation of Git is finished, you can confirm that everything worked by opening R Studio (make sure to restart R Studio if it was still open during your installation of Git).
+There should be a pane somewhere, probably on the top right corner, that has a Git tab (don’t mind the stuff below, that won’t look the same for you):</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-7"></span>
+<img src="pics/git_pane.png" alt="After installing Git, you should find a Git pane in RStudio."  />
+<p class="caption">
+Figure 2.4: After installing Git, you should find a Git pane in RStudio.
+</p>
+</div>
+<div id="if-that-didnt-work" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> If that didn’t work</h3>
+<p>In case that didn’t work for your, you might need to tell RStudio explicitly where to find Git.
+You can do that under <strong>Tools</strong> <span class="math inline">\(\to\)</span> <strong>Global Options</strong> <span class="math inline">\(\to\)</span> <strong>Git/SVN</strong>.</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-8"></span>
+<img src="pics/git_path.png" alt="When Git is successfully connected with RStudio, it should look something like this."  />
+<p class="caption">
+Figure 2.5: When Git is successfully connected with RStudio, it should look something like this.
+</p>
+</div>
+<p>Make sure that Rstudio know the correct path to Git, i.e. the location where Git is installed (if you’re a Windows user, your path will be similar to the one in the screenshot above).
+IF you don’t know where you installed Git, you can find out by typing <code>where git</code> in the command prompt (just type “command prompt” into the search bar of your computer and it will pop up).</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-9"></span>
+<img src="pics/shell.png" alt="If needed, find out where you installed Git using the command line."  />
+<p class="caption">
+Figure 2.6: If needed, find out where you installed Git using the command line.
+</p>
+</div>
+</div>
+<div id="introducing-yourself-to-git" class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Introducing yourself to Git</h3>
+<p>Git is a little bit shy - it will want to get to know you.
+Go ahead, introduce yourself!
+First, open a “shell” by clicking <strong>Tools</strong> <span class="math inline">\(\to\)</span> <strong>Shell</strong>.
+Git is not really a “point-and-click” thingy, but we will often have to communicate in written commands with it.</p>
+<p>To let Git know your user name, type the following command into the shell (<strong>don’t forget to replace <code>Your Username</code> with your actual user name!</strong>):</p>
+<pre><code>git config --global user.name &quot;Your Username&quot;</code></pre>
+<p>(If you’re trying to copy paste the command into the shell: <code>Cntrl + C</code> and <code>Cntrl + V</code> won’t work, but a right click will automatically paste the last thing you copied.)
+You can confirm that everything worked by typing the following, which should report back your user name:</p>
+<pre><code>git config user.name</code></pre>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-10"></span>
+<img src="pics/git_user_name.png" alt="After you've introduced yourself, Git will know your name."  />
+<p class="caption">
+Figure 2.7: After you’ve introduced yourself, Git will know your name.
+</p>
+</div>
+<p>Now set your email using a similar procedure. This time, the command is (<strong>again, don’t forget to replace the email address!</strong>):</p>
+<pre><code>git config --global user.email &quot;your@email.com&quot;</code></pre>
+<p>Make sure everything worked by running</p>
+<pre><code>git config user.email</code></pre>
+</div>
+</div>
+<div id="aaaaand-were-done" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> Aaaaand we’re done!</h2>
+<p>This is it!
+You finished all the preparations for the <code>R</code> workshop.
+Thank you for installing everything in advance - that will give us more time to spend with <code>R</code> during the workshop.
+Please write me an email and tell me whether the installation worked for you.
+I am looking forward to seeing you all at the PuG!</p>
 </div>
 </div>
             </section>

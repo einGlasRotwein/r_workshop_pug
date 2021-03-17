@@ -97,17 +97,95 @@ If you open RStudio after the installation, don't be worried when it doesn't loo
 I customised the appearance of my RStudio because this is the way I like it.
 Don't hesitate to play around under **Tools** $\to$ **Global Options** $\to$ **Appearance**.
 
-## Tine Travel: Git
+## Time Travel: Git
 
 One of the things we will learn in our workshop is time travel.
 For this, we will need a time turn- err, Git.
 Git enables us to use "version control" (read: time travel), which basically means that every change we made in a file is saved in a history.
+That does not only allow us to document the things we have changed, we can also go back in time to previous versions of our work in case we messed up.
+We will learn more about how Git works during the workshop.
+For now, I just want you to get everything ready so you will be able to use it later.
 
-TO DO: Describe git … version control, blab la
-Download git at https://git-scm.com/downloads
-Again, you can just click through. TO DO: Explain
-Mention how to introduce yourself to GitHub.
+First of all, create an account on [https://github.com/](https://github.com/).
+Next, download Git at [https://git-scm.com/downloads](https://git-scm.com/downloads).
+You can mostly click through the installation process.
+However, there is one option in the dialogue that might need some explaining:
 
+```{r fig.cap='The main branch of a GitHub repository used to be called "master". However, acknowledging the racist history behind a lot of terms used in coding, the name has now been changed to "main".'}
+knitr::include_graphics("./pics/main_master.png")
+```
+
+On GitHub, you can work on "branches" (read: alternative timelines) containing different versions/stages of your project.
+The main branch where the stable (or final) product is stored used to be called "master".
+During the Black Lives Matter movement, tech companies around the world started [replacing the "master/slave" terminology](https://www.allaboutcircuits.com/news/how-master-slave-terminology-reexamined-in-electrical-engineering/) widely used in computer science.
+When you install Git, it now lets you choose the default name of the main branch.
+
+When your installation of Git is finished, you can confirm that everything worked by opening R Studio (make sure to restart R Studio if it was still open during your installation of Git).
+There should be a pane somewhere, probably on the top right corner, that has a Git tab (don't mind the stuff below, that won't look the same for you):
+
+```{r fig.cap="After installing Git, you should find a Git pane in RStudio."}
+knitr::include_graphics("./pics/git_pane.png")
+```
+
+### If that didn't work
+
+In case that didn't work for your, you might need to tell RStudio explicitly where to find Git.
+You can do that under **Tools** $\to$ **Global Options** $\to$ **Git/SVN**.
+
+```{r fig.cap="When Git is successfully connected with RStudio, it should look something like this."}
+knitr::include_graphics("./pics/git_path.png")
+```
+
+Make sure that Rstudio know the correct path to Git, i.e. the location where Git is installed (if you're a Windows user, your path will be similar to the one in the screenshot above).
+IF you don't know where you installed Git, you can find out by typing `where git` in the command prompt (just type "command prompt" into the search bar of your computer and it will pop up).
+
+```{r fig.cap="If needed, find out where you installed Git using the command line."}
+knitr::include_graphics("./pics/shell.png")
+```
+
+### Introducing yourself to Git
+
+Git is a little bit shy - it will want to get to know you.
+Go ahead, introduce yourself!
+First, open a "shell" by clicking **Tools** $\to$ **Shell**.
+Git is not really a "point-and-click" thingy, but we will often have to communicate in written commands with it.
+
+To let Git know your user name, type the following command into the shell (**don't forget to replace `Your Username` with your actual user name!**):
+
+```
+git config --global user.name "Your Username"
+```
+
+(If you're trying to copy paste the command into the shell: `Cntrl + C` and `Cntrl + V` won't work, but a right click will automatically paste the last thing you copied.)
+You can confirm that everything worked by typing the following, which should report back your user name:
+
+```
+git config user.name
+```
+
+```{r fig.cap="After you've introduced yourself, Git will know your name."}
+knitr::include_graphics("./pics/git_user_name.png")
+```
+
+Now set your email using a similar procedure. This time, the command is (**again, don't forget to replace the email address!**):
+
+```
+git config --global user.email "your@email.com"
+```
+
+Make sure everything worked by running
+
+```
+git config user.email
+```
+
+## Aaaaand we're done!
+
+This is it!
+You finished all the preparations for the `R` workshop.
+Thank you for installing everything in advance - that will give us more time to spend with `R` during the workshop.
+Please write me an email and tell me whether the installation worked for you.
+I am looking forward to seeing you all at the PuG!
 
 ```{r child = "02_projects.Rmd", echo = FALSE}
 ```
