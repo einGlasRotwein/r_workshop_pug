@@ -1,12 +1,6 @@
 
 # Creating an R project
 
-## Be structured
-
-We code because we want to save time and effort - we don't want to make things harder for us.
-To achieve this, we have to be organised ...
-**TO DO: Elaborate**
-
 ## Find a place for your R stuff
 
 You want to be able to easily find your code on your computer.
@@ -121,3 +115,6 @@ Why a project-oriented workflow is so powerful ... bla bla. We will learn about 
 
 Has its merits because ... mention Jenny Bryans slides:
 https://twitter.com/hadleywickham/status/940021008764846080/photo/1
+
+```{r child = "03_basics.Rmd", echo = FALSE}
+```

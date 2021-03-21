@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="2-installation-guide.html"/>
-
+<link rel="next" href="4-basics-in-r.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -77,11 +77,11 @@
 </ul></li>
 <li class="chapter" data-level="3" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html"><i class="fa fa-check"></i><b>3</b> Creating an R project</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html#be-structured"><i class="fa fa-check"></i><b>3.1</b> Be structured</a></li>
-<li class="chapter" data-level="3.2" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html#find-a-place-for-your-r-stuff"><i class="fa fa-check"></i><b>3.2</b> Find a place for your R stuff</a></li>
-<li class="chapter" data-level="3.3" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html#create-your-first-project"><i class="fa fa-check"></i><b>3.3</b> Create your first project</a></li>
-<li class="chapter" data-level="3.4" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html#project-oriented-workflow"><i class="fa fa-check"></i><b>3.4</b> Project-oriented workflow</a></li>
+<li class="chapter" data-level="3.1" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html#find-a-place-for-your-r-stuff"><i class="fa fa-check"></i><b>3.1</b> Find a place for your R stuff</a></li>
+<li class="chapter" data-level="3.2" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html#create-your-first-project"><i class="fa fa-check"></i><b>3.2</b> Create your first project</a></li>
+<li class="chapter" data-level="3.3" data-path="3-creating-an-r-project.html"><a href="3-creating-an-r-project.html#project-oriented-workflow"><i class="fa fa-check"></i><b>3.3</b> Project-oriented workflow</a></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="4-basics-in-r.html"><a href="4-basics-in-r.html"><i class="fa fa-check"></i><b>4</b> Basics in R</a></li>
 </ul>
 
       </nav>
@@ -101,14 +101,8 @@
             <section class="normal" id="section-">
 <div id="creating-an-r-project" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Creating an R project</h1>
-<div id="be-structured" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Be structured</h2>
-<p>We code because we want to save time and effort - we don’t want to make things harder for us.
-To achieve this, we have to be organised …
-<strong>TO DO: Elaborate</strong></p>
-</div>
-<div id="find-a-place-for-your-r-stuff" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Find a place for your R stuff</h2>
+<div id="find-a-place-for-your-r-stuff" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Find a place for your R stuff</h2>
 <p>You want to be able to easily find your code on your computer.
 It sounds trivial, but you should have a folder for every project that you do.
 And by “project” I don’t necessarily mean a full-blown scientific project - it might just be some lines of code that you want to try out.
@@ -122,8 +116,8 @@ You might prefer a different structure, that is completely up to you.
 However, you need to make a decision about where to put your future <code>R</code> projects - and what we will do in this workshop will live in one of these projects.</p>
 <p>By the way, you can find amazing tips for folder structure, file naming and <code>R</code> projects in these slides by <a href="https://slides.djnavarro.net/project-structure/#1">Danielle Navarro</a>.</p>
 </div>
-<div id="create-your-first-project" class="section level2" number="3.3">
-<h2><span class="header-section-number">3.3</span> Create your first project</h2>
+<div id="create-your-first-project" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Create your first project</h2>
 <p>After you decided where you want to put your <code>R</code> stuff, we should create our first project which will contain everything you do during this workshop.
 However, we will not create another folder for this workshop right away.
 Remember that we want to use version control (time travel) throughout this workshop, because I want you to get used to it right from the beginning.
@@ -131,7 +125,7 @@ That means we will start by creating a new repository on GitHub.<a href="#fn1" c
 Everything you do will be backed up there and you will always be able to restore previous versions of your script.
 It is also a great way of tracking how much you actually achieved within these two days!
 Log in to GitHub and create a new repository with the big green “new” button.</p>
-<p><img src="pics/new_repo.png" style="display: block; margin: auto;" /></p>
+<p><img src="pics/new_repo.png" width="202" style="display: block; margin: auto;" /></p>
 <p>Choose a name for your repository, e.g. <em>pug_2021_r_workshop</em>.
 You can also provide a short description for your repository, e.g. something like “This repository contains my coding exercises at the PuG 2021 R workshop.”
 Your repository can be private, which means only you will be able to see it, or public, which means everyone will be able to see it.
@@ -144,10 +138,10 @@ If you tick the gitignore box, you can use a gitignore template that has some de
 Lastly, you can set a licence that determines if and how other people can use your code.
 You can read up about what those licences mean later, but for our workshop, we won’t use any.
 Great, now hit that create button!</p>
-<p><img src="pics/create_repo.png" style="display: block; margin: auto;" /></p>
+<p><img src="pics/create_repo.png" width="406" style="display: block; margin: auto;" /></p>
 <p>Now let’s get this repository to your computer..
 In RStudio, go to <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>New Project …</strong> and this is what you should see:</p>
-<p><img src="pics/new_project.png" style="display: block; margin: auto;" /></p>
+<p><img src="pics/new_project.png" width="265" style="display: block; margin: auto;" /></p>
 <p>We want to use GitHub, which is, as you know, a form of <strong>version control</strong>.
 So this is what we’ll pick.
 Next, choose <strong>Git</strong>.
@@ -156,13 +150,13 @@ Just put in the link to your repository (copy it from your browser) - <code>R</c
 You can of course change that name, but I strongly advise not to do that, because it will lead to <strong>A LOT</strong> of confusion.
 Lastly, <code>R</code> asks you in which folder your new repository folder should be saved.
 In my case, this folder is called <code>r_stuff</code>, because this is where all my <code>R</code> stuff is saved.</p>
-<p><img src="pics/create_git_project.png" style="display: block; margin: auto;" /></p>
+<p><img src="pics/create_git_project.png" width="264" style="display: block; margin: auto;" /></p>
 <p>You will find that RStudio created a folder with the same name as your repository in at the place where you told it to put it.</p>
-<p><img src="pics/repo_folder_created.png" style="display: block; margin: auto;" /></p>
+<p><img src="pics/repo_folder_created.png" width="374" style="display: block; margin: auto;" /></p>
 <p>Look inside.
 The folder contains a gitignore and a README file - no surprise, we created those when we created the repository.
 But there is also an <code>R</code> project file.</p>
-<p><img src="pics/repo_content.png" style="display: block; margin: auto;" /></p>
+<p><img src="pics/repo_content.png" width="132" style="display: block; margin: auto;" /></p>
 <p>Those projects are really useful and we will always use them throughout this workshop.
 To see how projects work and why they are so powerful, we create a little <code>R</code> script first.
 If RStudio did not open a script for you already, do so with <strong>File</strong> <span class="math inline">\(\to\)</span> <strong>New File</strong> <span class="math inline">\(\to\)</span> <strong>R Script</strong>.
@@ -178,21 +172,15 @@ Close RStudio for now.</p>
 <p>Head back to your project folder and double click on the Rproject file belonging to your project.
 You will notice that once again, you are in your project folder that contains the script you created earlier.
 There should be a <strong>Files</strong> panel in your RStudio where you can see everything that your project folder contains.</p>
-<p><img src="pics/files.png" style="display: block; margin: auto;" /></p>
+<p><img src="pics/files.png" width="224" style="display: block; margin: auto;" /></p>
 </div>
-<div id="project-oriented-workflow" class="section level2" number="3.4">
-<h2><span class="header-section-number">3.4</span> Project-oriented workflow</h2>
+<div id="project-oriented-workflow" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Project-oriented workflow</h2>
 <p>Why a project-oriented workflow is so powerful … bla bla. We will learn about that later.</p>
 <p>Has its merits because … mention Jenny Bryans slides:
 <a href="https://twitter.com/hadleywickham/status/940021008764846080/photo/1" class="uri">https://twitter.com/hadleywickham/status/940021008764846080/photo/1</a></p>
 </div>
 </div>
-
-
-
-
-
-
 <div class="footnotes">
 <hr />
 <ol start="1">
@@ -204,8 +192,8 @@ There should be a <strong>Files</strong> panel in your RStudio where you can see
           </div>
         </div>
       </div>
-<a href="2-installation-guide.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="2-installation-guide.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="4-basics-in-r.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
