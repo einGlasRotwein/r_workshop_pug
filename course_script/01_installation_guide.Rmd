@@ -2,18 +2,18 @@
 # Installation Guide
 
 Hello and welcome to the introductory `R` course at the PuG 2021!
+My name is [Juli Tkotz](https://juli-tkotz.de/) and I have the honour to be your guide through the `R` universe.
 Before the actual workshops starts, I would like you to set up a few things on your computer.
-I would like to spend as much time as possible with actual coding during the workshop, and since installing things always takes up a bit of time, we'll frontload that bit.
+I want to spend as much time as possible with actual coding during the workshop, and since installing things always takes up a bit of time, we'll frontload that bit.
 Think of it as your personal Hogwarts shopping list - you have to get your robes and your books and your wand and stuff so you'll be all set to do the real magic once you arrive in Hogwarts.
 
 ## Every computer is different
 
 That being said, you all have different setups.
-You have different computers with different operating systems, and I cannot foresee every little thing that might possibly go wrong when you're installing everything on your side.
-But no worries, that's all part of the process.
-Should you get stuck at some point, don't hesitate to shoot me an email.
-So far, I've got `R` running on any computer - I won't give in to yours ;-)
-(That being said, my installation guide is written from a Windows 10 perspective.)
+You have different computers with different operating systems, and sometimes that means that some details work differently for you.
+But no worries, if something goes wrong, whatever it is, we will be able to get `R` up and running on your computer.
+Should you get stuck at some point, don't hesitate to shoot me an email at <juliane.tkotz@zi-mannheim.de>.
+That being said, my installation guide is written from a Windows 10 perspective.
 
 You will sometimes hear that people don't like installing `R` (or any other programming language, for that matter) and dread updating it even more.
 I'm here to tell you that it's not that bad at all.
@@ -23,46 +23,48 @@ You can't break anything (nothing that can't be fixed, at least).
 
 ## Your magic abilities - R
 
-Imagine `R` as your magic abilities.
+Within our Hogwarts metaphor, imagine `R` as your magic abilities.
 Some people might be born with it, but we need to download it at  [https://www.r-project.org/](https://www.r-project.org/).
 Right on the start page, you can find a download link via CRAN ("The Comprehensive R Archive Network").
 
-```{r}
+```{r out.width='30%'}
 knitr::include_graphics("./pics/download_r.png")
 ```
 
 When clicking it, you will be asked to choose a CRAN mirror.
 That sounds a bit obscure.
-Simply put, the those "mirrors" around the world are servers containing identical information, in this case, the source code, additional packages and all the documentation of R.
-The advantage is that you can choose a server near your location for better bandwidth, and also, you will always be able to download R, even when one of the servers should be down.
-Personally, I am convinced it is an actual network of magical mirrors in a fantasy world that act as gateways which can transmit R packages between worlds – and no one has proven me wrong yet.
-Just pick one near you (anywhere in Germany is perfectly fine) and then download R for your operating system on the next page.
+Simply put, the those "mirrors" around the world are servers containing identical information, in this case, the source code, additional packages and all the documentation of `R`.
+The advantage is that you can choose a server near your location for better bandwidth, and also, you will always be able to download `R`, even when one of the servers should be down.
+Just think of it as an actual network of magical mirrors in a fantasy world that act as gateways which can transmit `R` packages between worlds.
+Just pick one near you (anywhere in Germany is perfectly fine) and then download `R` for your operating system on the next page.
 What you want is "base `R`".
 
-```{r}
+```{r out.width='130%'}
 knitr::include_graphics("./pics/base.png")
 ```
 
-Download R and execute the installation file.
+Download `R` and execute the installation file.
 Just click through the installation, the default settings are fine.
 
-### Optional for Windows Users: Rtools
+### OPTIONAL for Windows Users: Rtools
 
 If you have windows, it is a good idea to install Rtools as well (mac OS users don’t need it, because your operating system should cover the functionalities Rtools adds on Windows).
 It is not crucial, so feel free to skip this step.
-Briefly, Rtools provides tools that are needed on Windows if you want to build `R` packages.
+Briefly, Rtools provides tools that are needed on Windows if you want to build `R` packages [^packages].
+
+[^packages]: `R` packages are "add-ons" that provide additional functionalities for `R`. They are very important - you will most likely use several of them in your workflow.
+
 Most of the time, you just download and install the package from CRAN, where you get the "binary version" of a package that is ready to be used on your operating system.
 Sometimes, for some reason, the latest version of a package is not provided as a binary (yet); maybe because it’s just a few days old.
 In this case, `R` will ask you whether it should "compile" the package from source, i.e. build it on your computer.
 For this job, Rtools is needed on windows.
 However, you also have the option not to compile the package and get a (slightly) older version of the package.
-Which is completely fine – if you don’t want to install Rtools, just hit "no" whenever R asks you whether it should compile a package from source.
-From time to time, R might throw a warning that Rtools is missing, but no worries - you can just ignore that.
+If you don't want to install Rtools yet, that is completely fine.
+From time to time, `R` might throw a warning that Rtools is missing, but no worries - you can just ignore that.
 If you want to have the option to compile packages and e.g. build packages on your own at some point, then install Rtools.
-There is no disadvantage of doing that.
 It can be found on the download page just where we found base `R`.
 Only this time, we pick Rtools.
-It is quite likely that you want the 64 bit version.
+You will most likely want the 64 bit version.
 Execute the installation file and just click through.
 
 ## The wand - RStudio
@@ -71,17 +73,16 @@ We can't use our magic abilities without a wand (an "editor" in our case).
 Well, we can, but it is much much less comfortable and powerful.
 I show you what I mean.
 Look at this picture: You can see the default editor your get when installing `R`.
-I'm in the middle of typing a command, and that's it.
-`R` doesn't help me, functionalities are limited and it all looks pretty old school.
+Functionalities are limited and it all looks pretty old school.
 
-```{r fig.cap="The default editor for R is not very comfortable to handle."}
+```{r out.width='80%', fig.cap="The default editor for R is not very comfortable to handle. You can see that I'm in the middle of typing a command (in red), but there's no autocomplete."}
 knitr::include_graphics("./pics/plain_r.png")
 ```
 
 This, on the other hand, is RStudio, an editor for `R`.
 It looks a bit wild, because this is an actual screenshot of me working on this installation guide.
 But what we can see here is that RStudio offers way more than the default editor for `R`:
-We can easily manage several scripts at once (each of those would be a new window in the default editor), colours help us to read our code, we can easily open files, we can view plots, interact with version control software like GitHub and much, much more.
+We can easily manage several scripts at once (each of those would be a new window in the default editor), colours help us to read our code, we can easily open files, we can view plots, interact with other software like GitHub (more of that later) and much, much more.
 You can also see that, unlike the default editor, RStudio understands that I'm about to use the `mean()` function.
 It offers me to autocomplete the function for me (so I have to type less) and shows me some information about the function while I'm typing it.
 
@@ -91,7 +92,7 @@ knitr::include_graphics("./pics/rstudio.png")
 
 RStudio is not the only editor we can use.
 However, it is the most popular editor for `R` and it is what we will use during the workshop.
-What you want to download is the free version of RStudio Desktop here: [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/).
+What you want to download is the **free version of RStudio Desktop** here: [https://rstudio.com/products/rstudio/download/](https://rstudio.com/products/rstudio/download/).
 Execute the installation file – again, you can just click through.
 If you open RStudio after the installation, don't be worried when it doesn't look like the screenshot above.
 I customised the appearance of my RStudio because this is the way I like it.
@@ -106,40 +107,42 @@ That does not only allow us to document the things we have changed, we can also 
 We will learn more about how Git works during the workshop.
 For now, I just want you to get everything ready so you will be able to use it later.
 
-First of all, create an account on [https://github.com/](https://github.com/).
-Next, download Git at [https://git-scm.com/downloads](https://git-scm.com/downloads).
+- First of all, create an account on [https://github.com/](https://github.com/).
+- Next, download Git at [https://git-scm.com/downloads](https://git-scm.com/downloads).
+
 You can mostly click through the installation process.
 However, there is one option in the dialogue that might need some explaining:
 
-```{r fig.cap='The main branch of a GitHub repository used to be called "master". However, acknowledging the racist history behind a lot of terms used in coding, the name has now been changed to "main".'}
+```{r out.width='80%', fig.cap='The main branch of a GitHub repository used to be called "master". However, acknowledging the racist history behind a lot of terms used in coding, the name has now been changed to "main".'}
 knitr::include_graphics("./pics/main_master.png")
 ```
 
-On GitHub, you can work on "branches" (read: alternative timelines) containing different versions/stages of your project.
+Using Git you can work on "branches" (read: alternative timelines) containing different versions/stages of your project.
 The main branch where the stable (or final) product is stored used to be called "master".
 During the Black Lives Matter movement, tech companies around the world started [replacing the "master/slave" terminology](https://www.allaboutcircuits.com/news/how-master-slave-terminology-reexamined-in-electrical-engineering/) widely used in computer science.
 When you install Git, it now lets you choose the default name of the main branch.
 
-When your installation of Git is finished, you can confirm that everything worked by opening R Studio (make sure to restart R Studio if it was still open during your installation of Git).
+When your installation of Git is finished, you can confirm that everything worked by opening RStudio (make sure to restart RStudio if it was still open during your installation of Git).
 There should be a pane somewhere, probably on the top right corner, that has a Git tab (don't mind the stuff below, that won't look the same for you):
 
-```{r fig.cap="After installing Git, you should find a Git pane in RStudio."}
+```{r out.width='90%', fig.cap="After installing Git, you should find a Git pane in RStudio."}
 knitr::include_graphics("./pics/git_pane.png")
 ```
 
 ### If that didn't work
 
+**If you can find the Git pane in RStudio, you can skip this step!**
 In case that didn't work for your, you might need to tell RStudio explicitly where to find Git.
 You can do that under **Tools** $\to$ **Global Options** $\to$ **Git/SVN**.
 
-```{r fig.cap="When Git is successfully connected with RStudio, it should look something like this."}
+```{r out.width='80%', fig.cap="When Git is successfully connected with RStudio, it should look something like this."}
 knitr::include_graphics("./pics/git_path.png")
 ```
 
 Make sure that Rstudio know the correct path to Git, i.e. the location where Git is installed (if you're a Windows user, your path will be similar to the one in the screenshot above).
-IF you don't know where you installed Git, you can find out by typing `where git` in the command prompt (just type "command prompt" into the search bar of your computer and it will pop up).
+If you don't know where you installed Git, you can find out by typing `where git` in the command prompt (just type "command prompt" into the search bar of your computer and it will pop up).
 
-```{r fig.cap="If needed, find out where you installed Git using the command line."}
+```{r out.width='80%', fig.cap="If needed, find out where you installed Git using the command line."}
 knitr::include_graphics("./pics/shell.png")
 ```
 
@@ -147,10 +150,11 @@ knitr::include_graphics("./pics/shell.png")
 
 Git is a little bit shy - it will want to get to know you.
 Go ahead, introduce yourself!
-First, open a "shell" by clicking **Tools** $\to$ **Shell**.
-Git is not really a "point-and-click" thingy, but we will often have to communicate in written commands with it.
+First, open a "shell" in RStudio by clicking **Tools** $\to$ **Shell**.
+Git is not really a "point-and-click" thingy.
+RStudio gives us an interface with buttons that we can use most of the time, but sometimes, we will have to communicate with Git in written commands.
 
-To let Git know your user name, type the following command into the shell (**don't forget to replace `Your Username` with your actual user name!**):
+To let Git know your user name, type the following command into the shell (**don't forget to replace `Your Username` with your actual user name, i.e. the name of the GitHub account you created before!**):
 
 ```
 git config --global user.name "Your Username"
@@ -163,11 +167,11 @@ You can confirm that everything worked by typing the following, which should rep
 git config user.name
 ```
 
-```{r fig.cap="After you've introduced yourself, Git will know your name."}
+```{r out.width='80%', fig.cap="After you've introduced yourself, Git will know your name."}
 knitr::include_graphics("./pics/git_user_name.png")
 ```
 
-Now set your email using a similar procedure. This time, the command is (**again, don't forget to replace the email address!**):
+Now set your email using a similar procedure. This time, the command is (**again, don't forget to replace the email address - use the one that belongs to your GitHub account!**):
 
 ```
 git config --global user.email "your@email.com"
@@ -184,8 +188,17 @@ git config user.email
 This is it!
 You finished all the preparations for the `R` workshop.
 Thank you for installing everything in advance - that will give us more time to spend with `R` during the workshop.
-Please write me an email and tell me whether the installation worked for you.
+**Please write me an email (**<juliane.tkotz@zi-mannheim.de>**) and tell me whether the installation worked for you.**
+Answer the following questions:
+
+- 1) Open RStudio and type `41 + 1` into the console (there should be a tab called "console" in RStudio, see Fig 2.8). What happens?
+- 2) Is there a Git pane somewhere in your RStudio? (Like in Fig. 2.4)
+- 3) When you introduced yourself to Git, did it correctly return your user name?
+- 4) Did it correctly return your email address?
+- 5) What is your GitHub user name? (An account named [einGlasRotwein](https://github.com/einGlasRotwein) will start following you - that's me :-))
+
 I am looking forward to seeing you all at the PuG!
 
-```{r child = "02_projects.Rmd", echo = FALSE}
+```{r out.width='80%', fig.cap="Somewhere in RStudio, there should be a console tab."}
+knitr::include_graphics("./pics/rstudio_console.png")
 ```

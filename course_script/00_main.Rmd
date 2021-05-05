@@ -1,9 +1,11 @@
 ---
-title: "PuG R Workshop"
+title: "PuG R Workshop Installation Guide"
 output: 
-  bookdown::gitbook:
+  rmdformats::downcute:
     toc_depth: 2
     df_print: paged
+    lightbox: true
+    use_bookdown: true
     split_by: chapter+number
     config:
       toc:
@@ -25,10 +27,6 @@ output:
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(echo = FALSE, include = TRUE, fig.align = "center")
 ```
-
-# First Things First
-
-Mabye some introduction here.
 
 ```{r child = "01_installation_guide.Rmd", echo = FALSE}
 ```
