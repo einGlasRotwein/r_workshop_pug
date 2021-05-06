@@ -132,6 +132,23 @@ knitr::include_graphics("./pics/git_pane.png")
 ### If that didn't work
 
 **If you can find the Git pane in RStudio, you can skip this step!**
+
+One very simple reason why the Git pane does not show up is that no project is opened in `R`.
+The Git pane will only show up when you're in a project!
+We will talk more about projects during the workshop, but for now, we will just quickly create one for trouble shooting.
+Click **File** $\to$ **New Project** $\to$ **New Directory** $\to$ **New Project**.
+In the window that pops up, choose a name for your project (you could call it *git_test* or something).
+You can browser your files to decide where to save your project.
+It doesn't really matter now, because we just want to test something and you can delete the project afterwards.
+(Ideally, you create a folder somewhere on your computer where you save all your `R` projects, which could e.g. be called *my_r_projects*.
+This is where you can then also save your test project.)
+Tick the box "create a git repository".
+
+```{r out.width='80%', fig.cap='To check whether Git is working properly, we create a new project in R. I save mine in my folder r_stuff, where all my R projects are stored, and I called it git_test. Tick the box "create a git repository".'}
+knitr::include_graphics("./pics/git_project_test.png")
+```
+
+Once you clicked "create project", the Git pane should have appeared.
 In case that didn't work for your, you might need to tell RStudio explicitly where to find Git.
 You can do that under **Tools** $\to$ **Global Options** $\to$ **Git/SVN**.
 
@@ -191,8 +208,8 @@ Thank you for installing everything in advance - that will give us more time to 
 **Please write me an email (**<juliane.tkotz@zi-mannheim.de>**) and tell me whether the installation worked for you.**
 Answer the following questions:
 
-- 1) Open RStudio and type `41 + 1` into the console (there should be a tab called "console" in RStudio, see Fig 2.8). What happens?
-- 2) Is there a Git pane somewhere in your RStudio? (Like in Fig. 2.4)
+- 1) Open RStudio and type `41 + 1` into the console (there should be a tab called "console" in RStudio, see Fig 1.9). What happens?
+- 2) Is there a Git pane somewhere in your RStudio? (Like in Fig. 1.4)
 - 3) When you introduced yourself to Git, did it correctly return your user name?
 - 4) Did it correctly return your email address?
 - 5) What is your GitHub user name? (An account named [einGlasRotwein](https://github.com/einGlasRotwein) will start following you - that's me :-))
