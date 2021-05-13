@@ -62,7 +62,7 @@ nerd <- read.csv("./data_sets/nerd_data_short.csv")
 head(nerd)
 ```
 
-If we look into our Environment tab, it says that nerd has 15,212 observations (i.e. rows) of 1 variable - i.e. one column.
+If we look into our Environment tab, it says that nerd has 1,000 observations (i.e. rows) of 1 variable - i.e. one column.
 However, we expected something a little bit more like a table.
 This happened because `R` did not know how to separate the data.
 It put all of the information it found into one single column.
@@ -222,38 +222,12 @@ One of them was `summary()`.
 
 2.1) Use `summary()` on the `age` column. What do you notice?
 
-2.2) Use `summary()` on the `major` column (which contains the participants' major during university). What is different here? Why? (Tip: Inspect `nerd$major`, maybe using `head()`).
+2.2) Use `summary()` on the `country` column. What is different here? Why? (Tip: Inspect `nerd$country`, maybe using `head()`).
 
-2.3) Try `table()` for the `major` column. What is the difference?
+2.3) Try `table()` for the `country` column. What is the difference?
 
 2.4) What happens if you use `summary()` on the whole data frame?
 
 2.5) Try `table()` on the gender column. Does this help? Can you find more information in the codebook?
 
-## The tidyverse
-
-However, it is often most helpful to actually **see** the data, i.e. visualising it.
-Some teaching concepts put visualisation first, before doing anything else with the data, and I am a fan of that.
-So, get ready for your first plots!
-
-For this, we will install the package `tidyverse`.
-In fact, it is actually a collection of various packages that come with many handy functions for data wrangling and visualisation.
-The `tidyverse` has it's own "coding style" which works slightly different from what we've learned so far.
-This has lead to a whole war between "base `R`" and "the tidyverse", with many hardliners on both sides.
-Sometimes, the `tidyverse` is described as being especially beginner friendly and, well ... tidy.
-Personally, I don't know what all the fuzz is about: Both base `R` and the `tidyverse` have their pros and cons and honestly, I think they work best when used together.
-I use whatever I think works best for the task at hand - it's not "either or".
-This is why we will also use both "tidy coding" and "base coding", but feel free to pick whatever feels most comfortable for you.
-
-Let's install the `tidyverse` together.
-You already installed some packages during the installation guide, so the process should seem a bit familiar.
-Install the `tidyverse` with
-
-```{r eval=FALSE}
-install.packages("tidyverse")
-```
-
-
-Before we dive in, let's look at the key differences between base `R` and the `tidyverse`.
-Some of them will become apparently throughout this course.
-
+**THIS IS A GIT PUSH CHECKPOINT!**

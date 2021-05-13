@@ -1,0 +1,147 @@
+---
+title: "02 Data Frames"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+---
+
+```{css, echo=FALSE}
+.dark-output {
+  background-color: #5a5a5a;
+  color: white;
+}
+
+.error-output {
+  background-color: #cc9393;
+  color: black;
+}
+
+.message-output {
+  background-color: #5a5a5a;
+  color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output"
+  )
+```
+
+## The tidyverse
+
+For the next steps, I would like to switch to the `tidyverse`.
+The  `tidyverse` is an `R` package.
+In fact, it is actually a collection of various packages that come with many handy functions for data wrangling and visualisation.
+It is perfectly normal to use various `R` packages for additional functionalities and you will "collect" a lot of them over time.
+However, the packages of the `tidyverse` are a little bit special.
+The `tidyverse` has it's own "coding style" which works slightly different from what we've learned so far.
+This has lead to a whole war between "base `R`" and "the `tidyverse`", with many hardliners on both sides.
+Sometimes, the `tidyverse` is described as being especially beginner friendly and, well ... tidy.
+Personally, I don't know what all the fuzz is about: Both base `R` and the `tidyverse` have their pros and cons and honestly, I think they work best when used together.
+I use whatever I think works best for the task at hand - it's not "either or".
+In this course, I have to make decisions about what to teach you, and I will mainly show you the `tidyverse` way of doing it, even though I'm a huge fan of base `R`.
+But I can either teach you to do one thing in 50 different ways, or teach you how to do 50 different things instead, so I'm going with the latter.
+If you are interested, I can share materials with you that teach you how to do things "the base way".
+
+Let's install the `tidyverse` together.
+You can install any package using the function `install.packages()`.
+It takes the package name as an argument.
+If you start typing the package name without the quotation marks, `R` will start suggesting packages to you which are directly available on CRAN (this is also where we installed `R` from).
+
+```{r eval=FALSE}
+install.packages("tidyverse")
+```
+
+However, just because you have a package, that does not mean you can use it.
+Packages only become "active" if you load them with the function `library()`.
+This seems a bit effortful, but actually has good reasons: Because there are so many packages, a lot of the use the same names for different functions.
+One function in one package can do an entirely different thing than the "same" function in a different package!
+So, if all packages would be loaded, it might be a little bit difficult to avoid confusion.
+Usually, you want to make a conscious decision about which packages you want to load in your script.
+Once a package is loaded, it stays loaded throughout the entire `R` session.
+Let's load the `tidyverse`.[^loading_quotation]
+
+[^loading_quotation]: Notice that I'm not using quotation marks here. However, both works: `library(tidyverse)` and `library("tidyverse")` both do the same job.
+
+```{r}
+library(tidyverse)
+```
+
+One of the most popular and noticeable features of the `tidyverse` is the pipe operator, which looks like this: `%>%`.[^pipe_shortcut]
+It is used to create chains of functions, which means that you put functions after each other, linking them with the pipe operator.
+In base `R`. you achieve the same thing with a more "onion-like approach".
+Let me show you what I mean by this.
+Say we have this vector:
+
+[^pipe_shortcut]: This thing is a pain in the a** to type by hand. I strongly recommend creating a shortcut. You can do this via Tools $\to$ modify keyboard shortcuts. Look for "insert pipe operator" in the search bar. I chose "alt + ." to add the pipe, simply because "alt + -" inserts the assignment operator `<-` per default.
+
+```{r}
+example_vector <- c(1, 3, 33, 50, 5, 1, 2)
+```
+
+We want to take the mean of this vector (using the `mean()` function), and then round the result to two decimal places (using the function `round()`).
+In base `R`, we would stack the functions into each other.
+They are then executed from the inside towards the outside.
+
+```{r}
+round(mean(example_vector), 2)
+```
+
+We could also do the same thing stepwise (and sometimes this is the best approach if you want your code to be readable).
+
+```{r}
+example_mean <- mean(example_vector)
+round(example_mean, 2)
+```
+
+In the tidyverse, we chain those functions together using the pipe operator:
+
+```{r}
+example_vector %>% mean() %>% round(2)
+```
+
+Note how we can leave out the actual data argument every time.
+`mean()` doesn't use any argument at all.
+That is because the pipe "delivers" `example_vector` to the `mean()` function.
+That means, `mean()` **does** get an argument, only that it's not coming from within the brackets, but from the pipe to its left.
+We see that `round()` still has the number 2 as its second argument, indicating that we want to round to two decimal places.
+However, the first argument has been omitted.
+That's again because the data - the mean of `example_vector` in this case - is coming from the left.
+Let's practice chaining some functions together.
+
+1.1) Turn this "function onion" into a `tidyverse` chain:
+
+(Can you find out what the function `abs()` does?)
+
+```{r}
+another_vector <- c(3, -2, 5, 99, -132.5)
+```
+
+```{r}
+as.character(mean(abs(another_vector)))
+```
+
+1.2) Let's make things a bit trickier with additional arguments.
+
+```{r}
+vector_with_NAs <- c(3, -2, 5, NA, 99, -132.5, NA)
+```
+
+```{r}
+as.character(mean(head(abs(vector_with_NAs), 4), na.rm = TRUE))
+```
+1.3) How do we get this into a pipe?
+
+```{r}
+mean(another_vector * 2)
+```
+
+This does not work:
+
+```{r}
+another_vector * 2 %>% mean()
+```
+

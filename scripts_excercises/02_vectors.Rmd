@@ -16,17 +16,162 @@ output:
   background-color: #cc9393;
   color: black;
 }
+
+.warning-output {
+  background-color: #c0c537;
+  color: black;
+}
+
+.message-output {
+  background-color: #5a5a5a;
+  color: white;
+}
 ```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-  echo = TRUE, class.output = "dark-output", class.error = "error-output"
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output", class.warning = "warning-output"
   )
 ```
 
+## Vectors 
+
+Instead of explaining what vectors are, it's easiest to first look at one:
+
+```{r}
+c(1, 5, 8, 10)
+```
+
+You can see that this vector contains four numbers.
+When I define this vector, I start with an ominous `c`, I use commas between the numbers, and I wrap them in parentheses.
+In the output, however you just see the numbers next to each other, without the `c()` and without the commas.
+In this case, a vector is a collection of numbers.
+Here is another one:
+
+```{r}
+c(2.5, 10, 5.245)
+```
+
+And another one:
+
+```{r}
+c("apple", "cake", "pizza", "coffee")
+```
+
+And another one:
+
+```{r}
+c(TRUE, TRUE, FALSE, TRUE)
+```
+
+We see that a vector is a collection of elements, and it can consist of all the data types we previously got to know.
+The only "rule" is that vectors don't mix: A vector always contains one and only one data type.
+This does not work:
+
+```{r}
+c(10, "cake", TRUE)
+```
+
+It seems like it did work, but the quotation marks indicate that everything has just been turned into a character!
+
+A likewise peculiar thing occurs when we just put an integer and a logical together[^logical_numbers]:
+
+```{r}
+c(10, TRUE)
+```
+[^logical_numbers]: Remember that logicals have a numeric representation: `TRUE` equals to 1, and `FALSE` equals to 0.
+
+You might also have noticed that in the second vector we looked at (`c(2.5, 10, 5.245)`), all numbers actually got turned into decimals with three decimal places.
+So beware - a vector forces all elements to be of the same data type!
+
+Now for the mysterious `c`.
+It somehow makes sense to group all elements with parentheses, but why does the `c()` have to go in front of it?
+`c()` is actually a function that combines elements.
+We will find out about functions later, but even if you learn about them, `c()` still does not really *feel* like a function.
+Still, all we can do is accept that `R` needs a function to be able to combine elements into a vector.
+This will not work:
+
+```{r error = TRUE}
+(1, 5, 9)
+```
+
+It's likely that you will forget `c()` a lot in the beginning, but that will go away.
+
+Of course, vectors can be saved into variables, just like we did with single elements before[^one_element_vector]:
+
+```{r}
+this_is_a_vector <- c(1, 34, 42)
+this_is_a_vector
+```
+
+[^one_element_vector]: In fact, we worked with vectors before! When we have e.g. `"hello"`, that is a one-element character vector. And `2` is a one-element integer vector. We don't need `c()` here, because we don't combine anything.
+
+1.1) Create some vectors. Create one vector with characters, one with whole numbers, one with decimals and one with logicals. Save them all into different variables.
+
+### Mathematical operations
+
+What's important about vectors is that you can do mathematical operations with them.
+Can you figure out what happens here?
+
+```{r}
+c(1, 2, 5) + 1
+```
+
+What do you expect the following code will produce?
+
+1.2) `c(1, 2, 5) - 1`
+
+1.3) `c(1, 2, 5) * 2`
+
+1.4) `c(1, 2, 5) / 2`
+
+Vectors are one of the most important concepts of `R`.
+Sure, other programming languages have similar things, but what is really important in `R` is that a lot of things are "vectorised".
+That means that functions work on entire vectors, or that clever combinations of vectors can be used to produce the desired results.
+
+That is, things get interesting when we use mathematical operations involving several multi-element vectors.
+What happens here?
+
+```{r}
+c(2, 4, 6) + c(1, 0, 1)
+```
+
+Let's play the same game again.
+What do you think these lines of code will produce?
+
+1.5) `c(2, 4, 6) - c(1, 0, 1)`
+
+1.6) `c(2, 4, 6) * c(1, 0, 1)`
+
+1.7) `c(2, 4, 6) / c(1, 2, 1)`
+
+However, things get *really* wild when we use vectors that do not have the same length.
+
+Can you see what happened here?
+
+```{r}
+c(2, 4, 6, 5) + c(1, 10)
+```
+
+Let's look at this concept some more.
+
+1.8) Can you multiply every other element of `c(2, 4, 6, 4, 9, 12)` with 2?
+
+1.9) Given `c(2, 4, 6, 4, 9, 12)`, subtract 1 from the first element, 2 from the second, 3 from the third, then again 1 from the fourth and so on.
+
+1.10) Run the following code cell. What happened here? Is that bad?
+
+```{r}
+c(2, 4, 6, 4, 9, 12) + c(1, 2, 3, 4)
+```
+
+Just as a little reminder, run exercises 1.5 - 1.7 again, but this time, save the vectors into variables.
+I know that coming up with meaningful names for these is difficult, so just give them funny names that you can share with the class to lighten up the mood.
+
 ## Hot Dog Data
 
-In these exercises, we will work with vectors some more. We will also learn to use functions in R.
+In these exercises, we will work with vectors some more. We will also learn to use functions in `R`.
 For these exercises, I have some actual data for you: It's from [Nathan's Hotdog Eating Contest](https://nathansfamous.com/hot-dog-eating-contest/hall-of-fame/).
 This is not the full data - we only look at the data of a few contestants for this example.
 We'll look at bigger data sets in a second.
@@ -259,5 +404,14 @@ We can achieve this using indices.
 3.10) Get the hot dog results **only for the men** in 2019 and save the results in a variable. (Think of a good name!) Do the same for the women's results in 2018.
 
 3.11) Remember that you can combine logical comparisons using `&` and `|`. Can you find a way to get the name of the **woman** who ate the **most hot dogs in 2019** using `&` and `max()`? You will need to use several of the vectors in our environment for that!
+
+## Missing values
+
+There is one last data type that I want to show you, because you will meet it frequently and it changes the way some functions work.
+I'm talking about missing values, which are typically indicated with `NA` (not available).
+Technically, there are different types of `NA`, depending on which data type it is supposed to mark as missing (i.e., a "character NA", an "integer NA" etc.).
+However, in 99.99% of the cases, all you will need is `NA`.
+It will turn into the "correc" type of `NA` when used in context.
+
 
 **THIS IS A GIT PUSH CHECKPOINT!**
