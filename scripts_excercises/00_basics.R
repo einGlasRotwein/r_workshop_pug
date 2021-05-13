@@ -63,6 +63,9 @@ typeof(3.2)
 
 # 3.6) What is "cat" > "dog"? What about other words? Can you find a pattern?
 
+# 3.7) By the way, did you know that logicals have numeric representations? Try TRUE + 1.
+#      Then try FALSE + 1. What is the numeric value of TRUE? What is the numeric value of FALSE?
+
 #### 4 VECTORS ####
 
 # As you can imagine, this is not terribly helpful for data analysis. We need something bigger.
