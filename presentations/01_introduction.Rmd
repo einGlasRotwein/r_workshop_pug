@@ -56,7 +56,7 @@ knitr::opts_chunk$set(echo = FALSE)
 <div class="columns-2">
   ![](pics/programming_learning_curve.jpg)
 
-- Sorry, you can't learn to code in 2 days.
+- You can't learn to code in 2 days.
 - **But** you will acquire the basic skills for the journey ahead.
 - Learning is only possible by doing. **No excuses: Start. Using. Code. Now!**
 </div>
@@ -74,6 +74,18 @@ knitr::opts_chunk$set(echo = FALSE)
 - You don't need to know how to do it - but you need to know where to look.
 - We will use Google and the R documentation along the way.
 </div>
+
+---
+
+<br><br><br><br>
+<center><span style="font-size: 100px">Who are you?</span></center>
+<br><br>
+
+- What you do.
+- Your experience with `R`.
+- Your expectations for this course.
+- You favourite cake.
+
 
 ## Let's dive in!
 - They already forked their GitHub repo?
