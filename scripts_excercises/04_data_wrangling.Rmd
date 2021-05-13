@@ -4,22 +4,23 @@ output:
   html_document:
     theme: dark
     highlight: zenburn
+    df_print: paged
 ---
 
 ```{css, echo=FALSE}
 .dark-output {
   background-color: #5a5a5a;
-  color: white;
+    color: white;
 }
 
 .error-output {
   background-color: #cc9393;
-  color: black;
+    color: black;
 }
 
 .message-output {
   background-color: #5a5a5a;
-  color: white;
+    color: white;
 }
 ```
 
@@ -27,7 +28,7 @@ output:
 knitr::opts_chunk$set(
   echo = TRUE, class.output = "dark-output", class.error = "error-output",
   class.message = "message-output"
-  )
+)
 ```
 
 ## The tidyverse
@@ -145,3 +146,120 @@ This does not work:
 another_vector * 2 %>% mean()
 ```
 
+## Data wrangling
+
+The pipes are all fun and games for vectors, but they unlock their true potential when applied to data frames.
+Furthermore, the `tidyverse` offers a lot of functionalities for "data wrangling", i.e. cleaning, formatting and processing data.
+Let's load in the nerd data again.
+
+```{r}
+nerd <- read.csv("./data_sets/nerd_data_short.csv", sep = "\t")
+```
+
+The data contains a lot of information we don't want to look at for now.
+How about selecting only the columns we want to work with right now?
+This is what the `select()` function does.
+We pipe our `nerd` data into it and then select the columns we want to keep.
+I want to keep the participants' age, the gender, whether they're married or not, and all of the "nerdy" questions, e.g. `Q1` - `Q26`.
+
+```{r}
+nerd %>% 
+  select(age, gender, married, Q1:Q26)
+```
+
+A few remarkable things just happened.
+First of all, look at how I'm addressing the columns: I'm just using their names, without writing the name of the data frame again.
+That is, I'm writing `age` instead of `nerd$age` or `nerd["age"]`.
+That is not self-evident at all and a feature of the `tidyverse`'s "tidy evaluation", called "data masking".
+That means, you can use the columns of your data frame as if they were variables in your environment.
+You don't have to refer to the data source (`nerd`, in this case), in order to access the columns.
+The `tidyerse` "knows" what you are referring to because you piped the main data source into the `select()` function.
+
+And then there's the fact that we don't have to type out all of the columns `Q1` - `Q26` - we can actually just write exactly that: `Q1:Q26` means column `Q1` to `Q26`.
+Also note how the columns are now displayed in the order we typed them.
+Had we chosen a different order, our data would have been ordered differently as well.
+Let's save this reduced data frame in a variable to we continue working with it.
+
+```{r}
+nerd_red <- nerd %>% 
+  select(age, gender, married, Q1:Q26)
+```
+
+There are further options for selecting subsets of data.
+We just made a selection based on columns, but we can also only select certain rows.
+This can be achieved with the `filter()` function.
+Let's for example only filter out the female participants, which are coded as `2` in the `gender` column.
+
+```{r}
+nerd_red %>% 
+  filter(gender == 2)
+```
+
+We use the same notation as for logical comparisons, so make sure to use `==` instead of `=`!
+Here, we filter for women below the age of 30.
+
+```{r}
+nerd_red %>% 
+  filter(gender == 2 & age < 30)
+```
+
+Interestingly, the logical `&` can be replaced with a comma in `filter()`.
+
+```{r}
+nerd_red %>% 
+  filter(gender == 2, age < 30)
+```
+
+Filter `nerd_red`. Feel free to look at the code you wrote earlier in the course for the logical comparisons. Choose ...
+
+2.1) ... anyone who is either 22 or 26 years old. There are several ways to achieve this! There is also an interesting `tidyverse` way that I will show you later.
+
+2.2) ... anyone who is either a man (`gender == 1`) or older than 30.
+
+2.3) ... anyone who has a non-binary (`gender == 3`) and who is currently married or has previously been (1=Never married, 2=Currently married, 3=Previously married).
+
+When looking at the data summary, we already noticed that some of the reported values for age are impossible.
+We want to filter those out - what would you consider to be a good cut-off value?
+Also, marital status is supposed to be coded on a scale from 1 - 3, but there are five people where the entry is 0.
+We want to exclude these guys as well.
+
+```{r}
+table(nerd_red$married)
+```
+
+Normally, there is no output when I assign something to a variable, but by wrapping my code into `()`, the output is printed.
+
+```{r}
+(
+  nerd_red <- nerd_red %>% 
+    filter(married != 0, age < 120)
+)
+```
+
+2.4) After filtering, what is the maximum age?
+
+2.5) How many people of each gender are included in the data?
+
+2.6) How many people per marital status do we have?
+
+2.7) How many people did we exclude in total?
+
+## Adding columns
+
+We want to add some columns to the data.
+Most of the time, we want to calculate something like a sum score or re-code questions.
+The good news is that all of this follows the same logic as vector operations which we saw before.
+Let's say we want to calculate the the sum of `Q1` and `Q2`.
+Whenever we want to add a new column (or modify one) within the `tidyverse`, we use the `mutate()` function.
+I call my new column `sum_Q1_Q2`.
+Let's select only the first few columns, as well as our newly created column `sum_Q1_Q2` so we can see them next to each other.
+
+```{r}
+nerd_red %>% 
+  mutate(sum_Q1_Q2 = Q1 + Q2) %>% 
+  select(age:Q2, sum_Q1_Q2)
+```
+
+We can see how the columns `Q1` and `Q2` add up per row in our new column.
+But what if we want to calculate the sum score across all the columns `Q1` - `Q26`?
+Writing all of them down with a little plus sign seems tedious.
