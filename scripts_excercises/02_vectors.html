@@ -328,11 +328,12 @@ pre code {
 <p>Let’s look at this concept some more.</p>
 <p>1.8) Can you multiply every other element of <code>c(2, 4, 6, 4, 9, 12)</code> with 2?</p>
 <p>1.9) Given <code>c(2, 4, 6, 4, 9, 12)</code>, subtract 1 from the first element, 2 from the second, 3 from the third, then again 1 from the fourth and so on.</p>
-<p>1.10) Run the following code cell. What happened here?</p>
+<p>1.10) Run the following code cell. What happened here? Is that bad?</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">12</span>) <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span></code></pre></div>
 <pre class="warning-output"><code>## Warning in c(2, 4, 6, 4, 9, 12) + c(1, 2, 3, 4): longer object length is not a
 ## multiple of shorter object length</code></pre>
 <pre class="dark-output"><code>## [1]  3  6  9  8 10 14</code></pre>
+<p>Just as a little reminder, run exercises 1.5 - 1.7 again, but this time, save the vectors into variables. I know that coming up with meaningful names for these is difficult, so just give them funny names that you can share with the class to lighten up the mood.</p>
 </div>
 </div>
 <div id="hot-dog-data" class="section level2">
@@ -361,17 +362,17 @@ pre code {
 <pre class="dark-output"><code>## [1] 11</code></pre>
 <p>A function in <code>R</code> always comes with a <code>()</code>. It takes <strong>arguments</strong> (i.e. we put something in) and <strong>returns</strong> something (i.e. gives us a result). Here, <code>hotdog_names</code> is the argument, and <code>11</code> is the return value or <strong>output</strong>.</p>
 <p>Try out a few other functions. Here are some you could try:</p>
-<p>1.1) <code>max()</code> gives you the maximum value in a vector. What do you think <code>min()</code> does? Use both on <code>hotdog_2018</code> and <code>hotdog_2019</code>.</p>
-<p>1.2) Use <code>table()</code> on <code>hotdog_genders</code>. What do you get?</p>
-<p>1.3) Use <code>mean()</code> and <code>sd()</code> on <code>hotdog_2018</code> and <code>hotdog_2019</code>. What do you get?</p>
-<p>1.4) Use <code>summary()</code> on <code>hotdog_2018</code> and <code>hotdog_2019</code>. What is the difference to using <code>mean()</code> and <code>sd()</code>?</p>
-<p>1.5) Use <code>head()</code> and <code>tail()</code> on either of the vectors. What do these functions do?</p>
-<p>1.6) How many hotdogs were eaten in total in the year 2019? Use the function <code>sum()</code>.</p>
+<p>2.1) <code>max()</code> gives you the maximum value in a vector. What do you think <code>min()</code> does? Use both on <code>hotdog_2018</code> and <code>hotdog_2019</code>.</p>
+<p>2.2) Use <code>table()</code> on <code>hotdog_genders</code>. What do you get?</p>
+<p>2.3) Use <code>mean()</code> and <code>sd()</code> on <code>hotdog_2018</code> and <code>hotdog_2019</code>. What do you get?</p>
+<p>2.4) Use <code>summary()</code> on <code>hotdog_2018</code> and <code>hotdog_2019</code>. What is the difference to using <code>mean()</code> and <code>sd()</code>?</p>
+<p>2.5) Use <code>head()</code> and <code>tail()</code> on either of the vectors. What do these functions do?</p>
+<p>2.6) How many hotdogs were eaten in total in the year 2019? Use the function <code>sum()</code>.</p>
 </div>
 <div id="more-arguments" class="section level2">
 <h2>More arguments</h2>
 <p>Most functions take more than one argument. For example, you can control the behaviour of <code>head()</code> and <code>tail()</code> with an additional argument.</p>
-<p>2.1) Can you guess what the second argument in <code>head()</code> (and <code>tail()</code>) does? What happens when you leave out the second argument?</p>
+<p>3.1) Can you guess what the second argument in <code>head()</code> (and <code>tail()</code>) does? What happens when you leave out the second argument?</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(hotdog_names, <span class="dv">3</span>)</span></code></pre></div>
 <pre class="dark-output"><code>## [1] &quot;Miki Sudo&quot;      &quot;Darron Breeden&quot; &quot;Juan Rodriguez&quot;</code></pre>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(hotdog_names, <span class="dv">1</span>)</span></code></pre></div>
@@ -384,7 +385,7 @@ pre code {
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(hotdog_names)</span></code></pre></div>
 <pre class="dark-output"><code>## [1] &quot;Miki Sudo&quot;      &quot;Darron Breeden&quot; &quot;Juan Rodriguez&quot; &quot;Juan Neave&quot;    
 ## [5] &quot;Joey Chestnut&quot;  &quot;Sophia DeVita&quot;</code></pre>
-<p>2.2) What do you think will happen when the second argument is larger than the number of hot dog contestants (11)? Try it.</p>
+<p>3.2) What do you think will happen when the second argument is larger than the number of hot dog contestants (11)? Try it.</p>
 <p>We can see that arguments have a <strong>position</strong> in the function - for <code>head()</code>, the data belongs at the first position, and the number of elements we want to display comes second. <code>head()</code> will be unhappy if we just switch the order around:</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="dv">10</span>, hotdog_names)</span></code></pre></div>
 <pre class="error-output"><code>## Error in checkHT(n, dx &lt;- dim(x)): invalid &#39;n&#39; - must have length one when dim(x) is NULL, got 11</code></pre>
@@ -402,7 +403,7 @@ pre code {
 <p>We will now learn how to access specific elements in a vector via so called <strong>indexing</strong>. Let us bring up the names of the contestants again. To get only the name of the third contestant, we do this:</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>hotdog_names[<span class="dv">3</span>]</span></code></pre></div>
 <pre class="dark-output"><code>## [1] &quot;Juan Rodriguez&quot;</code></pre>
-<p>3.1) Can you find the name of the 5th contestant?</p>
+<p>4.1) Can you find the name of the 5th contestant?</p>
 <p>What if we wanted to find the names of the 3rd <strong>and</strong> the 5th contestant? We can use another vector for indexing!</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>hotdog_names[<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">5</span>)]</span></code></pre></div>
 <pre class="dark-output"><code>## [1] &quot;Juan Rodriguez&quot; &quot;Joey Chestnut&quot;</code></pre>
@@ -414,16 +415,16 @@ pre code {
 <p>But there is another way. Consider what this code does:</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span></code></pre></div>
 <pre class="dark-output"><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
-<p>3.2) Can you think of a way how we can modify and use this as an index to find the first three hot dog contestants?</p>
+<p>4.2) Can you think of a way how we can modify and use this as an index to find the first three hot dog contestants?</p>
 <p>We can use functions that return numbers for indexing. So, anything that gives you a number can be used. These examples do not make any sense, but show you how the principle works:</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>hotdog_names[<span class="dv">4-3</span>]</span></code></pre></div>
 <pre class="dark-output"><code>## [1] &quot;Miki Sudo&quot;</code></pre>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>hotdog_names[<span class="fu">min</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)]</span></code></pre></div>
 <pre class="dark-output"><code>## [1] &quot;Miki Sudo&quot;</code></pre>
 <p>One common situation is this: You want to get the last element in a vector, but you do not know how long it is.</p>
-<p>3.3) How would you get the last name of the hot dog contestants using the <code>tail()</code> function we saw above?</p>
-<p>3.4) Remember what <code>length(hotdog_names)</code> returns. How can you use that for indexing?</p>
-<p>3.5) How would you get the name of the person who ate the most hot dogs in 2019? Use an index and the function <code>max()</code>! You will have to use two different vector here: <code>hotdog_names</code> and <code>hotdog_2019</code>.</p>
+<p>4.3) How would you get the last name of the hot dog contestants using the <code>tail()</code> function we saw above?</p>
+<p>4.4) Remember what <code>length(hotdog_names)</code> returns. How can you use that for indexing?</p>
+<p>4.5) How would you get the name of the person who ate the most hot dogs in 2019? Use an index and the function <code>max()</code>! You will have to use two different vector here: <code>hotdog_names</code> and <code>hotdog_2019</code>.</p>
 <p>There is more that can be done with indexing when we use logical comparisons. Here is how this works: We have a vector called <code>numbers</code> that contains the number 1 - 4.</p>
 <p>Bonus question: This vector could have been created differently (with less typing). How?</p>
 <p>We also have an index (which we stored in a variable named <code>index</code> here) that is a logical vector. We now apply this index to our vector <code>numbers</code>. Examine the result. What happened?</p>
@@ -447,18 +448,61 @@ pre code {
 <pre class="error-output"><code>## Error: &lt;text&gt;:1:9: unexpected &#39;&lt;&#39;
 ## 1: numbers[&lt;
 ##             ^</code></pre>
-<p>3.6) Can you write code that gives you all elements larger than 6 in the vector <code>1:10</code>?</p>
+<p>4.6) Can you write code that gives you all elements larger than 6 in the vector <code>1:10</code>?</p>
 <p>How can we use indexing with logical vectors in a more useful way? Let’s get back to our hot dog examples.</p>
-<p>3.7) Can you create a vector that is <code>TRUE</code> when the participant ate more hot dogs in 2019 than in 2018 and <code>FALSE</code> when s/he didn’t? Remember that the results from 2018 are stored in <code>hotdog_2018</code> and the results from 2019 are stored in <code>hotdog_2019</code>.</p>
+<p>4.7) Can you create a vector that is <code>TRUE</code> when the participant ate more hot dogs in 2019 than in 2018 and <code>FALSE</code> when s/he didn’t? Remember that the results from 2018 are stored in <code>hotdog_2018</code> and the results from 2019 are stored in <code>hotdog_2019</code>.</p>
 <p>We now would like to find out <strong>which</strong> participants improved from 2018 to 2019. We can achieve this using indices.</p>
-<p>3.8) Based on the previous examples, how would you get the names of the contestants who ate more hot dogs in 2019 than in 2018?</p>
-<p>3.9) Can you find the name of the contestant who ate exactly the same number of hot dogs in 2018 and 2019?</p>
-<p>3.10) Get the hot dog results <strong>only for the men</strong> in 2019 and save the results in a variable. (Think of a good name!) Do the same for the women’s results in 2018.</p>
-<p>3.11) Remember that you can combine logical comparisons using <code>&amp;</code> and <code>|</code>. Can you find a way to get the name of the <strong>woman</strong> who ate the <strong>most hot dogs in 2019</strong> using <code>&amp;</code> and <code>max()</code>? You will need to use several of the vectors in our environment for that!</p>
+<p>4.8) Based on the previous examples, how would you get the names of the contestants who ate more hot dogs in 2019 than in 2018?</p>
+<p>4.9) Can you find the name of the contestant who ate exactly the same number of hot dogs in 2018 and 2019?</p>
+<p>4.10) Get the hot dog results <strong>only for the men</strong> in 2019 and save the results in a variable. (Think of a good name!) Do the same for the women’s results in 2018.</p>
+<p>4.11) Remember that you can combine logical comparisons using <code>&amp;</code> and <code>|</code>. Can you find a way to get the name of the <strong>woman</strong> who ate the <strong>most hot dogs in 2019</strong> using <code>&amp;</code> and <code>max()</code>? You will need to use several of the vectors in our environment for that!</p>
 </div>
 <div id="missing-values" class="section level2">
 <h2>Missing values</h2>
-<p>There is one last data type that I want to show you, because you will meet it frequently and it changes the way some functions work. I’m talking about missing values, which are typically indicated with <code>NA</code> (not available). Technically, there are different types of <code>NA</code>, depending on which data type it is supposed to mark as missing (i.e., a “character NA”, an “integer NA” etc.). However, in 99.99% of the cases, all you will need is <code>NA</code>. It will turn into the “correc” type of <code>NA</code> when used in context.</p>
+<p>There is one last data type that I want to show you, because you will meet it frequently and it changes the way some functions work. I’m talking about missing values, which are typically indicated with <code>NA</code> (not available). Technically, there are different types of <code>NA</code>, depending on which data type it is supposed to mark as missing (i.e., a “character NA”, an “integer NA” etc.). However, in 99.99% of the cases, all you will need is <code>NA</code>. It will turn into the “correct” type of <code>NA</code> when used in context. Let’s see some examples.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">10</span>, <span class="cn">NA</span>, <span class="dv">12</span>)</span></code></pre></div>
+<pre class="dark-output"><code>## [1] 10 NA 12</code></pre>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">&quot;cake&quot;</span>, <span class="st">&quot;more cake&quot;</span>, <span class="cn">NA</span>)</span></code></pre></div>
+<pre class="dark-output"><code>## [1] &quot;cake&quot;      &quot;more cake&quot; NA</code></pre>
+<p>The important thing is that <code>NA</code>s will change the behaviour of some functions. For example:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="cn">NA</span>))</span></code></pre></div>
+<pre class="dark-output"><code>## [1] NA</code></pre>
+<p>The mean of this vector is “not available”, because there is uncertainty due to the missing values. This is a good “safety” behaviour, because you might not be aware that there are missing values in your data. If <code>R</code> just ignored the missing values, you might end up with a biased mean without knowing. However, you can tell <code>R</code> to do just that: Calculate the mean for all the numbers which are not <code>NA</code>s. We can do that by setting the argument <code>na.rm</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> to <code>TRUE</code> (its default value is <code>FALSE</code>).</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre class="dark-output"><code>## [1] 9</code></pre>
+<p>The same logic applies for a lot of different functions. For the following functions, examine how they behave when there is an <code>NA</code> in the vector. Can you use <code>na.rm = TRUE</code> to change their behaviour?</p>
+<p>5.1) <code>sd()</code></p>
+<p>5.2) <code>min()</code> and <code>max()</code></p>
+<p>5.3) <code>summary()</code></p>
+<p>5.4) <code>table()</code></p>
+<p>5.5) <code>head()</code> and <code>tail()</code></p>
+<p>5.6) <code>length()</code></p>
+<p>The situation also gets interesting when logicals come to the picture. Consider the following examples:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="cn">TRUE</span> <span class="sc">&amp;</span> <span class="cn">NA</span></span></code></pre></div>
+<pre class="dark-output"><code>## [1] NA</code></pre>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="cn">FALSE</span> <span class="sc">&amp;</span> <span class="cn">NA</span></span></code></pre></div>
+<pre class="dark-output"><code>## [1] FALSE</code></pre>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="cn">TRUE</span> <span class="sc">|</span> <span class="cn">NA</span></span></code></pre></div>
+<pre class="dark-output"><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="cn">FALSE</span> <span class="sc">|</span> <span class="cn">NA</span></span></code></pre></div>
+<pre class="dark-output"><code>## [1] NA</code></pre>
+<p>Can you explain why this is happening?</p>
+<p>Speaking of logical comparisons. Remember that you can look for certain elements in a vector like this:</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>a_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="cn">NA</span>, <span class="dv">12</span>)</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>a_vector <span class="sc">==</span> <span class="dv">12</span></span></code></pre></div>
+<pre class="dark-output"><code>## [1] FALSE  TRUE FALSE    NA  TRUE</code></pre>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>a_vector[a_vector <span class="sc">==</span> <span class="dv">12</span>]</span></code></pre></div>
+<pre class="dark-output"><code>## [1] 12 NA 12</code></pre>
+<p>Unsurprisingly, the <code>NA</code> stays an <code>NA</code> in the output. Also, when we filter for elements that are <code>==</code> 12 via indexing, the <code>NA</code> gets returned as well. This is something you should keep in mind for actual data analysis - always check whether you have any <code>NA</code>s first!</p>
+<p>Which brings us to the next point: How do you actually check for <code>NA</code>s? You might assume it works like this:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>a_vector <span class="sc">==</span> <span class="cn">NA</span></span></code></pre></div>
+<pre class="dark-output"><code>## [1] NA NA NA NA NA</code></pre>
+<p>However, the result is not what we would expect. This is such a common mistake that R Studio warns you that you probably did something wrong here. If you hover over the little exclamation mark, it actualy tells you what you should use instead, which is:</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.na</span>(a_vector)</span></code></pre></div>
+<pre class="dark-output"><code>## [1] FALSE FALSE FALSE  TRUE FALSE</code></pre>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>a_vector[<span class="sc">!</span><span class="fu">is.na</span>(a_vector)]</span></code></pre></div>
+<pre class="dark-output"><code>## [1]  1 12 14 12</code></pre>
+<p>Note how I’m filtering for all elements which are <strong>not</strong> <code>NA</code> in the last code, effectively getting rid of all missing values in the data.</p>
 <p><strong>THIS IS A GIT PUSH CHECKPOINT!</strong></p>
 </div>
 <div class="footnotes">
@@ -466,6 +510,7 @@ pre code {
 <ol>
 <li id="fn1"><p>Remember that logicals have a numeric representation: <code>TRUE</code> equals to 1, and <code>FALSE</code> equals to 0.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>In fact, we worked with vectors before! When we have e.g. <code>&quot;hello&quot;</code>, that is a one-element character vector. And <code>2</code> is a one-element integer vector. We don’t need <code>c()</code> here, because we don’t combine anything.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Note that we have to explicitly name the argument here, because <code>na.rm</code> is actually the third argument of the <code>mean()</code> function. See <code>?mean</code>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

@@ -223,24 +223,24 @@ Here, `hotdog_names` is the argument, and `11` is the return value or **output**
 
 Try out a few other functions. Here are some you could try:
 
-1.1) `max()` gives you the maximum value in a vector. What do you think `min()` does? Use both on `hotdog_2018` and `hotdog_2019`.
+2.1) `max()` gives you the maximum value in a vector. What do you think `min()` does? Use both on `hotdog_2018` and `hotdog_2019`.
 
-1.2) Use `table()` on `hotdog_genders`. What do you get?
+2.2) Use `table()` on `hotdog_genders`. What do you get?
 
-1.3) Use `mean()` and `sd()` on `hotdog_2018` and `hotdog_2019`. What do you get?
+2.3) Use `mean()` and `sd()` on `hotdog_2018` and `hotdog_2019`. What do you get?
 
-1.4) Use `summary()` on `hotdog_2018` and `hotdog_2019`. What is the difference to using `mean()` and `sd()`?
+2.4) Use `summary()` on `hotdog_2018` and `hotdog_2019`. What is the difference to using `mean()` and `sd()`?
 
-1.5) Use `head()` and `tail()` on either of the vectors. What do these functions do?
+2.5) Use `head()` and `tail()` on either of the vectors. What do these functions do?
 
-1.6) How many hotdogs were eaten in total in the year 2019? Use the function `sum()`.
+2.6) How many hotdogs were eaten in total in the year 2019? Use the function `sum()`.
 
 ## More arguments
 
 Most functions take more than one argument.
 For example, you can control the behaviour of `head()` and `tail()` with an additional argument.
 
-2.1) Can you guess what the second argument in `head()` (and `tail()`) does?
+3.1) Can you guess what the second argument in `head()` (and `tail()`) does?
 What happens when you leave out the second argument?
 
 ```{r}
@@ -250,7 +250,7 @@ head(hotdog_names, 11)
 head(hotdog_names)
 ```
 
-2.2) What do you think will happen when the second argument is larger than the number of hot dog contestants (`r length(hotdog_names)`)? Try it.
+3.2) What do you think will happen when the second argument is larger than the number of hot dog contestants (`r length(hotdog_names)`)? Try it.
 
 We can see that arguments have a **position** in the function - for `head()`, the data belongs at the first position, and the number of elements we want to display comes second.
 `head()` will be unhappy if we just switch the order around:
@@ -289,7 +289,7 @@ To get only the name of the third contestant, we do this:
 hotdog_names[3]
 ```
 
-3.1) Can you find the name of the 5th contestant?
+4.1) Can you find the name of the 5th contestant?
 
 What if we wanted to find the names of the 3rd **and** the 5th contestant?
 We can use another vector for indexing!
@@ -316,7 +316,7 @@ Consider what this code does:
 1:10
 ```
 
-3.2) Can you think of a way how we can modify and use this as an index to find the first three hot dog contestants?
+4.2) Can you think of a way how we can modify and use this as an index to find the first three hot dog contestants?
 
 We can use functions that return numbers for indexing.
 So, anything that gives you a number can be used.
@@ -332,11 +332,11 @@ hotdog_names[min(1:10)]
 
 One common situation is this: You want to get the last element in a vector, but you do not know how long it is.
 
-3.3) How would you get the last name of the hot dog contestants using the `tail()` function we saw above?
+4.3) How would you get the last name of the hot dog contestants using the `tail()` function we saw above?
 
-3.4) Remember what `length(hotdog_names)` returns. How can you use that for indexing?
+4.4) Remember what `length(hotdog_names)` returns. How can you use that for indexing?
 
-3.5) How would you get the name of the person who ate the most hot dogs in 2019? Use an index and the function `max()`! You will have to use two different vector here: `hotdog_names` and `hotdog_2019`.
+4.5) How would you get the name of the person who ate the most hot dogs in 2019? Use an index and the function `max()`! You will have to use two different vector here: `hotdog_names` and `hotdog_2019`.
 
 There is more that can be done with indexing when we use logical comparisons.
 Here is how this works: We have a vector called `numbers` that contains the number 1 - 4.
@@ -387,23 +387,23 @@ In fact, RStudio is already giving me a warning that something is wrong with my 
 numbers[<3]
 ```
 
-3.6) Can you write code that gives you all elements larger than 6 in the vector `1:10`?
+4.6) Can you write code that gives you all elements larger than 6 in the vector `1:10`?
 
 How can we use indexing with logical vectors in a more useful way?
 Let's get back to our hot dog examples.
 
-3.7) Can you create a vector that is `TRUE` when the participant ate more hot dogs in 2019 than in 2018 and `FALSE` when s/he didn't? Remember that the results from 2018 are stored in `hotdog_2018` and the results from 2019 are stored in `hotdog_2019`.
+4.7) Can you create a vector that is `TRUE` when the participant ate more hot dogs in 2019 than in 2018 and `FALSE` when s/he didn't? Remember that the results from 2018 are stored in `hotdog_2018` and the results from 2019 are stored in `hotdog_2019`.
 
 We now would like to find out **which** participants improved from 2018 to 2019.
 We can achieve this using indices.
 
-3.8) Based on the previous examples, how would you get the names of the contestants who ate more hot dogs in 2019 than in 2018?
+4.8) Based on the previous examples, how would you get the names of the contestants who ate more hot dogs in 2019 than in 2018?
 
-3.9) Can you find the name of the contestant who ate exactly the same number of hot dogs in 2018 and 2019?
+4.9) Can you find the name of the contestant who ate exactly the same number of hot dogs in 2018 and 2019?
 
-3.10) Get the hot dog results **only for the men** in 2019 and save the results in a variable. (Think of a good name!) Do the same for the women's results in 2018.
+4.10) Get the hot dog results **only for the men** in 2019 and save the results in a variable. (Think of a good name!) Do the same for the women's results in 2018.
 
-3.11) Remember that you can combine logical comparisons using `&` and `|`. Can you find a way to get the name of the **woman** who ate the **most hot dogs in 2019** using `&` and `max()`? You will need to use several of the vectors in our environment for that!
+4.11) Remember that you can combine logical comparisons using `&` and `|`. Can you find a way to get the name of the **woman** who ate the **most hot dogs in 2019** using `&` and `max()`? You will need to use several of the vectors in our environment for that!
 
 ## Missing values
 
@@ -411,7 +411,92 @@ There is one last data type that I want to show you, because you will meet it fr
 I'm talking about missing values, which are typically indicated with `NA` (not available).
 Technically, there are different types of `NA`, depending on which data type it is supposed to mark as missing (i.e., a "character NA", an "integer NA" etc.).
 However, in 99.99% of the cases, all you will need is `NA`.
-It will turn into the "correc" type of `NA` when used in context.
+It will turn into the "correct" type of `NA` when used in context.
+Let's see some examples.
 
+```{r}
+c(10, NA, 12)
+```
+```{r}
+c("cake", "more cake", NA)
+```
+
+The important thing is that `NA`s will change the behaviour of some functions.
+For example:
+
+```{r}
+mean(c(1, 12, 14, NA))
+```
+
+The mean of this vector is "not available", because there is uncertainty due to the missing values.
+This is a good "safety" behaviour, because you might not be aware that there are missing values in your data.
+If `R` just ignored the missing values, you might end up with a biased mean without knowing.
+However, you can tell `R` to do just that: Calculate the mean for all the numbers which are not `NA`s.
+We can do that by setting the argument `na.rm`[^narm_position] to `TRUE` (its default value is `FALSE`).
+
+[^narm_position]: Note that we have to explicitly name the argument here, because `na.rm` is actually the third argument of the `mean()` function. See `?mean`.
+
+```{r}
+mean(c(1, 12, 14, NA), na.rm = TRUE)
+```
+
+The same logic applies for a lot of different functions.
+For the following functions, examine how they behave when there is an `NA` in the vector.
+Can you use `na.rm = TRUE` to change their behaviour?
+
+5.1) `sd()`
+
+5.2) `min()` and `max()`
+
+5.3) `summary()`
+
+5.4) `table()`
+
+5.5) `head()` and `tail()`
+
+5.6) `length()`
+
+The situation also gets interesting when logicals come to the picture.
+Consider the following examples:
+
+```{r}
+TRUE & NA
+FALSE & NA
+TRUE | NA
+FALSE | NA
+```
+
+Can you explain why this is happening?
+
+Speaking of logical comparisons.
+Remember that you can look for certain elements in a vector like this:
+
+```{r}
+a_vector <- c(1, 12, 14, NA, 12)
+a_vector == 12
+a_vector[a_vector == 12]
+```
+
+Unsurprisingly, the `NA` stays an `NA` in the output.
+Also, when we filter for elements that are `==` 12 via indexing, the `NA` gets returned as well.
+This is something you should keep in mind for actual data analysis - always check whether you have any `NA`s first!
+
+Which brings us to the next point: How do you actually check for `NA`s?
+You might assume it works like this:
+
+```{r}
+a_vector == NA
+```
+
+However, the result is not what we would expect.
+This is such a common mistake that R Studio warns you that you probably did something wrong here.
+If you hover over the little exclamation mark, it actualy tells you what you should use instead, which is:
+
+```{r}
+is.na(a_vector)
+a_vector[!is.na(a_vector)]
+```
+
+Note how I'm filtering for all elements which are **not** `NA` in the last code, effectively getting rid of all missing values in the data.
 
 **THIS IS A GIT PUSH CHECKPOINT!**
