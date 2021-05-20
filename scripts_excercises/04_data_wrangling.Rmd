@@ -425,3 +425,4 @@ For every position of that vector, you contemplate whether you should put in the
 some_more_numbers <- c(12, 0, 0, -4, 0, -12, 5, 2)
 ```
 
+**THIS IS A GITHUB PUSH CHECKPOINT**
