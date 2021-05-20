@@ -295,7 +295,7 @@ pre code {
 <p>You might also have noticed that in the second vector we looked at (<code>c(2.5, 10, 5.245)</code>), all numbers actually got turned into decimals with three decimal places. So beware - a vector forces all elements to be of the same data type!</p>
 <p>Now for the mysterious <code>c</code>. It somehow makes sense to group all elements with parentheses, but why does the <code>c()</code> have to go in front of it? <code>c()</code> is actually a function that combines elements. We will find out about functions later, but even if you learn about them, <code>c()</code> still does not really <em>feel</em> like a function. Still, all we can do is accept that <code>R</code> needs a function to be able to combine elements into a vector. This will not work:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">9</span>)</span></code></pre></div>
-<pre class="error-output"><code>## Error: &lt;text&gt;:1:3: unexpected &#39;,&#39;
+<pre class="error-output"><code>## Error: &lt;text&gt;:1:3: Unerwartete(s) &#39;,&#39;
 ## 1: (1,
 ##       ^</code></pre>
 <p>It’s likely that you will forget <code>c()</code> a lot in the beginning, but that will go away.</p>
@@ -330,8 +330,8 @@ pre code {
 <p>1.9) Given <code>c(2, 4, 6, 4, 9, 12)</code>, subtract 1 from the first element, 2 from the second, 3 from the third, then again 1 from the fourth and so on.</p>
 <p>1.10) Run the following code cell. What happened here? Is that bad?</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">12</span>) <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span></code></pre></div>
-<pre class="warning-output"><code>## Warning in c(2, 4, 6, 4, 9, 12) + c(1, 2, 3, 4): longer object length is not a
-## multiple of shorter object length</code></pre>
+<pre class="warning-output"><code>## Warning in c(2, 4, 6, 4, 9, 12) + c(1, 2, 3, 4): Länge des längeren Objektes
+##       ist kein Vielfaches der Länge des kürzeren Objektes</code></pre>
 <pre class="dark-output"><code>## [1]  3  6  9  8 10 14</code></pre>
 <p>Just as a little reminder, run exercises 1.5 - 1.7 again, but this time, save the vectors into variables. I know that coming up with meaningful names for these is difficult, so just give them funny names that you can share with the class to lighten up the mood.</p>
 </div>
@@ -409,7 +409,7 @@ pre code {
 <pre class="dark-output"><code>## [1] &quot;Juan Rodriguez&quot; &quot;Joey Chestnut&quot;</code></pre>
 <p>It is important to use <code>c()</code> for this - <code>c()</code> puts 3 and 5 into the same vector. If we write <code>[3, 5]</code>, we’re trying to use two vectors at the same time (3 is the first, 5 is the second), and that won’t work:</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>hotdog_names[<span class="dv">3</span>, <span class="dv">5</span>]</span></code></pre></div>
-<pre class="error-output"><code>## Error in hotdog_names[3, 5]: incorrect number of dimensions</code></pre>
+<pre class="error-output"><code>## Error in hotdog_names[3, 5]: falsche Anzahl von Dimensionen</code></pre>
 <p>What if we want to see the first 3 contestants?</p>
 <p>Bonus question: You already know one function which does this!</p>
 <p>But there is another way. Consider what this code does:</p>
@@ -445,7 +445,7 @@ pre code {
 <pre class="dark-output"><code>## [1] 1 2</code></pre>
 <p>It feels a little bit weird to use the same vector twice in one line. But basically, what this code “translates” to is: Show me all of the elements in numbers (the first <code>numbers</code> in the code), where <code>numbers</code> is smaller than 3. As humans, we would rather say something like: “Show me all elements in numbers smaller than 3.” For a computer, however, you need to explicitly say <strong>what</strong> should be smaller than 3. Something like this will not work. In fact, RStudio is already giving me a warning that something is wrong with my code.</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>numbers[<span class="sc">&lt;</span><span class="dv">3</span>]</span></code></pre></div>
-<pre class="error-output"><code>## Error: &lt;text&gt;:1:9: unexpected &#39;&lt;&#39;
+<pre class="error-output"><code>## Error: &lt;text&gt;:1:9: Unerwartete(s) &#39;&lt;&#39;
 ## 1: numbers[&lt;
 ##             ^</code></pre>
 <p>4.6) Can you write code that gives you all elements larger than 6 in the vector <code>1:10</code>?</p>
