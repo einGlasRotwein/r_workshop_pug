@@ -35,6 +35,38 @@ knitr::opts_chunk$set(
   )
 ```
 
+## Cleaning up
+
+When starting new exercises (i.e. R Markdown scripts), we should clean our environment to make sure we don't have any unused variables lingering around that might produce unwanted results because we use them by accident, not knowing what they contain.
+The following command clears the environment and gives you a clean slate.
+Observe your environment pane while running it!
+
+```{r}
+rm(list = ls())
+```
+
+People sometimes mock how unnecessarily complex it is - there just could have been a clear, simple function with a sensible name to achieve this.
+However, `rm()` is a function to *r*e*m*ove things from the environment.
+So if I create a variable ...
+
+```{r}
+test <- "hello world"
+```
+
+... I can make it disappear from the environment like this:
+
+```{r}
+rm(test)
+```
+
+If we want to clear the whole environment, we don't want to name all the variables that are in there individually.
+That might be quite a lot!
+Instead, we tell `R` to delete a list of things (`list = ...`).
+That list of things is `ls()`.
+`ls()` is a function that lists the names of all objects in the environment, thus providing the information for `R` what do delete - everything.
+
+Now that our environment is nice and tidy again, we can dive into the concept of vectors.
+
 ## Vectors 
 
 Instead of explaining what vectors are, it's easiest to first look at one:
