@@ -1,0 +1,46 @@
+---
+title: "05 Plots"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+    df_print: paged
+---
+
+```{css, echo=FALSE}
+.dark-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+
+.error-output {
+  background-color: #cc9393;
+    color: black;
+}
+
+.message-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output"
+)
+```
+
+## Now for some fun
+
+There is more to be said about data wrangling, and we will get back to it, but I want to create some plots first.
+Plots are fun because they give you nice and colourful results, and they are a very important tool for inspecting your data and getting an intuition for it.
+While base `R` has a plotting function, the `tidyverse`'s `ggplot2` is what is partly responsible fpr `R`'s fame.
+
+`ggplot2` is based on the ["Grammar of Graphics" by Leland] Wilkinson(https://www.springer.com/de/book/9780387245447), a framework for good data visualisation in data science.
+In a way, `ggplot2` has a grammar of its own, which is something new for us.
+But don't worry, it all makes sense.
+
+TO DO: Preprocessing file with the nerd data.
+
+**THIS IS A GITHUB PUSH CHECKPOINT**
