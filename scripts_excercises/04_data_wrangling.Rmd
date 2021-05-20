@@ -1,5 +1,5 @@
 ---
-title: "02 Data Frames"
+title: "04 Data Wrangling"
 output: 
   html_document:
     theme: dark
@@ -73,7 +73,7 @@ library(tidyverse)
 
 One of the most popular and noticeable features of the `tidyverse` is the pipe operator, which looks like this: `%>%`.[^pipe_shortcut]
 It is used to create chains of functions, which means that you put functions after each other, linking them with the pipe operator.
-In base `R`. you achieve the same thing with a more "onion-like approach".
+In base `R`, you achieve the same thing with a more "onion-like approach".
 Let me show you what I mean by this.
 Say we have this vector:
 
@@ -84,8 +84,10 @@ example_vector <- c(1, 3, 33, 50, 5, 1, 2)
 ```
 
 We want to take the mean of this vector (using the `mean()` function), and then round the result to two decimal places (using the function `round()`).
-In base `R`, we would stack the functions into each other.
+In base `R`, we would stack the functions into each other.[^base_pipe]
 They are then executed from the inside towards the outside.
+
+[^base_pipe]: In fact, a brand new pipe operator has just been added to base `R`, which looks like this: `|>|`. It works much like the `tidyverse` pipe, but not quite. You can't exchange one for the other, at least not at the time of writing. The base `R` people is officially available since 18.05.2021 (since version 4.1.0), so it will probably face some developments during the next years.
 
 ```{r}
 round(mean(example_vector), 2)
@@ -148,6 +150,8 @@ another_vector * 2 %>% mean()
 
 ## Data wrangling
 
+### Selecting and filtering
+
 The pipes are all fun and games for vectors, but they unlock their true potential when applied to data frames.
 Furthermore, the `tidyverse` offers a lot of functionalities for "data wrangling", i.e. cleaning, formatting and processing data.
 Let's load in the nerd data again.
@@ -178,11 +182,27 @@ The `tidyerse` "knows" what you are referring to because you piped the main data
 And then there's the fact that we don't have to type out all of the columns `Q1` - `Q26` - we can actually just write exactly that: `Q1:Q26` means column `Q1` to `Q26`.
 Also note how the columns are now displayed in the order we typed them.
 Had we chosen a different order, our data would have been ordered differently as well.
-Let's save this reduced data frame in a variable to we continue working with it.
+
+Sometimes, you want to bring one column to the front, but you don't really want to change anything else.
+You don't want to name all the other columns, so there's a shortcut for that: `everything()`.
+It literally throws in all the remaining columns you haven't selected yet and is great for reordering.
+Say that, for some reason, we wanted the column `voted` (whether or not someone voted in the past election) to go first, then the age, and then all the rest.
+The corresponding code would look like this:
 
 ```{r}
+nerd %>% 
+  select(voted, age, everything())
+```
+
+Don't forget the `()` behind everything!
+
+1.4) I want to continue working with a reduced version of our data that only contains the columns `age`, `gender`, `married`, `voted` and also `Q1` - `Q26`.
+Can you select these columns and save this reduced data frame in a variable called `nerd_red` ("nerd reduced")? 
+
+```{r}
+# TAKE OUT FOR THE COURSE
 nerd_red <- nerd %>% 
-  select(age, gender, married, Q1:Q26)
+  select(age, gender, married, voted, Q1:Q26)
 ```
 
 There are further options for selecting subsets of data.
@@ -216,7 +236,7 @@ Filter `nerd_red`. Feel free to look at the code you wrote earlier in the course
 
 2.2) ... anyone who is either a man (`gender == 1`) or older than 30.
 
-2.3) ... anyone who has a non-binary (`gender == 3`) and who is currently married or has previously been (1=Never married, 2=Currently married, 3=Previously married).
+2.3) ... anyone who has a non-binary (`gender == 3`) and who is currently married or has previously been (1 = Never married, 2 = Currently married, 3 = Previously married).
 
 When looking at the data summary, we already noticed that some of the reported values for age are impossible.
 We want to filter those out - what would you consider to be a good cut-off value?
@@ -227,13 +247,15 @@ We want to exclude these guys as well.
 table(nerd_red$married)
 ```
 
-Normally, there is no output when I assign something to a variable, but by wrapping my code into `()`, the output is printed.
+Note that there is no output when I assign something to a variable, so I have to call the variable `nerd_red` again on order to display it.[^display_parentheses]
+
+[^display_parentheses]: The alternative is to wrap the code into `()`. Then, the output is printed even if I assign something to a variable. See the difference between `example <- 2 + 3` and `(example <- 2 + 3)`.
 
 ```{r}
-(
-  nerd_red <- nerd_red %>% 
-    filter(married != 0, age < 120)
-)
+nerd_red <- nerd_red %>% 
+  filter(married != 0, age < 120)
+
+nerd_red 
 ```
 
 2.4) After filtering, what is the maximum age?
@@ -248,18 +270,158 @@ Normally, there is no output when I assign something to a variable, but by wrapp
 
 We want to add some columns to the data.
 Most of the time, we want to calculate something like a sum score or re-code questions.
-The good news is that all of this follows the same logic as vector operations which we saw before.
-Let's say we want to calculate the the sum of `Q1` and `Q2`.
+The good news is that most of this follows the same logic as vector operations which we saw before.
+
+In a rather silly example, we could calculate the birth year of each participant.
+We know that data has been collected from December 2015 - December 2018, but let's assume for now that all this data is from 2018.
+So to get the participants' birth year (roughly), we would need to calculate 2018 - participant age.
+
 Whenever we want to add a new column (or modify one) within the `tidyverse`, we use the `mutate()` function.
-I call my new column `sum_Q1_Q2`.
-Let's select only the first few columns, as well as our newly created column `sum_Q1_Q2` so we can see them next to each other.
+Here is how things would work for our toy example:
 
 ```{r}
 nerd_red %>% 
-  mutate(sum_Q1_Q2 = Q1 + Q2) %>% 
-  select(age:Q2, sum_Q1_Q2)
+  mutate(birthyear = 2018 - age, .before = gender)
+```
+
+I used the `.before` argument so the new column would be added before the column `gender`.
+Otherwise, the new column would have been added at the end of my data frame.
+This argument is a little bit strange, because its name starts with a dot, but don't worry about this.
+
+Note that `birthyear` has not been saved to `nerd_red` right now:
+
+```{r}
+names(nerd_red)
+```
+
+In order to do that, we would explicitly need to overwrite `nerd_red`, which we won't do here, because `birthyear` is a very useless column for us.
+
+Likewise, we can use functions on columns.
+For example, we could turn the age column into a character.
+That doesn't make sense in this example, but the opposite case is often true, where you want to turn a column that is accidentally coded as a character into a numeric column.
+
+```{r}
+nerd_red <- nerd_red %>% 
+  mutate(age_character = as.character(age), .before = gender)
+
+nerd_red
+```
+
+3.1) By overwriting `nerd_red`, I permanently added the `age_character` column to the data frame. Can you turn it into a numeric column again? You can replace it using the old column name (i.e. `mutate(age_character = ...)`). (Of course, the name will be pretty misleading then.)
+
+3.2) According to the code book, `gender` as been coded as 1 = Male, 2 = Female, 3 = Other. Assume there has been a mistake and it's actually 0 = Male, 1 = Female, 2 = Other. How can you correct the mistake? Don't overwrite the data frame, because we want to keep the old (correct) `gender` column as it is.
+
+Now we still have the useless `age_character` column in our data. If we want to get rid of it, we can do so by simply "deselecting" it:
+
+```{r}
+nerd_red <- nerd_red %>% 
+  select(-age_character)
+```
+
+### Sums
+
+In a lot of cases, we want to calculate the sum of columns.
+Say we want to calculate the the sum of `Q1` and `Q2` in a new column called `sum_Q1_Q2`.
+This is how we would do that:
+
+```{r}
+nerd_red %>% 
+  mutate(sum_Q1_Q2 = Q1 + Q2, .after = Q2)
 ```
 
 We can see how the columns `Q1` and `Q2` add up per row in our new column.
 But what if we want to calculate the sum score across all the columns `Q1` - `Q26`?
 Writing all of them down with a little plus sign seems tedious.
+
+We can achieve this with a few twists.
+Let's consider the third row of this code chunk first, the bit with the `mutate()` function.
+We can see that we create a column called `nerd_score`.
+We then use the function `sum()`, for obvious reasons.
+Next, we see the function `across()`.
+This is a so-called "helper function" because it is only used inside of `mutate()`, so `mutate()` will know what columns to work on.
+Basically, we need `across()` every time `mutate()` needs to use the same function on multiple columns at once.
+(Adding two columns together is a special case.)
+It actually matches the verbal description I used above: I want to calculate the sum score *across* columns Q1 - Q26.
+So far, so good.
+However, one crucial piece of code that we need is the additional `rowwise()` function before using `mutate()`.
+It does exactly what the name suggests: It causes all following functions to be executed separately on every single row of a data frame.
+That is, we calculate the sum for every row (= participant) separately.
+This might seem slightly confusing because we just saw that adding vectors automatically sums up the rows.
+Most functions work like that in `R`, but some don't - one of them is `sum()`.
+It just sums up everything, so if we used it without `rowsums()`, we would get the entire sum of all the elements in all the columns we selected.
+Note that `sum()` is not the same as `+`.
+
+As a last step, we `ungroup()` the data, because `rowwise()` groups the data into rows and we don't want it to stay like that (otherwise, it would).
+Note that I overwrote `nerd_red` with the version of `nerd_red` that now has a column with the nerd sum score.
+
+```{r}
+nerd_red <- nerd_red %>% 
+  rowwise() %>% 
+  mutate(nerd_score = sum(across(Q1:Q26))) %>% 
+  ungroup()
+
+nerd_red
+```
+
+## Recoding data
+
+Sometimes, you want to modify existing columns in your data.
+For example, we could turn the numbers in the `gender` column into text, so it's easier to interpret.
+We can see in the code book that 1 = Male, 2 = Female, 3 = Other.
+This is how we would recode the gender column:
+
+```{r}
+nerd_red %>% 
+  mutate(
+    gender = case_when(
+      gender == 1 ~ "male",
+      gender == 2 ~ "female",
+      gender == 3 ~ "other"
+    )
+  )
+```
+
+Let's unpack this: `case_when()`, as the name suggests, does stuff when a certain case occurs.
+Whenever the `gender` column is 1, we insert "male", when it is 2, we put in "female", and when it is 3, we put in "other".
+Note that it is important to specify all possible cases.
+If we only had put in values for the cases 1 and 2 (so, male and female), every occurrence of 3 would have been left blank (`NA`).
+
+When we have only two cases, the function `ifelse()` is a useful shortcut.
+It takes three arguments:
+
+1) A condition.
+2) What should happen when the condition is true.
+3) What should happen when the condition is false.
+
+For example, if we want to classify these numbers into "one digit" or "more than one digit", it looks like this:
+
+```{r}
+some_numbers <- c(2, 24, 12, 5, 1, 353, 1)
+
+ifelse(some_numbers > 9, "more", "one")
+```
+
+We can also modify the data based on this.
+For example, we could multiply the data with -1 whenever it has more than one digit, and leave it as it is when it is one digit.
+
+```{r}
+ifelse(some_numbers > 9, some_numbers *-1, some_numbers)
+```
+
+Note how we have to call `some_numbers`, even if we're leaving things unchanged.
+You can imagine it like this: Suppose you're creating a new vector.
+For every position of that vector, you contemplate whether you should put in the old number from `some_numbers`, or whether you should multiply it with -1 before adding it.
+
+4.1) Recode the `married` column. It's 1 = Never married, 2 = Currently married, 3 = Previously married. Overwrite `nerd_red` with the version that contains the recoded column.
+
+4.2) Recode the `voted` column. It's 1 = Yes, 2 = No. Overwrite `nerd_red` with the version that contains the recoded column.
+
+4.3) Like `ifelse()`, `case_when()` can be used outside of `mutate()`. Can you use `case_when()` with the following vector so that you:
+1) add 20 when the number is below 0
+2) subtract 2 when the number is above 0
+3) put in 9999 when the number is exactly 0
+
+```{r}
+some_more_numbers <- c(12, 0, 0, -4, 0, -12, 5, 2)
+```
+
