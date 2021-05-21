@@ -27,7 +27,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE, class.output = "dark-output", class.error = "error-output",
-  class.message = "message-output"
+  class.message = "message-output", fig.align = "center"
 )
 ```
 
@@ -37,10 +37,279 @@ There is more to be said about data wrangling, and we will get back to it, but I
 Plots are fun because they give you nice and colourful results, and they are a very important tool for inspecting your data and getting an intuition for it.
 While base `R` has a plotting function, the `tidyverse`'s `ggplot2` is what is partly responsible fpr `R`'s fame.
 
-`ggplot2` is based on the ["Grammar of Graphics" by Leland] Wilkinson(https://www.springer.com/de/book/9780387245447), a framework for good data visualisation in data science.
+`ggplot2` is based on the ["Grammar of Graphics" by Leland Wilkinson](https://www.springer.com/de/book/9780387245447), a framework for good data visualisation in data science.
 In a way, `ggplot2` has a grammar of its own, which is something new for us.
 But don't worry, it all makes sense.
 
-TO DO: Preprocessing file with the nerd data.
+First, we need some data.
+I want to use the opportunity to show you how you would preprocess your data in a separate file, and then use it in you R Markdown file.
+We want to set up a little pre-processing file for our nerd data.
+To achieve this, we will go though the file `04_data_wrangling.Rmd` and copy-paste the bits of code that we need in order to get the raw data ready to be plotted.
+
+```{r}
+library(tidyverse)
+source("05_nerd_preprocessing.R")
+```
+
+One basic plot that you will frequently need is a histrogram.
+It's a good way to quickly inspect the distribution of your data.
+Below, you see how a simple histogram for the participant age works.
+The concept is pretty simple: We pipe our data, `nerd_red` into the ggplot function.
+Within the function, we use the `aes()` function, which stands for "aesthetics".
+The aesthetic function is used to tell `ggplot` all the information that is related to the data (as opposed to things that have nothing to do with the data, e.g. overall plot colour).
+It will make more sense once we see which things belong into `aes()` and which things belong outside of it.
+Unsurprisingly, the argument `x` is what we want to put on the x-axis, which is the age of our participants in this case.
+Lastly, we tell ggplot to make a histogram.
+Ggplot uses different "geoms", which you can imagine as different "geometric" plot shapes.
+Other geoms are for example `geom_point`, `geom_bar` or `geom_boxplot`.
+You can probably guess what they do.
+The special thing is that we don't use a pipe to add the histogram, but a plus sign.
+That is because ggplots work in "layers".
+You might have used an image maniplation program (or something like PowerPoint) that followed the same logic: When you created an image, some elements were behind/in front of each other.
+In ggplot, that's the same.
+We have the plot background as first layer, and then there's our histrogram on top of that.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_histogram()
+```
+
+We can observe the layered structure by leaving out the histogram layer.
+Here, we can see that ggplot still drew the plot background for us.
+It also labelled the x-axis with "age", because it knows that our age data will go there.
+Furthermore, it picked a sensible scale for the axis, because it knows the minimum/maximum of our data and can figure out the range it will need to plot.
+However, no data is plotted, and there is no y-axis.
+We did not provide any information for the y-axis.
+In our previous plot, `geom_histogram` automatically counted how many participants were in each age bin, and based the y-axis on that.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age))
+```
+
+Let's check out a different geom.
+Try `geom_boxplot()`.
+It looks a bit weird - what might be the problem here?
+
+```{r}
+# TAKE OUT FOR THE COURSE!
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_boxplot()
+```
+
+The plot will look much better with a different orientation, i.e. the data on the y-axis.
+
+```{r}
+# TAKE OUT FOR THE COURSE!
+nerd_red %>% 
+  ggplot(aes(y = age)) +
+  geom_boxplot()
+```
+
+But still, the x-axis looks weird.
+Here's how we can fix that.
+There's still that nastly little x as axis label - we'll talk about how to get rid of that later.
+
+```{r}
+# TAKE OUT FOR THE COURSE!
+nerd_red %>% 
+  ggplot(aes(y = age, x = "")) +
+  geom_boxplot()
+```
+
+For now, let's try another geom.
+How about a good old scatter plot?
+However, this requires information about both x and y, which makes sense.
+What do we want to plot on next to age?
+Maybe the nerd score?
+
+```{r}
+# TAKE OUT FOR THE COURSE!
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point()
+```
+
+How about adding a line to the data, indicating how age and nerd score are associated with each other?
+The corresponding geom is called `geom_smooth`.
+
+```{r}
+# TAKE OUT FOR THE COURSE!
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point() +
+  geom_smooth()
+```
+
+The default method for `geom_smooth`, as `R` informs us, is "loess".
+We can also have a plain linear regression line, which we achieve like this:
+
+```{r}
+# TAKE OUT FOR THE COURSE!
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+We can also split our plot by another variable, e.g. gender.
+Gender is a property of our data, so it also goes into the `aes()` function.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+## Customise things
+
+This is all fun and games, but the plot is not as nice as it could be.
+We want to customise it a little bit.
+For example, the text on the y axis says "nerd_score", because ggplot just put in the name of the column.
+We can change that in the following way:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(y = "nerd sum score")
+```
+
+Next, let's move the legend to the top of the plot.
+Using `theme()`, we can control **a lot** of things in our plot, like font sizes, whether there should be grid lines or not and much, much more.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(y = "nerd sum score") +
+  theme(legend.position = "top")
+```
+
+This grey plot grid is something ggplot is very famous for.
+However, it might not be the most beautiful and modern plotting option.
+You can either set up a completely custom theme using the `theme()` function, or you can use one of the many default themes, for example:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(y = "nerd sum score") +
+  theme_bw() +
+  theme(legend.position = "top")
+```
+
+Much better. How about more fine-grained steps on the x and y axis?
+One quick way to set up the breaks on a plot axis is the function `seq()`.
+It generates a sequence of numbers.
+You give it the start point, the end point, and the stepsize:
+
+```{r}
+seq(1, 10, 2)
+```
+
+It is also possible not to give a step size, but the **number** of steps instead:
+
+```{r}
+seq(1, 10, length.out = 3)
+```
+
+So, we can use `seq()` to adjust our axes like this:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(y = "nerd sum score") +
+  
+  scale_x_continuous(breaks = seq(10, 90, 10)) +
+  scale_y_continuous(breaks = seq(0, 140, 20)) +
+  
+  theme_bw() +
+  theme(legend.position = "top")
+```
+
+How about some thicker lines for the regression lines?
+And maybe we should make the dots and the confidence interval a bit more opaque.
+Note that all of these things don't go inside the `aes()` function, because things like transparency or line size don't depend on the data.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  
+  geom_point(alpha = .5) +
+  geom_smooth(method = "lm", alpha = .2, size = 1) +
+  labs(y = "nerd sum score") +
+  
+  scale_x_continuous(breaks = seq(10, 90, 10)) +
+  scale_y_continuous(breaks = seq(0, 140, 20)) +
+  
+  theme_bw() +
+  theme(legend.position = "top")
+```
+
+To illustrate this, let's make our first histogram a little bit more beautiful.
+Here is what it looked like before:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_histogram()
+```
+
+Let's change the theme and also add some colour.
+Note that some for some geoms or shapes, there is a distinction between colour and fill.
+Fill does exactly what the name suggests, and colour refers to the colour of the border.
+The circles we used before did not have a border, so we could colour the complete circle using colour.
+We can refer to the colour that we want by name, but can also use hex codes.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_histogram(fill = "#dca3a3", colour = "black") +
+  theme_bw()
+```
+
+How about categorical data?
+Let's have a boxplot for age that is grouped by gender.
+Here, I use gender on both the x-axis and for the colour.
+That's a bit redundant, but we can hide the x-axis if we want, so only the legend carries the information.
+I have also added a title.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(y = age, x = gender, fill = gender)) +
+  geom_boxplot() +
+  labs(title = "Age by gender") +
+  theme_bw() +
+  theme(legend.position = "top")
+```
+
+How about adding another factor?
+
+1.1) Can you do a boxplot that has the nerd score on the y-axis, gender on the x-axis and is filled with whether the person voted or not?
+
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(y = nerd_score, x = gender, fill = voted)) +
+  geom_boxplot() +
+  labs(title = "Age by gender and voting status") +
+  theme_bw() +
+  theme(legend.position = "top")
+```
+
+## Free solo
+
+The plot session doesn't really have exercises, but we will brain storm ideas together.
+Which plots do you want to see?
+You suggest a plot, and then we will discuss together how we can build that plot together.
 
 **THIS IS A GITHUB PUSH CHECKPOINT**
