@@ -48,7 +48,8 @@ To achieve this, we will go though the file `04_data_wrangling.Rmd` and copy-pas
 
 ```{r}
 library(tidyverse)
-source("05_nerd_preprocessing.R")
+# TO DO: create nerd preprocessing file!
+source("nerd_preprocessing.R")
 ```
 
 One basic plot that you will frequently need is a histrogram.
@@ -70,9 +71,7 @@ In ggplot, that's the same.
 We have the plot background as first layer, and then there's our histrogram on top of that.
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age)) +
-  geom_histogram()
+# plot a histogram with age on the x axis
 ```
 
 We can observe the layered structure by leaving out the histogram layer.
@@ -84,8 +83,7 @@ We did not provide any information for the y-axis.
 In our previous plot, `geom_histogram` automatically counted how many participants were in each age bin, and based the y-axis on that.
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age))
+# just use ggplot() with age on the x axis, without a geom
 ```
 
 Let's check out a different geom.
@@ -93,30 +91,21 @@ Try `geom_boxplot()`.
 It looks a bit weird - what might be the problem here?
 
 ```{r}
-# TAKE OUT FOR THE COURSE!
-nerd_red %>% 
-  ggplot(aes(x = age)) +
-  geom_boxplot()
+# Try geom_boxplot instead of geom_histogram
 ```
 
 The plot will look much better with a different orientation, i.e. the data on the y-axis.
 
 ```{r}
-# TAKE OUT FOR THE COURSE!
-nerd_red %>% 
-  ggplot(aes(y = age)) +
-  geom_boxplot()
+# Fix the problem from above
 ```
 
 But still, the x-axis looks weird.
 Here's how we can fix that.
-There's still that nastly little x as axis label - we'll talk about how to get rid of that later.
+There's still that nasty little x as axis label - we'll talk about how to get rid of that later.
 
 ```{r}
-# TAKE OUT FOR THE COURSE!
-nerd_red %>% 
-  ggplot(aes(y = age, x = "")) +
-  geom_boxplot()
+# use a dummy ("") for the x-axis
 ```
 
 For now, let's try another geom.
@@ -126,42 +115,28 @@ What do we want to plot on next to age?
 Maybe the nerd score?
 
 ```{r}
-# TAKE OUT FOR THE COURSE!
-nerd_red %>% 
-  ggplot(aes(x = age, y = nerd_score)) +
-  geom_point()
+# scatter plot with age in the x axis and nerd score on the y axis
 ```
 
 How about adding a line to the data, indicating how age and nerd score are associated with each other?
 The corresponding geom is called `geom_smooth`.
 
 ```{r}
-# TAKE OUT FOR THE COURSE!
-nerd_red %>% 
-  ggplot(aes(x = age, y = nerd_score)) +
-  geom_point() +
-  geom_smooth()
+# add a geom_smooth
 ```
 
 The default method for `geom_smooth`, as `R` informs us, is "loess".
 We can also have a plain linear regression line, which we achieve like this:
 
 ```{r}
-# TAKE OUT FOR THE COURSE!
-nerd_red %>% 
-  ggplot(aes(x = age, y = nerd_score)) +
-  geom_point() +
-  geom_smooth(method = "lm")
+# use a linear model instead
 ```
 
 We can also split our plot by another variable, e.g. gender.
 Gender is a property of our data, so it also goes into the `aes()` function.
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
-  geom_point() +
-  geom_smooth(method = "lm")
+# same plot as above, but colour by gender
 ```
 
 ## Customise things
@@ -172,23 +147,14 @@ For example, the text on the y axis says "nerd_score", because ggplot just put i
 We can change that in the following way:
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  labs(y = "nerd sum score")
+# customise the y-axis label
 ```
 
 Next, let's move the legend to the top of the plot.
 Using `theme()`, we can control **a lot** of things in our plot, like font sizes, whether there should be grid lines or not and much, much more.
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  labs(y = "nerd sum score") +
-  theme(legend.position = "top")
+# put the legend on top
 ```
 
 This grey plot grid is something ggplot is very famous for.
@@ -196,13 +162,7 @@ However, it might not be the most beautiful and modern plotting option.
 You can either set up a completely custom theme using the `theme()` function, or you can use one of the many default themes, for example:
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  labs(y = "nerd sum score") +
-  theme_bw() +
-  theme(legend.position = "top")
+# pick a different theme (theme_bw)
 ```
 
 Much better. How about more fine-grained steps on the x and y axis?
@@ -211,29 +171,19 @@ It generates a sequence of numbers.
 You give it the start point, the end point, and the stepsize:
 
 ```{r}
-seq(1, 10, 2)
+# create a sequence from 1 - 10 in steps of 2
 ```
 
 It is also possible not to give a step size, but the **number** of steps instead:
 
 ```{r}
-seq(1, 10, length.out = 3)
+# create steps from 1 - 10 with length.out = 3
 ```
 
 So, we can use `seq()` to adjust our axes like this:
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  labs(y = "nerd sum score") +
-  
-  scale_x_continuous(breaks = seq(10, 90, 10)) +
-  scale_y_continuous(breaks = seq(0, 140, 20)) +
-  
-  theme_bw() +
-  theme(legend.position = "top")
+# adjust the steps of the x and y axis
 ```
 
 How about some thicker lines for the regression lines?
@@ -241,27 +191,14 @@ And maybe we should make the dots and the confidence interval a bit more opaque.
 Note that all of these things don't go inside the `aes()` function, because things like transparency or line size don't depend on the data.
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
-  
-  geom_point(alpha = .5) +
-  geom_smooth(method = "lm", alpha = .2, size = 1) +
-  labs(y = "nerd sum score") +
-  
-  scale_x_continuous(breaks = seq(10, 90, 10)) +
-  scale_y_continuous(breaks = seq(0, 140, 20)) +
-  
-  theme_bw() +
-  theme(legend.position = "top")
+# use alpha and size outside of the aes function
 ```
 
 To illustrate this, let's make our first histogram a little bit more beautiful.
 Here is what it looked like before:
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age)) +
-  geom_histogram()
+# remember what our first histogram looked like
 ```
 
 Let's change the theme and also add some colour.
@@ -271,10 +208,7 @@ The circles we used before did not have a border, so we could colour the complet
 We can refer to the colour that we want by name, but can also use hex codes.
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(x = age)) +
-  geom_histogram(fill = "#dca3a3", colour = "black") +
-  theme_bw()
+# change the fill to"#dca3a3" and the colour to black
 ```
 
 How about categorical data?
@@ -284,32 +218,95 @@ That's a bit redundant, but we can hide the x-axis if we want, so only the legen
 I have also added a title.
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(y = age, x = gender, fill = gender)) +
-  geom_boxplot() +
-  labs(title = "Age by gender") +
-  theme_bw() +
-  theme(legend.position = "top")
+# create a box plot with y = age and x = gender.
+# fill by gender
+# set a title
+# use a nice theme and move the legend to the top
 ```
 
 How about adding another factor?
 
 1.1) Can you do a boxplot that has the nerd score on the y-axis, gender on the x-axis and is filled with whether the person voted or not?
 
+## Detour: Long format
+
+What if we wanted do a boxplot for each of the nerdy items, `Q1` - `Q2` next to each other?
+We run into a problem: Each item is stored in a separate column, but we can only put **one** column on the x-axis.
+That is because `ggplot2` (and in fact, a lot of `tidyverse` functions) require the "long format".
+The long format means that we deviate from the classical data format where every participant has a single row.
+In the long format, one participant can take up several rows.
+Consider this simplified example of a data frame with two participants and three items:
 
 ```{r}
-nerd_red %>% 
-  ggplot(aes(y = nerd_score, x = gender, fill = voted)) +
-  geom_boxplot() +
-  labs(title = "Age by gender and voting status") +
-  theme_bw() +
-  theme(legend.position = "top")
+wide_format <- 
+  data.frame(
+    participant = 1:2,
+    item_1 = c(1, 4),
+    item_2 = c(5, 10),
+    item_3 = c(11, 2)
+  )
+
+wide_format
 ```
+
+We want to "pivot" the data, so we end up with a situation like this (only observe the output for now, not the code):
+
+```{r}
+wide_format %>% 
+  pivot_longer(
+    item_1:item_3,
+    names_to = "item",
+    values_to = "score"
+  )
+```
+
+As you can see, each participant now takes up three rows (one for each item), and the corresponding score is stored in a single, separate column.
+This would now e.g. allow us to build a plot where we put the item on the x-axis and the score on the y-axis.
+
+You may know this transformation from other programmes like SPSS.
+In the `tidyverse`, we achieve this by using the `pivot_longer()` function.
+Here is how it works: First, we tell it which columns should be part of the pivot, in our case, `item1` - `item3`.
+You may think: Wait a minute. But the whole data frame is being transformed, aren't all columns part of the pivot?
+Think of it like this: We provide the columns that should be gone in the resulting "long" data frame, and replaced by other columns.
+In our case, we want to get rid of the individual item columns, but turn them into a column coding which item we have and a corresponding score column.
+Next, we use the argument `names_to` to name our "naming" column.
+This column will hold the old column names.
+And lastly, we use the argument `values_to` to name the column that holds the values that were previously scored in the three different item columns.
+
+`pivot_longer()` is a very powerful function that can handle much more complicated cases where multiple columns are turned into multiple naming columns, but this does not concern us for now.
+However, one handy trick is to clean up the naming column a little bit:
+
+```{r}
+wide_format %>% 
+  pivot_longer(
+    item_1:item_3,
+    names_to = "item",
+    values_to = "score",
+    names_prefix = "item_"
+  )
+```
+
+Let's practice this a little bit.
+
+1.2) Select the items from the Ten Item Personality Inventory from the `nerd` data (**not** `nerd_red`!). Those are named `TIPI1` - `TIPI10`. Also store the `age` column and create a column with a participant id. Save the resulting data frame into a new variable. Then, pivot the data into the long format, with a column called `TIPI_item` that stores the item name, and a column called `score` that stores the participants' response.
+
+```{r}
+# Select the age column and the items from the Ten Item Personality Inventory from the `nerd` data 
+# (**not** `nerd_red`!). Those are named `TIPI1` - `TIPI10`.
+# Create a column with a participant id.
+# Save the resulting data frame into a new variable.
+# Then, pivot the data into the long format, with a column called `TIPI_item` that stores the 
+# item name, and a column called `score` that stores the participants' response.
+```
+
+1.3) Now back to our initial plan. Take `nerd_red` and transform it into the long format in such a way that you end up with a column storing the nerd item name (`Q1`- `Q26`) and another column storing the response to each item.
+
+1.4) Create a boxplot with each nerd item on the x-axis and the score on the y-axis.
 
 ## Free solo
 
-The plot session doesn't really have exercises, but we will brain storm ideas together.
+Now it's time to brain storm some plot ideas together.
 Which plots do you want to see?
-You suggest a plot, and then we will discuss together how we can build that plot together.
+You suggest a plot, and then we will discuss together how we can build that plot.
 
 **THIS IS A GITHUB PUSH CHECKPOINT**
