@@ -1,5 +1,5 @@
 ---
-title: "02 Data Frames"
+title: "03 Data Frames"
 output: 
   html_document:
     theme: dark
@@ -59,7 +59,7 @@ nerd <- read.csv("./data_sets/nerd_data_short.csv")
 ... when we inspect the data using the `head()` function, it looks very weird:
 
 ```{r}
-head(nerd)
+# run head() on nerd
 ```
 
 If we look into our Environment tab, it says that nerd has 1,000 observations (i.e. rows) of 1 variable - i.e. one column.
@@ -72,14 +72,14 @@ Other common separators are `;`, `,` or `.`.
 The separator argument of the `read.csv()` function is called `sep`.
 
 ```{r}
-nerd <- read.csv("./data_sets/nerd_data_short.csv", sep = "\t")
+# read in nerd again, but this time with sep = "\t
 ```
 
 We can see in our environment that the data now has 80 variables (columns).
 And using `head()`, or data also looks more like a table:
 
 ```{r}
-head(nerd)
+# run head again
 ```
 
 The data comes with a code book, which is called `nerd_data.csv` and can be found in the `data_sets` folder.
@@ -96,20 +96,20 @@ With the data read in correctly, we can see that we have 1,000 observations, i.e
 We can see this in the Environment tab, but we can also ask `R` how many rows our data frame has:
 
 ```{r}
-nrow(nerd)
+# check the number of rows of nerd
 ```
 
 Likewise, we can ask about the number of columns:
 
 ```{r}
-ncol(nerd)
+# check the number of columns of nerd
 ```
 
 You might be tempted to use `length()` to check how many rows a data frame has (at least I make this mistake around once a week), but this is not what `length()` gives us for a data frame.
 Do you see what `length()` does here?
 
 ```{r}
-length(nerd)
+# use length on nerd
 ```
 
 Before we do anything with the data, we want to familiarise ourselves with it.
@@ -124,7 +124,7 @@ Each column has a name, just like columns in an excel file.
 We can quickly take a look at all of the column names using the function `names()`.
 
 ```{r}
-names(nerd)
+# check the names of nerd
 ```
 
 One of the most common ways to access a single column in a data frame is the `$` operator.
@@ -133,15 +133,15 @@ R Studio will already suggest columns to you while you are typing.
 Let's save the age in a variable:
 
 ```{r}
-age <- nerd$age
-head(age, 10)
+# save the age column into a variable
+# inspect the variable using head()
 ```
 
 I am using `head()` to only show the first 10 elements in `age`, because I don't want my console (or this document) to be cluttered with thousands of numbers.
 Of course, you can also apply `head()` directly when using the `$` operator:
 
 ```{r}
-head(nerd$age, 10)
+# use head directly on the age column
 ```
 
 In our console, we can see that `age` does indeed seem to be a vector.
@@ -150,9 +150,9 @@ Remember how we assessed the type of variables in the beginning of this course?
 Think about how you would confirm that `age` (or the column `nerd$age`) is a vector?
 
 ```{r}
-typeof(age)
-typeof(nerd$age)
-typeof(nerd)
+# what is the type of the variable that we saved out age column in?
+# what is the type of the age column?
+# what is the type of nerd?
 ```
 
 This does not really give is the answer we want to know.
@@ -160,18 +160,16 @@ But we can ask `R` directly whether something is a vector or a data frame!
 The functions `is.vector()` and `is.data.frame()` do exactly what the name suggest: For a given object, they tell you whether something is a vector/data frame (`TRUE`) or not (`FALSE`).
 
 ```{r}
-is.vector(age)
-is.vector(nerd$age)
-is.data.frame(nerd)
-is.data.frame(nerd$age)
+# check whether (the variable we saved) the age column in is a vector
+# check whether nerd and the age column are a data frame
 ```
 
 This general logic exists for many data types in `R`, e.g.
 
 ```{r}
-is.character("cheescake")
-is.character(42)
+# check whether something is a character
 ```
+
 The `$` operator is probably the most common way to access a column in a data frame, because it is quite quick (due to the autocompletion feature) and rather easy to read.
 However, other approaches have advantages when we are coding more complex things.
 We will briefly look at different options, but you don't need to remember them for now.
@@ -185,7 +183,7 @@ The disadvantage is that you have to type the whole column name yourself, but th
 [^4]: You will later see some examples how you might want to use column names that you generated somewhere else. For now, this does not concern us.
 
 ```{r}
-head(nerd[["age"]], 10)
+# select the age column using [[]]
 ```
 
 You can also access any row or column in a data frame using indices.
@@ -195,7 +193,7 @@ This time, it's two numbers: The first for the rows and the second for the colum
 So with this code, we get the first row of `nerd`.
 
 ```{r}
-nerd[1, ]
+# select the first row of nerd
 ```
 
 And with this code, we get the third column.
@@ -203,17 +201,45 @@ Note that we leave the second position blank when we want the whole row, but tha
 (Again, I use `head()` because otherwise, thousands of numbers would be printed.)
 
 ```{r}
-head(nerd[ , 3])
+# select the third column of nerd
 ```
 
 Once again, selecting a single column will give us a vector.
 But as you saw above, selecting a single row will give us a data frame with column names.
+
+We can also extract single values in our data frame by providing an index for both row **and** column.
+For example, we can select the number at the third row and the first column like this:
+
+```{r}
+# select the value in the third row and the first column
+```
+
+We can also change values in our data frame in the same manner by assigning new values to them.
+**Careful, this will overwrite the values in our data frame!**
+So we want to save our `nerd` data into a new variable, so we can mess around with that one instead of destroying the data in our old variable.
+(Of course, the data file itself would still be intact, so we could also just load in the data again if we make a mistake.)
+
+```{r}
+# Save the nerd data into a new variable that you can mess around with
+```
+
+Now, let's overwrite the value in the first row and second column with 999.
+
+```{r}
+# Overwrite the value in the first row and second column with 999.
+```
 
 1.1) Select the column `gender` from the `nerd` data frame and save it into a variable. Use three different approaches.
 
 1.2) Select the 10th row of `nerd` and save it into a variable.
 
 1.3) What would you do if you wanted to select row 10, 11 and 12 from `nerd`? Think back to how we used indices with vectors.
+
+1.4) Extract the value in the 10th row and the 70th column.
+
+1.5) Use the "mess around data frame" to overwrite the value in the 10th row and the 70th column with a value of your choice.
+
+1.6) Use the "mess around data frame" to overwrite the entire 70th column. We will solve this task together with the course, but first think about the following questions: How would you, in principle, overwrite the entire 70th column? What would you need to replace it with?
 
 ## Getting an overview
 
