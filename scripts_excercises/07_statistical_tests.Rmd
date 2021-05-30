@@ -1,0 +1,199 @@
+---
+title: "07 Statistical Tests"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+    df_print: paged
+---
+
+```{css, echo=FALSE}
+.dark-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+
+.error-output {
+  background-color: #cc9393;
+    color: black;
+}
+
+.message-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output", fig.align = "center"
+)
+```
+
+## t-Tests
+
+After all this data exploring and plotting, you probably want to do some statistical tests now.
+Let's start with our all-time favourite, the t-test.
+We start with loading the `tidyverse` and preprocessing our data.
+
+```{r}
+library(tidyverse)
+source("05_nerd_preprocessing.R")
+```
+
+By the way, I am sorry for this wild data fishing and multiple-testing expedition.
+I want to emphasise this is a coding exercise, not a good analysis practice workshop.
+
+For this part, I want to leave the `tidyverse` for little bit.
+The base `R` functions for statistical tests are not pipe-friendly, and even though there are packages that offer pipe-friendly versions, those also have their own downsides.
+(They e.g. require transforming your data into the long format.)
+
+Let's check for gender differences in the nerd score first.
+Since a t-test is a comparison between two groups, we filter the data again so we only have the men and women.
+Since we will be using this data some more, we save it in a separate variable.
+
+```{r}
+# create a variable called "nerd_fm" that only contains men and women
+```
+
+Now for the t-test.
+`R`'s native t-test function is `t.test()`.
+We have several ways of entering our data into our t-test, and one of them is the formula notation.
+First, we put in our outcome variable, `nerd_score`.
+Then we indicate we want to enter something the nerd score depends on by using `~` (you might have seen this for regression notation).
+Lastly, we enter our grouping variable, `gender`, in this case.
+So we calculate a t-test on the nerd score, grouped by gender.
+Since we're not within the `tidyverse`, we have to explicitly refer to the data source for each column.
+Which means we're back to our good old dollar operator.
+
+```{r}
+# run a t-test with the nerd score as dependent variable and gender as grouping variable
+# use the formula notation
+```
+
+As you can see, the results are a little bit messy - but we get a lot of information.
+
+1.1) Quick reminder: Calculate the mean and the standard deviation of the nerd score for each gender and compare the group means with the otuput of the t-test.
+
+You may be wondering why the degrees of freedom are not an even number.
+That is because within the `R` community, the default t-test option is the Welch's t-test.
+Unlike the standard t-test, it does not assume equal variances (in which case the pooled variance is used to estimate the variance).
+In the Welch's t-test, the Welch (or Satterthwaite) approximation to the degrees of freedom is used, hence the "weird" degrees of freedom.
+If you don't want that, you can get a "SPSS-like" t-test like this:
+
+```{r}
+# run the same t-test with var.equal = TRUE
+```
+
+In most cases, this won't drastically change the interpretation of our data.
+
+This was a t-test for two independent groups.
+The same function can also calculate a paired t-test for dependent groups.
+For example, if we wanted to test whether people score higher on item `Q1` than on `Q2`, that is a within-subject comparison.
+But how do we do that?
+We don't have a grouping variable - `Q1` and `Q2` are separate columns.
+We **could** transform the data into the long format (which is what the pipe-friendly versions of statistical tests would require), but luckily, the base `R` t-test also accepts two separate vectors as argument.
+We just add the argument `paired = TRUE`, and that's it - a paired t-test!
+
+```{r}
+# run a paired t-test between Q1 and Q2
+```
+
+1.1) Let's do the independent t-test between men and women again. But this time, use two separate vectors, i.e. one vector for the women and one for the men. Use `[]` and logical comparisons - take a look at the exercises with vectors for inspiration.
+
+1.2) Compare the nerd score between people who voted and people who didn't vote. Use the formula notation, and then the version with two separate vectors.
+
+1.3) Do a t-test with age as a dependent variable, and gender as grouping variable. Use the formula notation, and then the version with two separate vectors.
+
+1.4) Is there a significant difference between items `Q1` and `Q10`?
+
+Of course, we cn also do a one-sample t-test.
+For example, we could check whether people score significantly higher than the middle option on the nerd questionnaire.
+
+1.5) How many points do you get on the nerd questionnaire if you always check the middle option?
+
+Now let's test whether our participants' scores are significantly different from what we would expect if someone would always score in the middle.
+We want to test a specific hypothesis - that the participants' score is greater than what you would get if you always choose the middle option - so we use a one-sided t-test.
+Using the argument `alternative`, we can specify whether the t-test should be `"two.sided"` (which is the default), or whether we have a directed hypothesis (`"greater"`, or `"less"`).
+
+```{r}
+# run a one-sided t-test with mu = ???
+```
+
+The mean score of our participants is lower than 104, so it's not surprising that it is not significantly higher than that.
+
+The following exercises let you practise some t-tests, but also test your knowledge of creating vectors that are a subset of the available data (e.g. using logical comparisons).
+
+1.6) Test the hypothesis that all women in the sample are significantly younger than 30.
+
+1.7) Test the hypothesis that **among people who voted**, women have a higher nerd score than men.
+
+## Extracting the relevant values
+
+If you want to report a t-test in one of your papers, the default output is not terribly helpful, and we didn't learn how to code just to copy-paste values into our papers.
+So we need a way of accessing the relevant numbers from our t-test.
+Luckily, we can get them using the dollar operator.
+
+2.1) Run the t-test from above that compared the nerd score between men and women. Save it into a variable. Then type the variable name with the dollar operator at the end of it and explore the autocomplete options RStudio provides you. What information can you extract?
+
+2.2) This allows you to print your results right in your R Markdown document, e.g.: The p-value was [INSERT CODE HERE].
+
+By the way, you don't need to save your t-test into a variable to be able to access its values.
+You can just add the dollar operator at the end like this (but autocompletion won't be available then):
+
+```{r}
+# How to extract the p-value without saving the t-test into a variable
+```
+
+## Effect sizes
+
+You probably want to report effect sizes along with your t-test.
+For this, we need an additional package, which is conveniently named `effectsize`.
+
+3.1) Install and load the package `effectsize`.
+
+3.2) The function `cohen_d()` from the package follows exactly the same logic as the `t.test()` function. Can you run an independent and a paired t-test, and then calculate the corresponding effect size?
+
+3.3) Extract the effect size and save the number into a variable.
+
+## Correlations
+
+Correlations follow a very similar logic as the functions we saw above.
+To test a correlation, we use the function `cor.test()`.
+
+4.1) I bet you are able to use `cor.test()` without me having to tell you how. Test whether there is a correlation between age and nerd score.
+
+4.2) Plot the correlation - age on the x axis, nerd score on the y axis.
+
+4.3) Test the correlation between self-reported nerdiness (`nerdy`) and nerd score. Plot it.
+
+## Regressions
+
+We can do simple regressions using the `lm()` (linear model) function.
+To do this, we use the same formula notation as we did with our t-test.
+In fact, this is a nice reminder that a t-test is simply a regression.
+We use the exact same code - we just replace `t.test` with `lm`.
+Compare the results.
+
+```{r}
+# run the nerd score/gender t-test from above with var.equal = TRUE
+```
+
+```{r}
+# set up the corresponding regression
+# use the summary function to inspect the output
+```
+
+The difference between the `t.test()` and the `lm()` function is that the output of `lm()` itself is not very useful.
+We have to use `summary()` to get the results we want.
+
+5.1) Run the correlation between nerd score and self-reported nerdiness again - but this time, as a regression. Save the regression in a variable and inspect the results with `summary()`.
+
+We can add more predictors with `+`.
+
+```{r}
+# run a regression where self-reported nerdiness and gender predict the nerd score
+```
+
+**THIS IS A GITHUB PUSH CHECKPOINT**
