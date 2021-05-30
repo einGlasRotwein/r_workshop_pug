@@ -1,0 +1,166 @@
+---
+title: "06 Summaries and grouping"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+    df_print: paged
+---
+
+```{css, echo=FALSE}
+.dark-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+
+.error-output {
+  background-color: #cc9393;
+    color: black;
+}
+
+.message-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output", fig.align = "center"
+)
+```
+
+## Summaries and grouping
+
+Often, you want some nice summary tables for your data where you e.g. report the mean and standard deviation of certain subgroups in your data.
+This is what we will be doing now.
+First of all, let's call our preprocessed nerd data again.
+
+```{r}
+library(tidyverse)
+source("05_nerd_preprocessing.R")
+```
+
+## Grouping and counting
+
+In the `tidyverse`, there is a nice function called `group_by()` that let's you ... well, group your data.
+All functions will then be applied to each group separately, which is very handy.
+We saw a very special case of this when using the function `rowwise()`.
+
+Consider this example.
+Here, I count all my participants.
+
+```{r}
+# use count on nerd_red
+```
+
+That isn't very useful.
+I know that `nerd_red` has `r nrow(nerd_red)` rows.
+However, things get interesting if I group the data first.
+
+```{r}
+# group by gender and count again
+```
+
+It doesn't have to be just one group.
+We can group the data be several variables.
+
+```{r}
+# group by gender and voted and count
+```
+
+Note, however, that the little description over the data says: "Groups: gender, voted [6]".
+That means, there are now six groups in our data (3 gender categories $\times$ 2 voted categories), and the data stays grouped until we tell `R` something else.
+Grouping can be very dangerous, because all functions will be applied to the grouped data.
+If you forget that you grouped your data, this can lead to unexpected results.
+So it's a good idea do ungroup your data if you won't need the groups anymore.
+
+```{r}
+# group by gender and voted and count, but ungroup at the end
+```
+
+Nothing changed in the output, except that the little "groups" information is gone.
+
+## Summary statistics
+
+Let's calculate the mean nerd score across all participants.
+The function `summarise()` (not to be confused with `summary()`) unsurprisingly summarises data for you, using whatever function you want (as long it's a function fit for summarising things, of course).
+
+```{r}
+# calculate the mean nerd score
+```
+
+We can apply several summary functions at once:
+
+```{r}
+# calculate the mean nerd score and the sd
+```
+
+Again, this is nice, but we can make this way more powerful by using groups.
+
+```{r}
+# group by gender and calculate the mean nerd score and sd
+```
+
+Again, we can choose several grouping variables at once.
+(This doesn't make that much sense here, but who cares.)
+
+```{r}
+# group by gender and married and calculate the mean nerd score and sd
+```
+
+1.1) Calculate the mean age per gender.
+
+1.2) Which people are descriptively older? People who are married or people who have never been married? What do you expect?
+
+1.3) Group the data by three variables (`gender`, `married`, `voted`) and calculate the mean nerd score. Arrange your data by the mean nerd score (descending). Which group is the nerdiest? Which one is the least nerdy?
+
+1.4) We might have the suspicion that the groups we created in 1.3 have very different sizes. It's likely that we got some extreme numbers because there were not that many members in those categories. Do the same as in 1.3, but this time, add another summary column that tells you how many people are in each group. Tip: `count()` doesn't work within summary (it's a special summary function itself). Use `n()` instead.
+
+1.5) Group the data by the self-reported nerdiness (`nerdy`) and take a look at the nerd score. Do the results seem to fit well? Check for the category sizes like we did before.
+
+## More fun with groups
+
+Sometimes, it can be helpful to apply functions separately to different groups, without summarising the data.
+Let's say we want to calculate the cumulative nerd score for men and women separately.
+First of all, let's filter the data for female and male participants and arrange them by gender.
+
+```{r}
+# filter the data for female and male participants and arrange them by gender.
+```
+
+If we would now calculate the sum score using the function `cumsum()` (cumulative sum), this would happen:
+
+```{r}
+# use the code from above and create the nerd cumsum (after the gender column)
+# save the data frame into a new variable
+```
+
+It's best to see the effects in a plot.
+The line for men is clearly higher than for women, because it continues right where the female line ends.
+That's because we calculated the sum score across all participants, not separately for men and women.
+
+```{r}
+# plot the data with x = id, y = nerd_sumscore, colour = gender and geom_path
+```
+
+When filtering the data for male participants, we see that the sum score is already high for the first man - because the sum for all the women is already in included.
+
+```{r}
+# filter for male participants
+```
+
+If we calculate the sumscore when we group the data frame, however, this is what happens:
+
+```{r}
+# calculate the cumulative sum again, but this time grouped by gender
+```
+
+The exact same plot now looks very different:
+
+```{r}
+# same plot, different data
+```
+
+**THIS IS A GITHUB PUSH CHECKPOINT**
