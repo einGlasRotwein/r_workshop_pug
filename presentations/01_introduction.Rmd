@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - Anything else?
 
 ## I REALLY like R
-![](pics/rniversary1.jpg) ![](pics/rniversary2.jpg)
+![](pics/rniversary1.jpg) ![](pics/rniversary2.jpg) ![](pics/rniversary3.jpg)
 
 ## About R
 <center>
@@ -84,7 +84,7 @@ knitr::opts_chunk$set(echo = FALSE)
 - What you do.
 - Your experience with `R`.
 - Your expectations for this course.
-- You favourite cake.
+- Your favourite cake.
 
 
 ## Let's dive in!
