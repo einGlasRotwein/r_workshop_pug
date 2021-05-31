@@ -1,0 +1,532 @@
+---
+title: "01 Vectors and functions"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+---
+
+```{css, echo=FALSE}
+.dark-output {
+  background-color: #5a5a5a;
+  color: white;
+}
+
+.error-output {
+  background-color: #cc9393;
+  color: black;
+}
+
+.warning-output {
+  background-color: #c0c537;
+  color: black;
+}
+
+.message-output {
+  background-color: #5a5a5a;
+  color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output", class.warning = "warning-output"
+  )
+```
+
+## Cleaning up
+
+When starting new exercises (i.e. R Markdown scripts), we should clean our environment to make sure we don't have any unused variables lingering around that might produce unwanted results because we use them by accident, not knowing what they contain.
+The following command clears the environment and gives you a clean slate.
+Observe your environment pane while running it!
+
+```{r}
+# clear envinronment
+```
+
+People sometimes mock how unnecessarily complex it is - there just could have been a clear, simple function with a sensible name to achieve this.
+However, `rm()` is a function to *r*e*m*ove things from the environment.
+So if I create a variable ...
+
+```{r}
+# create dummy variable
+```
+
+... I can make it disappear from the environment like this:
+
+```{r}
+# remove it from the environment
+```
+
+If we want to clear the whole environment, we don't want to name all the variables that are in there individually.
+That might be quite a lot!
+Instead, we tell `R` to delete a list of things (`list = ...`).
+That list of things is `ls()`.
+`ls()` is a function that lists the names of all objects in the environment, thus providing the information for `R` what do delete - everything.
+
+Now that our environment is nice and tidy again, we can dive into the concept of vectors.
+
+## Vectors 
+
+Instead of explaining what vectors are, it's easiest to first look at one:
+
+```{r}
+# a vector with whole numbers
+```
+
+You can see that this vector contains four numbers.
+When I define this vector, I start with an ominous `c`, I use commas between the numbers, and I wrap them in parentheses.
+In the output, however you just see the numbers next to each other, without the `c()` and without the commas.
+In this case, a vector is a collection of numbers.
+Here is another one:
+
+```{r}
+# a vector with numbers that have different decimal places
+```
+
+And another one:
+
+```{r}
+# a vector with characters
+```
+
+And another one:
+
+```{r}
+# a vector with logicals
+```
+
+We see that a vector is a collection of elements, and it can consist of all the data types we previously got to know.
+The only "rule" is that vectors don't mix: A vector always contains one and only one data type.
+This does not work:
+
+```{r}
+# mix numeric, character and logical in a vector
+```
+
+It seems like it did work, but the quotation marks indicate that everything has just been turned into a character!
+
+A likewise peculiar thing occurs when we just put an integer and a logical together[^logical_numbers]:
+
+```{r}
+# mix numeric and logical in a vector
+```
+
+[^logical_numbers]: Remember that logicals have a numeric representation: `TRUE` equals to 1, and `FALSE` equals to 0.
+
+You might also have noticed that in the second vector we looked at (`c(2.5, 10, 5.245)`), all numbers actually got turned into decimals with three decimal places.
+So beware - a vector forces all elements to be of the same data type!
+
+Now for the mysterious `c`.
+It somehow makes sense to group all elements with parentheses, but why does the `c()` have to go in front of it?
+`c()` is actually a function that combines elements.
+We will find out about functions later, but even if you learn about them, `c()` still does not really *feel* like a function.
+Still, all we can do is accept that `R` needs a function to be able to combine elements into a vector.
+This will not work:
+
+```{r error = TRUE}
+# a vector without c()
+```
+
+It's likely that you will forget `c()` a lot in the beginning, but that will go away.
+
+Of course, vectors can be saved into variables, just like we did with single elements before[^one_element_vector]:
+
+```{r}
+# store vector in a variable
+# print vector
+```
+
+[^one_element_vector]: In fact, we worked with vectors before! When we have e.g. `"hello"`, that is a one-element character vector. And `2` is a one-element integer vector. We don't need `c()` here, because we don't combine anything.
+
+1.1) By the way: I sneaked in a vector in disguise in the "basics" exercises that doesn't use the `c()` function. Can you find it?
+
+1.2) Create some vectors. Create one vector with characters, one with whole numbers, one with decimals and one with logicals. Save them all into different variables.
+
+1.3) We saw that the `c()` function combines elements into a vector, but it can also combine vectors! Try to combine some of the vectors you previously created using the `c()` function.
+
+### Mathematical operations
+
+The important thing about vectors is that you can do mathematical operations with them.
+Can you figure out what happens here?
+
+```{r}
+c(1, 2, 5) + 1
+```
+
+What do you expect the following code will produce?
+
+1.2) `c(1, 2, 5) - 1`
+
+1.3) `c(1, 2, 5) * 2`
+
+1.4) `c(1, 2, 5) / 2`
+
+Vectors are one of the most important concepts of `R`.
+Sure, other programming languages have similar things, but what is really important in `R` is that a lot of things are "vectorised".
+That means that functions work on entire vectors, or that clever combinations of vectors can be used to produce the desired results.
+
+That is, things get interesting when we use mathematical operations involving several multi-element vectors.
+What happens here?
+
+```{r}
+c(2, 4, 6) + c(1, 0, 1)
+```
+
+Let's play the same game again.
+What do you think these lines of code will produce?
+
+1.5) `c(2, 4, 6) - c(1, 0, 1)`
+
+1.6) `c(2, 4, 6) * c(1, 0, 1)`
+
+1.7) `c(2, 4, 6) / c(1, 2, 1)`
+
+However, things get *really* wild when we use vectors that do not have the same length.
+
+Can you see what happened here?
+
+```{r}
+c(2, 4, 6, 5) + c(1, 10)
+```
+
+Let's look at this concept some more.
+
+1.8) Can you multiply every other element of `c(2, 4, 6, 4, 9, 12)` with 2?
+
+1.9) Given `c(2, 4, 6, 4, 9, 12)`, subtract 1 from the first element, 2 from the second, 3 from the third, then again 1 from the fourth and so on.
+
+1.10) Run the following code cell. What happened here? Is that bad?
+
+```{r}
+c(2, 4, 6, 4, 9, 12) + c(1, 2, 3, 4)
+```
+
+Just as a little reminder, run exercises 1.5 - 1.7 again, but this time, save the vectors into variables.
+I know that coming up with meaningful names for these is difficult, so just give them funny names that you can share with the class to lighten up the mood.
+
+## Hot Dog Data
+
+In these exercises, we will work with vectors some more. We will also learn to use functions in `R`.
+For these exercises, I have some actual data for you: It's from [Nathan's Hotdog Eating Contest](https://nathansfamous.com/hot-dog-eating-contest/hall-of-fame/).
+This is not the full data - we only look at the data of a few contestants for this example.
+We'll look at bigger data sets in a second.
+
+This is a vector containing the number of hot dogs the contestants ate in 2018:
+
+```{r}
+hotdog_2018 <- 
+  c(37, 43, 32, 27, 74, 14, 28, 25, 27, 19, 24)
+```
+
+And these are the results of the same contestants in 2019:
+
+```{r}
+hotdog_2019 <- 
+  c(31, 50, 26, 29, 71, 14, 26.5, 23, 27, 18, 22)
+```
+
+Here is another vector that contains their names:
+
+```{r}
+hotdog_names <- 
+  c("Miki Sudo", "Darron Breeden", "Juan Rodriguez", "Juan Neave", "Joey Chestnut",
+    "Sophia DeVita", "Michelle Lesco", "Juliet Lee", "Derek Jacobs", "Larell Marie Mele",
+    "Steve Hendry")
+```
+
+Here are their genders:
+
+```{r}
+hotdog_genders <- 
+  c("male", "female", "male", "male", "male", "female", "female", "female", "male", "female",
+    "male")
+```
+
+## Some simple functions
+
+We will now use some functions to work with this data. For example, we can find out how many
+contestants we have by asking how long one of our vectors is (they should all have the same
+length). Unsurprisingly, we can do that with the function `length()`.
+
+```{r}
+# Find out how many contestants there are
+```
+
+A function in `R` always comes with a `()`.
+It takes **arguments** (i.e. we put something in) and **returns** something (i.e. gives us a result).
+Here, `hotdog_names` is the argument, and `11` is the return value or **output**.
+
+Try out a few other functions. Here are some you could try:
+
+2.1) `max()` gives you the maximum value in a vector. What do you think `min()` does? Use both on `hotdog_2018` and `hotdog_2019`.
+
+2.2) Use `table()` on `hotdog_genders`. What do you get?
+
+2.3) Use `mean()` and `sd()` on `hotdog_2018` and `hotdog_2019`. What do you get?
+
+2.4) Use `summary()` on `hotdog_2018` and `hotdog_2019`. What is the difference to using `mean()` and `sd()`?
+
+2.5) Use `head()` and `tail()` on either of the vectors. What do these functions do?
+
+2.6) How many hotdogs were eaten in total in the year 2019? Use the function `sum()`.
+
+## More arguments
+
+Most functions take more than one argument.
+For example, you can control the behaviour of `head()` and `tail()` with an additional argument.
+
+3.1) Can you guess what the second argument in `head()` (and `tail()`) does?
+What happens when you leave out the second argument? The following examples will help you:
+
+```{r}
+head(hotdog_names, 3)
+head(hotdog_names, 1)
+head(hotdog_names, 11)
+head(hotdog_names)
+```
+
+3.2) What do you think will happen when the second argument is larger than the number of hot dog contestants (`r length(hotdog_names)`)? Try it.
+
+We can see that arguments have a **position** in the function - for `head()`, the data belongs at the first position, and the number of elements we want to display comes second.
+`head()` will be unhappy if we just switch the order around:
+
+```{r error = TRUE}
+# use head() with the arguments in the wrong order
+```
+
+The function expects some data at the first position, and an integer at the second position.
+It is not "smart" it can't guess what we want.
+(Also, in this case, guessing might be pretty easy, but in other cases, it's not so obvious what we actually want.)
+However, you don't need to remember the order of arguments in a function (even though for simple functions, you automatically will at some point and use them that way).
+You can also address arguments **by name**.
+This way, `head()` understands what we want:
+
+```{r}
+# use head() in the wrong order, but with argument names
+```
+
+It is common in `R` that the data input of a function is simply called `x`.
+That violates the rule to use self-explanatory names in good coding practice, but it is a convention that exists for ages.
+We will discover more functions that take several arguments later.
+
+In general, you can see which arguments a function takes by reading the documentation of that function.
+Just type a question mark, and the the function name (without parentheses!), e.g. `?head`.
+Often, the documentation is a bit overwhelming and gives you much more than you need.
+In a lot of cases, you can just scroll down to the examples and see how the function should be used.
+
+## Indexing
+
+We will now learn how to access specific elements in a vector via so called **indexing**.
+Let us bring up the names of the contestants again.
+To get only the name of the third contestant, we do this:
+
+```{r}
+# get the third hot dog contestant
+```
+
+4.1) Can you find the name of the 5th contestant?
+
+What if we wanted to find the names of the 3rd **and** the 5th contestant?
+We can use another vector for indexing!
+
+```{r}
+# get the third and fifth hot dog contestant
+```
+
+It is important to use `c()` for this - `c()` puts 3 and 5 into the same vector.
+If we write `[3, 5]`, we're trying to use two vectors at the same time (3 is the first, 5 is the second), and that won't work:
+
+```{r error = TRUE}
+# try to get the third and fifth hot dog contestant, but without using c()
+```
+
+4.2) What if we want to see the first 3 contestants? (There are several ways to achieve this.)
+
+4.3) Can you think of a way how we can modify and use this as an index to find the first three hot dog contestants?
+
+We can use functions that return numbers for indexing.
+So, anything that gives you a number can be used.
+These examples do not make any sense, but show you how the principle works:
+
+```{r}
+hotdog_names[4-3]
+```
+
+```{r}
+hotdog_names[min(1:10)]
+```
+
+One common situation is this: You want to get the last element in a vector, but you do not know how long it is.
+
+4.3) How would you get the last name of the hot dog contestants using the `tail()` function we saw above?
+
+4.4) Remember what `length(hotdog_names)` returns. How can you use that for indexing?
+
+4.5) How would you get the name of the person who ate the most hot dogs in 2019? Use an index and the function `max()`! You will have to use two different vector here: `hotdog_names` and `hotdog_2019`.
+
+There is more that can be done with indexing when we use logical comparisons.
+Here is how this works: We have a vector called `numbers` that contains the number 1 - 4.
+We also have an index (which we stored in a variable named `index` here) that is a logical vector.
+We now apply this index to our vector `numbers`.
+Examine the result.
+What happened?
+
+```{r}
+numbers <- c(1, 2, 3, 4)
+# Bonus question: This vector could have been created with less typing. How?
+index <- c(TRUE, TRUE, FALSE, TRUE)
+numbers[index]
+```
+
+Remember how we can create logical vectors.
+Consider this code, for example - what does it do?
+
+```{r}
+numbers < 3
+```
+
+Let's apply this to our `numbers` vector:
+
+```{r}
+# save the previous code in a variable called index
+# apply it to numbers
+```
+
+What happened?
+
+We can achieve the same thing without saving the index in a variable:
+
+```{r}
+# same code as above, but without using variables
+```
+
+It feels a little bit weird to use the same vector twice in one line.
+But basically, what this code "translates" to is: Show me all of the elements in numbers (the first `numbers` in the code), where `numbers` is smaller than 3.
+As humans, we would rather say something like: "Show me all elements in numbers smaller than 3."
+For a computer, however, you need to explicitly say **what** should be smaller than 3.
+Something like this will not work.
+In fact, RStudio is already giving me a warning that something is wrong with my code.
+
+```{r error = TRUE}
+# try to use a logical comparison as an index, but we forget to repeat the variable
+# name (numbers) for the logical comparison
+```
+
+4.6) Can you write code that gives you all elements larger than 6 in the vector `1:10`?
+
+How can we use indexing with logical vectors in a more useful way?
+Let's get back to our hot dog examples.
+
+4.7) Can you create a vector that is `TRUE` when the participant ate more hot dogs in 2019 than in 2018 and `FALSE` when s/he didn't? Remember that the results from 2018 are stored in `hotdog_2018` and the results from 2019 are stored in `hotdog_2019`.
+
+We now would like to find out **which** participants improved from 2018 to 2019.
+We can achieve this using indices.
+
+4.8) Based on the previous examples, how would you get the names of the contestants who ate more hot dogs in 2019 than in 2018?
+
+4.9) Can you find the name of the contestant who ate exactly the same number of hot dogs in 2018 and 2019?
+
+4.10) Get the hot dog results **only for the men** in 2019 and save the results in a variable. (Think of a good name!) Do the same for the women's results in 2018.
+
+4.11) Remember that you can combine logical comparisons using `&` and `|`. Can you find a way to get the name of the **woman** who ate the **most hot dogs in 2019** using `&` and `max()`? You will need to use several of the vectors in our environment for that!
+
+## Missing values
+
+There is one last data type that I want to show you, because you will meet it frequently and it changes the way some functions work.
+I'm talking about missing values, which are typically indicated with `NA` (not available).
+Technically, there are different types of `NA`, depending on which data type it is supposed to mark as missing (i.e., a "character NA", an "integer NA" etc.).
+However, in 99.99% of the cases, all you will need is `NA`.
+It will turn into the "correct" type of `NA` when used in context.
+Let's see some examples.
+
+```{r}
+# A vector of numbers with an NA in between
+```
+
+```{r}
+# a character vector with some NAs in between
+```
+
+The important thing is that `NA`s will change the behaviour of some functions.
+For example:
+
+```{r}
+# run mean on a vector with NAs
+```
+
+The mean of this vector is "not available", because there is uncertainty due to the missing values.
+This is a good "safety" behaviour, because you might not be aware that there are missing values in your data.
+If `R` just ignored the missing values, you might end up with a biased mean without knowing.
+However, you can tell `R` to do just that: Calculate the mean for all the numbers which are not `NA`s.
+We can do that by setting the argument `na.rm`[^narm_position] to `TRUE` (its default value is `FALSE`).
+
+[^narm_position]: Note that we have to explicitly name the argument here, because `na.rm` is actually the third argument of the `mean()` function. See `?mean`.
+
+```{r}
+# run the function again, but with na.rm = TRUE
+```
+
+The same logic applies for a lot of different functions.
+For the following functions, examine how they behave when there is an `NA` in the vector.
+Can you use `na.rm = TRUE` to change their behaviour?
+
+5.1) `sd()`
+
+5.2) `min()` and `max()`
+
+5.3) `summary()`
+
+5.4) `table()`
+
+5.5) `head()` and `tail()`
+
+5.6) `length()`
+
+The situation also gets interesting when logicals come to the picture.
+Consider the following examples:
+
+```{r}
+TRUE & NA
+FALSE & NA
+TRUE | NA
+FALSE | NA
+```
+
+Can you explain why this is happening?
+
+Speaking of logical comparisons.
+Remember that you can look for certain elements in a vector like this:
+
+```{r}
+a_vector <- c(1, 12, 14, NA, 12)
+a_vector[a_vector == 12]
+```
+
+Unsurprisingly, the `NA` stays an `NA` in the output.
+Also, when we filter for elements that are `==` 12 via indexing, the `NA` gets returned as well.
+This is something you should keep in mind for actual data analysis - always check whether you have any `NA`s first!
+
+Which brings us to the next point: How do you actually check for `NA`s?
+You might assume it works like this:
+
+```{r}
+# try to use a logical comparison to look for NAs
+```
+
+However, the result is not what we would expect.
+This is such a common mistake that R Studio warns you that you probably did something wrong here.
+If you hover over the little exclamation mark, it actually tells you what you should use instead, which is:
+
+```{r}
+# use the correct function to detect NAs
+```
+
+```{r}
+# use the function to filter a_vector for all elements that are NOT NAs
+```
+
+Note how I'm filtering for all elements which are **not** `NA` in the last code, effectively getting rid of all missing values in the data.
+
+**THIS IS A GIT PUSH CHECKPOINT!**

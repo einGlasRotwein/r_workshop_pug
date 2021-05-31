@@ -1,0 +1,259 @@
+---
+title: "03 Data Frames"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+---
+
+```{css, echo=FALSE}
+.dark-output {
+  background-color: #5a5a5a;
+  color: white;
+}
+
+.error-output {
+  background-color: #cc9393;
+  color: black;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output"
+  )
+```
+
+Most likely, the most frequent data format you will encounter during data analysis is the data frame.
+It is more or less a table of data, a bit like you know it from excel.
+We can create data frames by hand, but I think it is best to get our hands on real data right from the start.
+We use data from the "Nerdy Personality Attributes Scale", a fun scale that was developed to quantify what "nerdiness" is.
+You can take the test online at [Open Psychometrics](https://openpsychometrics.org/tests/NPAS/).
+The data for the test (and many others) is also freely available [here](https://openpsychometrics.org/_rawdata/).
+
+The nerd data is in a .csv file - .csv and text files are really easy to read into `R`.
+For excel files or SPSS data sets, we need additional packages to do the job.
+The function `read.csv()` does exactly what the name suggests: It reads in a .csv file.
+The first argument is the path that the file lies in.
+In the folder where your script for this exercise lies, there is folder called `"data_sets"` which - you guessed it - contains the data sets for this workshop.
+(It's best to keep your data in a separate folder so you won't end up in a folder where scripts, data and lord knows what else is mixed together.)
+The file we want to work with is `"nerd_data.csv"`.
+
+So, the path to our file is: `"./data_sets/nerd_data.csv"`.
+This is called a **relative path** - it is the path to the file that we need to take from our current location, not the full path from the start.
+The absolute path on my computer would e.g. be `"C:/Users/julit/OneDrive/Dokumente/r_stuff/r_workshop_pug/scripts_excercises/data_sets"`.
+This is not only an annoyingly long path, it is also dangerous for reproducibility:
+If I had put this path into the script, you could not run it, because this path does not exist on your computer.
+Each of you would have to put in their own user name, the name of their workshop folder and so on.
+The relative path, however, works relative to this R Markdown file.
+`./"` means "here" (i.e. where the R Markdown file is), and from here, we go to the data_sets folder and then to the specific file, nerd_data.csv.
+**Note that this works differently for R Markdown files versus R scripts. In a script, your location is where your current working directory is. When you're using R Projects, that's where your R Project lies.**
+
+So, we read in our data and assign it to a variable called `nerd`.
+This code runs fine, but ...
+
+```{r}
+nerd <- read.csv("./data_sets/nerd_data_short.csv")
+```
+
+... when we inspect the data using the `head()` function, it looks very weird:
+
+```{r}
+# run head() on nerd
+```
+
+If we look into our Environment tab, it says that nerd has 1,000 observations (i.e. rows) of 1 variable - i.e. one column.
+However, we expected something a little bit more like a table.
+This happened because `R` did not know how to separate the data.
+It put all of the information it found into one single column.
+We need to tell it what separates the columns.
+In this data, we can see that the separator is a tab - this is indicated with `\t`.
+Other common separators are `;`, `,` or `.`.
+The separator argument of the `read.csv()` function is called `sep`.
+
+```{r}
+# read in nerd again, but this time with sep = "\t
+```
+
+We can see in our environment that the data now has 80 variables (columns).
+And using `head()`, or data also looks more like a table:
+
+```{r}
+# run head again
+```
+
+The data comes with a code book, which is called `nerd_data.csv` and can be found in the `data_sets` folder.
+We see that the nerd questionnaire contains 26 questions, represented in the columns `Q1` - `Q26` in the data.
+There is also a personality questionnaire (`TIPI1`-`TIPI10`), a test about word definition knowledge (`VCL1` - `VCL16`) and various demographic information.
+Each row represents a participant.
+
+## Working with data frames
+
+With the data read in correctly, we can see that we have 1,000 observations, i.e. 1,000 participants.[^1]
+
+[^1]: The actual data set has around 15,000 participants, but for the purpose of this course, I created a smaller data set with only the first 1,000 participants.
+
+We can see this in the Environment tab, but we can also ask `R` how many rows our data frame has:
+
+```{r}
+# check the number of rows of nerd
+```
+
+Likewise, we can ask about the number of columns:
+
+```{r}
+# check the number of columns of nerd
+```
+
+You might be tempted to use `length()` to check how many rows a data frame has (at least I make this mistake around once a week), but this is not what `length()` gives us for a data frame.
+Do you see what `length()` does here?
+
+```{r}
+# use length on nerd
+```
+
+Before we do anything with the data, we want to familiarise ourselves with it.
+`R` can help you to get an overview about your data in various ways.
+Before that, however, we need to understand how data frames work.
+The good news is: It's just a bunch of vectors!
+Each column in a data frame is a vector[^2], just like the ones we've worked with before!
+
+[^2]: Technically, a column in a data frame can also be a list, but this is rather rare and does not need to concern us now.
+
+Each column has a name, just like columns in an excel file.
+We can quickly take a look at all of the column names using the function `names()`.
+
+```{r}
+# check the names of nerd
+```
+
+One of the most common ways to access a single column in a data frame is the `$` operator.
+Here is how it works: You type the name of the data frame, then the `$` operator, and then the name of the column you want to access.
+R Studio will already suggest columns to you while you are typing.
+Let's save the age in a variable:
+
+```{r}
+# save the age column into a variable
+# inspect the variable using head()
+```
+
+I am using `head()` to only show the first 10 elements in `age`, because I don't want my console (or this document) to be cluttered with thousands of numbers.
+Of course, you can also apply `head()` directly when using the `$` operator:
+
+```{r}
+# use head directly on the age column
+```
+
+In our console, we can see that `age` does indeed seem to be a vector.
+That means, when we isolate a column of a data frame, it becomes a vector.
+Remember how we assessed the type of variables in the beginning of this course?
+Think about how you would confirm that `age` (or the column `nerd$age`) is a vector?
+
+```{r}
+# what is the type of the variable that we saved out age column in?
+# what is the type of the age column?
+# what is the type of nerd?
+```
+
+This does not really give is the answer we want to know.
+But we can ask `R` directly whether something is a vector or a data frame!
+The functions `is.vector()` and `is.data.frame()` do exactly what the name suggest: For a given object, they tell you whether something is a vector/data frame (`TRUE`) or not (`FALSE`).
+
+```{r}
+# check whether (the variable we saved) the age column in is a vector
+# check whether nerd and the age column are a data frame
+```
+
+This general logic exists for many data types in `R`, e.g.
+
+```{r}
+# check whether something is a character
+```
+
+The `$` operator is probably the most common way to access a column in a data frame, because it is quite quick (due to the autocompletion feature) and rather easy to read.
+However, other approaches have advantages when we are coding more complex things.
+We will briefly look at different options, but you don't need to remember them for now.
+
+Instead of `$`, we can use `[["column_name"]]`, i.e. the column name in double square brackets.
+(Again, I use `head()` so `R` won't print the entire column, but the "raw" code would read: `nerd[["age"]]`).
+The disadvantage is that you have to type the whole column name yourself, but the advantage is that it is slightly less "dangerous"[^3] and that you can exchange the column name quite flexibly with names you generated (e.g. in a function)[^4].
+
+[^3]: Again, this doesn't concern us for now, but when using `$`, there is this feature called "partial matching". It's a bit like autocomplete on steroids. If you do not type the full column name, `R` will still identify a column that your partial name matches (that is, unless there is no ambiguity). In very unfortunate cases, this can lead to silent errors when you have a typo in your column name, i.e. errors without an error message. This does not happen when you access columns using `[[]]`, because every typo will throw an error.
+
+[^4]: You will later see some examples how you might want to use column names that you generated somewhere else. For now, this does not concern us.
+
+```{r}
+# select the age column using [[]]
+```
+
+You can also access any row or column in a data frame using indices.
+It works much like the indices that we used for single vectors, but this time, you have two dimensions (rows and columns).
+As with the vectors, we use square brackets (`[]`) for indices.
+This time, it's two numbers: The first for the rows and the second for the columns.
+So with this code, we get the first row of `nerd`.
+
+```{r}
+# select the first row of nerd
+```
+
+And with this code, we get the third column.
+Note that we leave the second position blank when we want the whole row, but that we leave the first position blank when we want the whole column.
+(Again, I use `head()` because otherwise, thousands of numbers would be printed.)
+
+```{r}
+# select the third column of nerd
+```
+
+Once again, selecting a single column will give us a vector.
+But as you saw above, selecting a single row will give us a data frame with column names.
+
+We can also extract single values in our data frame by providing an index for both row **and** column.
+For example, we can select the number at the third row and the first column like this:
+
+```{r}
+# select the value in the third row and the first column
+```
+
+We can also change values in our data frame in the same manner by assigning new values to them.
+**Careful, this will overwrite the values in our data frame!**
+So we want to save our `nerd` data into a new variable, so we can mess around with that one instead of destroying the data in our old variable.
+(Of course, the data file itself would still be intact, so we could also just load in the data again if we make a mistake.)
+
+```{r}
+# Save the nerd data into a new variable that you can mess around with
+```
+
+Now, let's overwrite the value in the first row and second column with 999.
+
+```{r}
+# Overwrite the value in the first row and second column with 999.
+```
+
+1.1) Select the column `gender` from the `nerd` data frame and save it into a variable. Use three different approaches.
+
+1.2) Select the 10th row of `nerd` and save it into a variable.
+
+1.3) What would you do if you wanted to select row 10, 11 and 12 from `nerd`? Think back to how we used indices with vectors.
+
+1.4) Extract the value in the 10th row and the 70th column.
+
+1.5) Use the "mess around data frame" to overwrite the value in the 10th row and the 70th column with a value of your choice.
+
+1.6) Use the "mess around data frame" to overwrite the entire 70th column. We will solve this task together with the course, but first think about the following questions: How would you, in principle, overwrite the entire 70th column? What would you need to replace it with?
+
+## Getting an overview
+
+When we worked with vectors (the hot dog data), we already used some functions that can help us to get an overview over the data.
+One of them was `summary()`.
+
+2.1) Use `summary()` on the `age` column. What do you notice?
+
+2.2) Use `summary()` on the `country` column. What is different here? Why? (Tip: Inspect `nerd$country`, maybe using `head()`).
+
+2.3) Try `table()` for the `country` column. What is the difference?
+
+2.4) What happens if you use `summary()` on the whole data frame?
+
+2.5) Try `table()` on the gender column. Does this help? Can you find more information in the codebook?
+
+**THIS IS A GIT PUSH CHECKPOINT!**

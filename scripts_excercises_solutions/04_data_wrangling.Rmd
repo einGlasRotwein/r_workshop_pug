@@ -1,0 +1,487 @@
+---
+title: "04 Data Wrangling"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+    df_print: paged
+---
+
+```{css, echo=FALSE}
+.dark-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+
+.error-output {
+  background-color: #cc9393;
+    color: black;
+}
+
+.message-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output"
+)
+```
+
+## The tidyverse
+
+For the next steps, I would like to switch to the `tidyverse`.
+The  `tidyverse` is an `R` package.
+In fact, it is actually a collection of various packages that come with many handy functions for data wrangling and visualisation.
+It is perfectly normal to use various `R` packages for additional functionalities and you will "collect" a lot of them over time.
+However, the packages of the `tidyverse` are a little bit special.
+The `tidyverse` has it's own "coding style" which works slightly different from what we've learned so far.
+This has lead to a whole war between "base `R`" and "the `tidyverse`", with many hardliners on both sides.
+Sometimes, the `tidyverse` is described as being especially beginner friendly and, well ... tidy.
+Personally, I don't know what all the fuzz is about: Both base `R` and the `tidyverse` have their pros and cons and honestly, I think they work best when used together.
+I use whatever I think works best for the task at hand - it's not "either or".
+In this course, I have to make decisions about what to teach you, and I will mainly show you the `tidyverse` way of doing it, even though I'm a huge fan of base `R`.
+But I can either teach you to do one thing in 50 different ways, or teach you how to do 50 different things instead, so I'm going with the latter.
+If you are interested, I can share materials with you that teach you how to do things "the base way".
+
+Let's install the `tidyverse` together.
+You can install any package using the function `install.packages()`.
+It takes the package name as an argument.
+If you start typing the package name without the quotation marks, `R` will start suggesting packages to you which are directly available on CRAN (this is also where we installed `R` from).
+
+```{r eval=FALSE}
+# install the tidyverse
+```
+
+However, just because you have a package, that does not mean you can use it.
+Packages only become "active" if you load them with the function `library()`.
+This seems a bit effortful, but actually has good reasons: Because there are so many packages, a lot of the use the same names for different functions.
+One function in one package can do an entirely different thing than the "same" function in a different package!
+So, if all packages would be loaded, it might be a little bit difficult to avoid confusion.
+Usually, you want to make a conscious decision about which packages you want to load in your script.
+Once a package is loaded, it stays loaded throughout the entire `R` session.
+Let's load the `tidyverse`.[^loading_quotation]
+
+[^loading_quotation]: Notice that I'm not using quotation marks here. However, both works: `library(tidyverse)` and `library("tidyverse")` both do the same job.
+
+```{r}
+# load the tidyverse
+```
+
+One of the most popular and noticeable features of the `tidyverse` is the pipe operator, which looks like this: `%>%`.[^pipe_shortcut]
+It is used to create chains of functions, which means that you put functions after each other, linking them with the pipe operator.
+In base `R`, you achieve the same thing with a more "onion-like approach".
+Let me show you what I mean by this.
+Say we have this vector:
+
+[^pipe_shortcut]: This thing is a pain in the a** to type by hand. I strongly recommend creating a shortcut. You can do this via Tools $\to$ modify keyboard shortcuts. Look for "insert pipe operator" in the search bar. I chose "alt + ." to add the pipe, simply because "alt + -" inserts the assignment operator `<-` per default.
+
+```{r}
+example_vector <- c(1, 3, 33, 50, 5, 1, 2)
+```
+
+We want to take the mean of this vector (using the `mean()` function), and then round the result to two decimal places (using the function `round()`).
+In base `R`, we would stack the functions into each other.[^base_pipe]
+They are then executed from the inside towards the outside.
+
+[^base_pipe]: In fact, a brand new pipe operator has just been added to base `R`, which looks like this: `|>|`. It works much like the `tidyverse` pipe, but not quite. You can't exchange one for the other, at least not at the time of writing. The base `R` people is officially available since 18.05.2021 (since version 4.1.0), so it will probably face some developments during the next years.
+
+```{r}
+# take the mean of the example vector and round the result to two decimal places (base R style)
+```
+
+We could also do the same thing stepwise (and sometimes this is the best approach if you want your code to be readable).
+
+```{r}
+# same as above, but in two steps
+```
+
+In the tidyverse, we chain those functions together using the pipe operator:
+
+```{r}
+# this time: tidy style!
+```
+
+Note how we can leave out the actual data argument every time.
+`mean()` doesn't use any argument at all.
+That is because the pipe "delivers" `example_vector` to the `mean()` function.
+That means, `mean()` **does** get an argument, only that it's not coming from within the brackets, but from the pipe to its left.
+We see that `round()` still has the number 2 as its second argument, indicating that we want to round to two decimal places.
+However, the first argument has been omitted.
+That's again because the data - the mean of `example_vector` in this case - is coming from the left.
+Let's practice chaining some functions together.
+
+1.1) Turn this "function onion" into a `tidyverse` chain:
+
+(Can you find out what the function `abs()` does?)
+
+```{r}
+another_vector <- c(3, -2, 5, 99, -132.5)
+```
+
+```{r}
+# use abs on the vector, then take the mean and transform the result into a character
+```
+
+1.2) Let's make things a bit trickier with additional arguments.
+
+```{r}
+vector_with_NAs <- c(3, -2, 5, NA, 99, -132.5, NA)
+```
+
+```{r}
+# use abs on the vector, show the first 4 elements with head, take the mean (with na.rm = TRUE)
+# and turn into character
+```
+
+1.3) How do we get this into a pipe?
+
+```{r}
+mean(another_vector * 2)
+```
+
+This does not work:
+
+```{r}
+another_vector * 2 %>% mean()
+```
+
+## Data wrangling
+
+### Selecting and filtering
+
+The pipes are all fun and games for vectors, but they unlock their true potential when applied to data frames.
+Furthermore, the `tidyverse` offers a lot of functionalities for "data wrangling", i.e. cleaning, formatting and processing data.
+Let's load in the nerd data again.
+
+```{r}
+nerd <- read.csv("./data_sets/nerd_data_short.csv", sep = "\t")
+```
+
+The data contains a lot of information we don't want to look at for now.
+How about selecting only the columns we want to work with right now?
+This is what the `select()` function does.
+We pipe our `nerd` data into it and then select the columns we want to keep.
+I want to keep the participants' age, the gender, whether they're married or not, and all of the "nerdy" questions, e.g. `Q1` - `Q26`.
+
+```{r}
+# select age, gender, married, and Q1 - Q26
+```
+
+A few remarkable things just happened.
+First of all, look at how I'm addressing the columns: I'm just using their names, without writing the name of the data frame again.
+That is, I'm writing `age` instead of `nerd$age` or `nerd["age"]`.
+That is not self-evident at all and a feature of the `tidyverse`'s "tidy evaluation", called "data masking".
+That means, you can use the columns of your data frame as if they were variables in your environment.
+You don't have to refer to the data source (`nerd`, in this case), in order to access the columns.
+The `tidyerse` "knows" what you are referring to because you piped the main data source into the `select()` function.
+
+And then there's the fact that we don't have to type out all of the columns `Q1` - `Q26` - we can actually just write exactly that: `Q1:Q26` means column `Q1` to `Q26`.
+Also note how the columns are now displayed in the order we typed them.
+Had we chosen a different order, our data would have been ordered differently as well.
+
+Sometimes, you want to bring one column to the front, but you don't really want to change anything else.
+You don't want to name all the other columns, so there's a shortcut for that: `everything()`.
+It literally throws in all the remaining columns you haven't selected yet and is great for reordering.
+Say that, for some reason, we wanted the column `voted` (whether or not someone voted in the past election) to go first, then the age, and then all the rest.
+The corresponding code would look like this:
+
+```{r}
+# select voted, age and then the rest of the data frame
+```
+
+Don't forget the `()` behind everything!
+
+1.4) I want to continue working with a reduced version of our data that only contains the columns `age`, `gender`, `married`, `voted`, `nerdy` and also `Q1` - `Q26`.
+Can you select these columns and save this reduced data frame in a variable called `nerd_red` ("nerd reduced")? 
+
+There are further options for selecting subsets of data.
+We just made a selection based on columns, but we can also only select certain rows.
+This can be achieved with the `filter()` function.
+Let's for example only filter out the female participants, which are coded as `2` in the `gender` column.
+
+```{r}
+# filter participants where the gender is 2
+```
+
+We use the same notation as for logical comparisons, so make sure to use `==` instead of `=`!
+Here, we filter for women below the age of 30.
+
+```{r}
+# filter for women below the age of 30 - use &
+```
+
+Interestingly, the logical `&` can be replaced with a comma in `filter()`.
+
+```{r}
+# filter for women below the age of 30 - use ,
+```
+
+Filter `nerd_red`. Feel free to look at the code you wrote earlier in the course for the logical comparisons. Choose ...
+
+2.1) ... anyone who is either 22 or 26 years old. There are several ways to achieve this! There is also an interesting `tidyverse` way that I will show you later.
+
+2.2) ... anyone who is either a man (`gender == 1`) or older than 30.
+
+2.3) ... anyone who has a non-binary (`gender == 3`) and who is currently married or has previously been (1 = Never married, 2 = Currently married, 3 = Previously married).
+
+2.4) The column `nerdy` contains the agreement to the statement "I see myself as nerdy" (1 = disagree strongly - 7 = agree strongly). How many women have the highest self-reported nerdiness? How many have the lowest self-reported nerdiness? What about the men? Solve this task using filters, but also try `table()`.
+
+When looking at the data summary, we already noticed that some of the reported values for age are impossible.
+We want to filter those out - what would you consider to be a good cut-off value?
+Also, marital status is supposed to be coded on a scale from 1 - 3, but there are five people where the entry is 0.
+We want to exclude these guys as well.
+
+```{r}
+# table the married column
+```
+
+Note that there is no output when I assign something to a variable, so I have to call the variable `nerd_red` again on order to display it.[^display_parentheses]
+
+[^display_parentheses]: The alternative is to wrap the code into `()`. Then, the output is printed even if I assign something to a variable. See the difference between `example <- 2 + 3` and `(example <- 2 + 3)`.
+
+```{r}
+# filter out people with implausible marriage status and age
+# overwrite nerd_red
+```
+
+2.4) After filtering, what is the maximum age?
+
+2.5) How many people of each gender are included in the data?
+
+2.6) How many people per marital status do we have?
+
+2.7) How many people did we exclude in total?
+
+2.8) Check whether the `nerdy` column has only valid values, i.e. values from 1 - 7. What would your strategy be? Filter out invalid values if necessary.
+
+2.9) Check whether the `voted` column has only valid entries (1 or 2). Filter out invalid values if necessary.
+
+## Extracting single columns
+
+We know how to extract a vector from a data frame.
+
+3.1) Quick recap: Save the `age` column into a single vector.
+
+But what if we modified our data frame with a pipe and want to quickly extract one column?
+Sure, we could save the modified data frame and then extract the column.
+
+3.2) Save a data frame where you filter all participants who are younger than 20. Then extract the age column.
+
+However, we can do all of this in one go using the `pull()` function.
+
+```{r}
+# Filter the data frame for participants who are younger than 20 and extract the age 
+# column using pull()
+```
+
+You might wonder why we don't just use `select()` to do the job.
+Try using select for the same purpose.
+Can you see what the problem is?
+
+```{r}
+# Filter the data frame for participants who are younger than 20 and extract the age 
+# column using select()
+```
+
+
+## Sorting data
+
+Another thing that is very useful is `arrange()` which lets you sort your data easily.
+For example, here is how you would sort the data by age:
+
+```{r}
+# arrange nerd_red by age
+```
+
+We can also arrange the data in descending order by wrapping the respective column in `desc()` (for "descending").
+
+```{r}
+# arrange nerd_red by age in descending order
+```
+
+Sorting with multiple columns is not a problem:
+
+```{r}
+# arrange nerd_red by age and gender
+```
+
+4.1) Use the code above, but switch the order of gender and age. What happens?
+
+4.2) Arrange `nerd_red` by `voted` and `age`. Let `voted` be ascending and `age` descending.
+
+## Adding columns
+
+We want to add some columns to the data.
+Most of the time, we want to calculate something like a sum score or re-code questions.
+The good news is that most of this follows the same logic as vector operations which we saw before.
+
+In a rather silly example, we could calculate the birth year of each participant.
+We know that data has been collected from December 2015 - December 2018, but let's assume for now that all this data is from 2018.
+So to get the participants' birth year (roughly), we would need to calculate 2018 - participant age.
+
+Whenever we want to add a new column (or modify one) within the `tidyverse`, we use the `mutate()` function.
+Here is how things would work for our toy example:
+
+```{r}
+# create a column with the (approximate) birth year - add it before the gender column
+```
+
+I used the `.before` argument so the new column would be added before the column `gender`.
+Otherwise, the new column would have been added at the end of my data frame.
+This argument is a little bit strange, because its name starts with a dot, but don't worry about this.
+
+Note that `birthyear` has not been saved to `nerd_red` right now:
+
+```{r}
+# show names of nerd_red
+```
+
+In order to do that, we would explicitly need to overwrite `nerd_red`, which we won't do here, because `birthyear` is a very useless column for us.
+
+Likewise, we can use functions on columns.
+For example, we could turn the age column into a character.
+That doesn't make sense in this example, but the opposite case is often true, where you want to turn a column that is accidentally coded as a character into a numeric column.
+
+```{r}
+# create a column called age_character (the age as character) and put it before the gender column
+# overwrite nerd_red
+```
+
+5.1) By overwriting `nerd_red`, I permanently added the `age_character` column to the data frame. Can you turn it into a numeric column again? You can replace it using the old column name (i.e. `mutate(age_character = ...)`). (Of course, the name will be pretty misleading then.)
+
+5.2) According to the code book, `gender` as been coded as 1 = Male, 2 = Female, 3 = Other. Assume there has been a mistake and it's actually 0 = Male, 1 = Female, 2 = Other. How can you correct the mistake? Don't overwrite the data frame, because we want to keep the old (correct) `gender` column as it is.
+
+Now we still have the useless `age_character` column in our data. If we want to get rid of it, we can do so by simply "deselecting" it:
+
+```{r}
+# deselect the age_character column
+# overwrite nerd_red
+```
+
+### Sums
+
+In a lot of cases, we want to calculate the sum of columns.
+Say we want to calculate the the sum of `Q1` and `Q2` in a new column called `sum_Q1_Q2`.
+This is how we would do that:
+
+```{r}
+# calculate the sum of Q1 and Q2 and save it in a column sum_Q1_Q2 - put it after Q2
+```
+
+We can see how the columns `Q1` and `Q2` add up per row in our new column.
+But what if we want to calculate the sum score across all the columns `Q1` - `Q26`?
+Writing all of them down with a little plus sign seems tedious.
+
+We can achieve this with a few twists.
+Let's consider the third row of this code chunk first, the bit with the `mutate()` function.
+We can see that we create a column called `nerd_score`.
+We then use the function `sum()`, for obvious reasons.
+Next, we see the function `across()`.
+This is a so-called "helper function" because it is only used inside of `mutate()`, so `mutate()` will know what columns to work on.
+Basically, we need `across()` every time `mutate()` needs to use the same function on multiple columns at once.
+(Adding two columns together is a special case.)
+It actually matches the verbal description I used above: I want to calculate the sum score *across* columns Q1 - Q26.
+So far, so good.
+However, one crucial piece of code that we need is the additional `rowwise()` function before using `mutate()`.
+It does exactly what the name suggests: It causes all following functions to be executed separately on every single row of a data frame.
+That is, we calculate the sum for every row (= participant) separately.
+This might seem slightly confusing because we just saw that adding vectors automatically sums up the rows.
+Most functions work like that in `R`, but some don't - one of them is `sum()`.
+It just sums up everything, so if we used it without `rowsums()`, we would get the entire sum of all the elements in all the columns we selected.
+Note that `sum()` is not the same as `+`.
+
+As a last step, we `ungroup()` the data, because `rowwise()` groups the data into rows and we don't want it to stay like that (otherwise, it would).
+Note that I overwrote `nerd_red` with the version of `nerd_red` that now has a column with the nerd sum score.
+
+```{r}
+# use rowwise ...
+# to calculate the nerd score ...
+# as the sum ...
+# across ...
+# Q1 - Q26
+# ungroup at the end
+```
+
+## Recoding data
+
+Sometimes, you want to modify existing columns in your data.
+For example, we could turn the numbers in the `gender` column into text, so it's easier to interpret.
+We can see in the code book that 1 = Male, 2 = Female, 3 = Other.
+This is how we would recode the gender column:
+
+```{r}
+# use case_when() to recode the gender column
+# overwrite nerd_red
+```
+
+Let's unpack this: `case_when()`, as the name suggests, does stuff when a certain case occurs.
+Whenever the `gender` column is 1, we insert "male", when it is 2, we put in "female", and when it is 3, we put in "other".
+Note that it is important to specify all possible cases.
+If we only had put in values for the cases 1 and 2 (so, male and female), every occurrence of 3 would have been left blank (`NA`).
+
+When we have only two cases, the function `ifelse()` is a useful shortcut.
+It takes three arguments:
+
+1) A condition.
+2) What should happen when the condition is true.
+3) What should happen when the condition is false.
+
+For example, if we want to classify these numbers into "one digit" or "more than one digit", it looks like this:
+
+```{r}
+some_numbers <- c(2, 24, 12, 5, 1, 353, 1)
+
+# use ifelse to put "more" when some_numbers has more than one digit, and "one" if it's one digit
+```
+
+We can also modify the data based on this.
+For example, we could multiply the data with -1 whenever it has more than one digit, and leave it as it is when it is one digit.
+
+```{r}
+# multiply ome_numbers with -1 whenever it has more than one digit, and leave it as it is 
+# when it is one digit.
+# Question: What does some_numbers contain now?
+```
+
+Note how we have to call `some_numbers`, even if we're leaving things unchanged.
+You can imagine it like this: Suppose you're creating a new vector.
+For every position of that vector, you contemplate whether you should put in the old number from `some_numbers`, or whether you should multiply it with -1 before adding it.
+
+6.1) Recode the `married` column. It's 1 = Never married, 2 = Currently married, 3 = Previously married. Overwrite `nerd_red` with the version that contains the recoded column.
+
+6.2) Recode the `voted` column. It's 1 = Yes, 2 = No. Use `ifelse()`. Overwrite `nerd_red` with the version that contains the recoded column.
+
+6.3) Like `ifelse()`, `case_when()` can be used outside of `mutate()`. Can you use `case_when()` with the following vector so that you:
+1) add 20 when the number is below 0
+2) subtract 2 when the number is above 0
+3) put in 9999 when the number is exactly 0
+
+```{r}
+some_more_numbers <- c(12, 0, 0, -4, 0, -12, 5, 2)
+```
+
+## Adding an id
+
+One last thing.
+We see that every participant is a row in our data frame, but there is no participant id.
+This is in principle not a big issue for this data set, but for some data sets, it's really important that everything stays in the correct order.
+Some operations on the data may change the order of it, and then it is crucial to be able to recover the original order of the data.
+We can add an id column to your data by numbering the rows.
+
+The tidyverse has a built-in function for this, which goes like:
+
+```{r}
+# use rowid_to_column() to create a new id column named id (var = id)
+```
+
+You could also number the rows like this:
+
+```{r}
+# use nrow to create the same id column (add before age)
+```
+
+**THIS IS A GITHUB PUSH CHECKPOINT**
