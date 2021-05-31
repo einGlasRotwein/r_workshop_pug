@@ -42,7 +42,7 @@ The following command clears the environment and gives you a clean slate.
 Observe your environment pane while running it!
 
 ```{r}
-# clear envinronment
+rm(list = ls())
 ```
 
 People sometimes mock how unnecessarily complex it is - there just could have been a clear, simple function with a sensible name to achieve this.
@@ -50,13 +50,14 @@ However, `rm()` is a function to *r*e*m*ove things from the environment.
 So if I create a variable ...
 
 ```{r}
-# create dummy variable
+example_var <- "test"
+example_var2 <- "test"
 ```
 
 ... I can make it disappear from the environment like this:
 
 ```{r}
-# remove it from the environment
+rm(example_var)
 ```
 
 If we want to clear the whole environment, we don't want to name all the variables that are in there individually.
@@ -73,6 +74,7 @@ Instead of explaining what vectors are, it's easiest to first look at one:
 
 ```{r}
 # a vector with whole numbers
+c(1, 7, 12, 4, 2)
 ```
 
 You can see that this vector contains four numbers.
@@ -83,18 +85,21 @@ Here is another one:
 
 ```{r}
 # a vector with numbers that have different decimal places
+c(2, 6.1, 9.234, 1.23)
 ```
 
 And another one:
 
 ```{r}
 # a vector with characters
+c("Hallo", "Kuchen", "Keks")
 ```
 
 And another one:
 
 ```{r}
 # a vector with logicals
+c(TRUE, FALSE, FALSE, TRUE)
 ```
 
 We see that a vector is a collection of elements, and it can consist of all the data types we previously got to know.
@@ -103,6 +108,7 @@ This does not work:
 
 ```{r}
 # mix numeric, character and logical in a vector
+c(10, "Keks", TRUE)
 ```
 
 It seems like it did work, but the quotation marks indicate that everything has just been turned into a character!
@@ -111,6 +117,7 @@ A likewise peculiar thing occurs when we just put an integer and a logical toget
 
 ```{r}
 # mix numeric and logical in a vector
+c(10, FALSE)
 ```
 
 [^logical_numbers]: Remember that logicals have a numeric representation: `TRUE` equals to 1, and `FALSE` equals to 0.
@@ -127,6 +134,7 @@ This will not work:
 
 ```{r error = TRUE}
 # a vector without c()
+(2, 5, 10)
 ```
 
 It's likely that you will forget `c()` a lot in the beginning, but that will go away.
@@ -135,16 +143,57 @@ Of course, vectors can be saved into variables, just like we did with single ele
 
 ```{r}
 # store vector in a variable
+my_vector <- c(1, 4, 9, 12)
 # print vector
+my_vector
 ```
 
 [^one_element_vector]: In fact, we worked with vectors before! When we have e.g. `"hello"`, that is a one-element character vector. And `2` is a one-element integer vector. We don't need `c()` here, because we don't combine anything.
 
 1.1) By the way: I sneaked in a vector in disguise in the "basics" exercises that doesn't use the `c()` function. Can you find it?
 
+```{r}
+1:4
+sequence_vector <- 1:4
+```
+
 1.2) Create some vectors. Create one vector with characters, one with whole numbers, one with decimals and one with logicals. Save them all into different variables.
 
+```{r}
+animals <- c("dog", "fish", "cat", "squirrel")
+animals
+
+vektor_decimals <- c(1, 3.4, 7.45555)
+vektor_decimals
+
+conditions <- c("dark", "light")
+conditions
+
+experiment_complete <- c(TRUE, FALSE) 
+experiment_complete
+
+vector_num <- c(2:5, 13)
+vector_num
+
+kuchen <- c("mehl", "butter", "zucker")
+kuchen 
+```
+
 1.3) We saw that the `c()` function combines elements into a vector, but it can also combine vectors! Try to combine some of the vectors you previously created using the `c()` function.
+
+```{r}
+vector1 <- c(1, 5, 9)
+vector2 <- c(1, 9)
+
+c(vector1, vector2, 5, 12, 130)
+```
+
+```{r}
+vector3 <- c(1, 24, 353)
+vector4 <- c("Kaffee", "Kuchen")
+
+c(vector3, vector4)
+```
 
 ### Mathematical operations
 
