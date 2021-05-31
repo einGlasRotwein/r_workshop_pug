@@ -628,7 +628,7 @@ hotdog_2018_female <- hotdog_2018[hotdog_genders == "female"]
 hotdog_2018_female
 ```
 
-4.11) Remember that you can combine logical comparisons using `&` and `|`. Can you find a way to get the name of the **woman** who ate the **most hot dogs in 2019** using `&` and `max()`? You will need to use several of the vectors in our environment for that!
+4.11) Remember that you can combine logical comparisons using `&` and `|`. Can you find a way to get the name of the **woman** who ate the **most hot dogs in 2019**? You will need several steps to solve this task, and it makes sense to save some vectors as "in between results".
 
 ```{r}
 female_names <- hotdog_names[hotdog_genders == "female"]
