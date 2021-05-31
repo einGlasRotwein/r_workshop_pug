@@ -62,21 +62,40 @@ typeof(FALSE)
 # wild?
 
 # 3.1) Type 12 > 3 into your console. Then, type 12 < 3.
+12 > 3
+12 < 3
 
 # 3.1) Try 12 == 12. And now 12 == 13. What does == do?
+12 == 12
+12 == 13
 
 # 3.2) Try out: FALSE & FALSE, then FALSE & TRUE and finally, TRUE & TRUE. What happens?
+FALSE & FALSE
+FALSE & TRUE
+TRUE & TRUE
 
 # 3.3) Try the same as above, but replace & with | (alt gr + <). Do you know what & and | do?
+FALSE | FALSE
+FALSE | TRUE
+TRUE | TRUE
 
 # 3.4) What do you think will be the result of 4 < 3 | 4 == 4? What is 4 < 3 & 4 == 4?
+4 < 3 | 4 == 4
+4 < 3 & 4 == 4
 
 # 3.5) What is "cat" != "dog"?
+"cat" != "dog"
 
 # 3.6) What is "cat" > "dog"? What about other words? Can you find a pattern?
+"cat" > "dog"
+"cat" > "apple"
+"cat" > "druckerpatrone"
+"a" < "b"
 
 # 3.7) By the way, did you know that logicals have numeric representations? Try TRUE + 1.
 #      Then try FALSE + 1. What is the numeric value of TRUE? What is the numeric value of FALSE?
+TRUE + 1
+FALSE + 1
 
 #### 4 VARIABLES ####
 
@@ -87,15 +106,22 @@ typeof(FALSE)
 # like this:
 
 single_number <- 7
+another_number = 12
 
 # ALWAYS USE VARIABLE NAMES THAT TELL YOU WHAT THAT VARIABLE CONTAINS!!!
 
 # 4.1) Type single_number into the console and hit return.
+single_number
 
 # 4.2) Run the following code. What will happen now if you type single_number into the console?
 single_number <- 2
+single_number
 
 # 4.3) Assign something to a variable with a name of your choice.
+test_data <- 3:4
+number_participants <- 20
+own_variable <- "own text"
+favourite_cake <- "apple cake"
 
 # 4.4) Examine what happens here. What is the result? What do you think will single_number
 #      contain now? 2 or 6?
@@ -109,6 +135,9 @@ number2 + number6
 
 multiplied <- number2 * number6
 multiplied
+
+# Delete a variable
+rm(single_number)
 
 #### THIS IS A GIT HUB CHECKPOINT ####
 
