@@ -337,6 +337,7 @@ length). Unsurprisingly, we can do that with the function `length()`.
 
 ```{r}
 # Find out how many contestants there are
+length(hotdog_names)
 ```
 
 A function in `R` always comes with a `()`.
@@ -347,15 +348,51 @@ Try out a few other functions. Here are some you could try:
 
 2.1) `max()` gives you the maximum value in a vector. What do you think `min()` does? Use both on `hotdog_2018` and `hotdog_2019`.
 
+```{r}
+max(hotdog_2018)
+max(hotdog_2019)
+
+min(hotdog_2018)
+min(hotdog_2019)
+```
+
 2.2) Use `table()` on `hotdog_genders`. What do you get?
+
+```{r}
+table(hotdog_genders)
+```
 
 2.3) Use `mean()` and `sd()` on `hotdog_2018` and `hotdog_2019`. What do you get?
 
+```{r}
+mean(hotdog_2018)
+sd(hotdog_2018)
+
+mean(hotdog_2019)
+sd(hotdog_2019)
+```
+
 2.4) Use `summary()` on `hotdog_2018` and `hotdog_2019`. What is the difference to using `mean()` and `sd()`?
+
+```{r}
+summary(hotdog_2018)
+summary(hotdog_2019)
+```
 
 2.5) Use `head()` and `tail()` on either of the vectors. What do these functions do?
 
+```{r}
+hotdog_2018
+head(hotdog_2018)
+tail(hotdog_2018)
+```
+
 2.6) How many hotdogs were eaten in total in the year 2019? Use the function `sum()`.
+
+```{r}
+hotdog_2019
+sum(hotdog_2019)
+```
 
 ## More arguments
 
@@ -374,11 +411,17 @@ head(hotdog_names)
 
 3.2) What do you think will happen when the second argument is larger than the number of hot dog contestants (`r length(hotdog_names)`)? Try it.
 
+```{r}
+hotdog_names
+head(hotdog_names, 100)
+```
+
 We can see that arguments have a **position** in the function - for `head()`, the data belongs at the first position, and the number of elements we want to display comes second.
 `head()` will be unhappy if we just switch the order around:
 
 ```{r error = TRUE}
 # use head() with the arguments in the wrong order
+head(2, hotdog_names)
 ```
 
 The function expects some data at the first position, and an integer at the second position.
@@ -390,6 +433,8 @@ This way, `head()` understands what we want:
 
 ```{r}
 # use head() in the wrong order, but with argument names
+head(n = 2, x = hotdog_names)
+head(hotdog_names, 2)
 ```
 
 It is common in `R` that the data input of a function is simply called `x`.
@@ -409,15 +454,21 @@ To get only the name of the third contestant, we do this:
 
 ```{r}
 # get the third hot dog contestant
+hotdog_names[3]
 ```
 
 4.1) Can you find the name of the 5th contestant?
+
+```{r}
+hotdog_names[5]
+```
 
 What if we wanted to find the names of the 3rd **and** the 5th contestant?
 We can use another vector for indexing!
 
 ```{r}
 # get the third and fifth hot dog contestant
+hotdog_names[c(3, 5)]
 ```
 
 It is important to use `c()` for this - `c()` puts 3 and 5 into the same vector.
@@ -425,11 +476,16 @@ If we write `[3, 5]`, we're trying to use two vectors at the same time (3 is the
 
 ```{r error = TRUE}
 # try to get the third and fifth hot dog contestant, but without using c()
+hotdog_names[3, 5]
 ```
 
 4.2) What if we want to see the first 3 contestants? (There are several ways to achieve this.)
 
-4.3) Can you think of a way how we can modify and use this as an index to find the first three hot dog contestants?
+```{r}
+head(hotdog_names, 3)
+hotdog_names[c(1, 2, 3)]
+hotdog_names[1:3]
+```
 
 We can use functions that return numbers for indexing.
 So, anything that gives you a number can be used.
@@ -447,9 +503,29 @@ One common situation is this: You want to get the last element in a vector, but 
 
 4.3) How would you get the last name of the hot dog contestants using the `tail()` function we saw above?
 
+```{r}
+tail(hotdog_names, 1)
+```
+
 4.4) Remember what `length(hotdog_names)` returns. How can you use that for indexing?
 
+```{r}
+hotdog_names[length(hotdog_names)]
+```
+
 4.5) How would you get the name of the person who ate the most hot dogs in 2019? Use an index and the function `max()`! You will have to use two different vector here: `hotdog_names` and `hotdog_2019`.
+
+```{r}
+index <- hotdog_2019 == max(hotdog_2019)
+index
+```
+```{r}
+hotdog_names[index]
+```
+
+```{r}
+hotdog_names[hotdog_2019 == max(hotdog_2019)]
+```
 
 There is more that can be done with indexing when we use logical comparisons.
 Here is how this works: We have a vector called `numbers` that contains the number 1 - 4.
@@ -459,8 +535,7 @@ Examine the result.
 What happened?
 
 ```{r}
-numbers <- c(1, 2, 3, 4)
-# Bonus question: This vector could have been created with less typing. How?
+numbers <- 1:4
 index <- c(TRUE, TRUE, FALSE, TRUE)
 numbers[index]
 ```
@@ -476,7 +551,9 @@ Let's apply this to our `numbers` vector:
 
 ```{r}
 # save the previous code in a variable called index
+index <- numbers < 3
 # apply it to numbers
+numbers[index]
 ```
 
 What happened?
@@ -485,6 +562,7 @@ We can achieve the same thing without saving the index in a variable:
 
 ```{r}
 # same code as above, but without using variables
+numbers[numbers < 3]
 ```
 
 It feels a little bit weird to use the same vector twice in one line.
@@ -497,9 +575,19 @@ In fact, RStudio is already giving me a warning that something is wrong with my 
 ```{r error = TRUE}
 # try to use a logical comparison as an index, but we forget to repeat the variable
 # name (numbers) for the logical comparison
+numbers[< 3]
 ```
 
 4.6) Can you write code that gives you all elements larger than 6 in the vector `1:10`?
+
+```{r}
+numbers <- 1:10
+numbers[numbers > 6]
+```
+
+```{r}
+(1:10)[1:10 > 6]
+```
 
 How can we use indexing with logical vectors in a more useful way?
 Let's get back to our hot dog examples.
