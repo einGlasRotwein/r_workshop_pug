@@ -27,3 +27,4 @@
 
 # 1.1) Run install.packages("rmarkdown") in the console. It will install a lot of other packages
 #      that it depends on.
+install.packages("rmarkdown")
