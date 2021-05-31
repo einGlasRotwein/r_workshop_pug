@@ -594,16 +594,51 @@ Let's get back to our hot dog examples.
 
 4.7) Can you create a vector that is `TRUE` when the participant ate more hot dogs in 2019 than in 2018 and `FALSE` when s/he didn't? Remember that the results from 2018 are stored in `hotdog_2018` and the results from 2019 are stored in `hotdog_2019`.
 
+```{r}
+hotdog_2019 > hotdog_2018
+```
+
 We now would like to find out **which** participants improved from 2018 to 2019.
 We can achieve this using indices.
 
 4.8) Based on the previous examples, how would you get the names of the contestants who ate more hot dogs in 2019 than in 2018?
 
+```{r}
+hotdog_names[hotdog_2019 > hotdog_2018]
+```
+```{r}
+hotdog_names[which(hotdog_2019 > hotdog_2018)]
+```
+
 4.9) Can you find the name of the contestant who ate exactly the same number of hot dogs in 2018 and 2019?
+
+```{r}
+hotdog_names[hotdog_2019 == hotdog_2018]
+```
 
 4.10) Get the hot dog results **only for the men** in 2019 and save the results in a variable. (Think of a good name!) Do the same for the women's results in 2018.
 
+```{r}
+hotdog_2019_male <- hotdog_2019[hotdog_genders == "male"]
+hotdog_2019_male
+```
+
+```{r}
+hotdog_2018_female <- hotdog_2018[hotdog_genders == "female"]
+hotdog_2018_female
+```
+
 4.11) Remember that you can combine logical comparisons using `&` and `|`. Can you find a way to get the name of the **woman** who ate the **most hot dogs in 2019** using `&` and `max()`? You will need to use several of the vectors in our environment for that!
+
+```{r}
+female_names <- hotdog_names[hotdog_genders == "female"]
+female_names
+
+female_results_2019 <- hotdog_2019[hotdog_genders == "female"]
+female_results_2019
+
+female_names[female_results_2019 == max(female_results_2019)]
+```
 
 ## Missing values
 
@@ -616,10 +651,12 @@ Let's see some examples.
 
 ```{r}
 # A vector of numbers with an NA in between
+c(1, 20, NA, 12, 3)
 ```
 
 ```{r}
 # a character vector with some NAs in between
+c("test", NA, "more test")
 ```
 
 The important thing is that `NA`s will change the behaviour of some functions.
@@ -627,6 +664,7 @@ For example:
 
 ```{r}
 # run mean on a vector with NAs
+mean(c(1, 20, NA, 12, 3))
 ```
 
 The mean of this vector is "not available", because there is uncertainty due to the missing values.
@@ -639,6 +677,8 @@ We can do that by setting the argument `na.rm`[^narm_position] to `TRUE` (its de
 
 ```{r}
 # run the function again, but with na.rm = TRUE
+mean(c(1, 20, NA, 12, 3), na.rm = TRUE)
+mean(c(1, 20, 12, 3))
 ```
 
 The same logic applies for a lot of different functions.
@@ -647,15 +687,42 @@ Can you use `na.rm = TRUE` to change their behaviour?
 
 5.1) `sd()`
 
+```{r}
+na_vector <- c(1, 20, NA, 12, 3)
+sd(na_vector, na.rm = TRUE)
+```
+
 5.2) `min()` and `max()`
+
+```{r}
+min(na_vector, na.rm = TRUE)
+max(na_vector, na.rm = TRUE)
+```
 
 5.3) `summary()`
 
+```{r}
+summary(na_vector)
+```
+
 5.4) `table()`
+
+```{r}
+table(na_vector)
+```
 
 5.5) `head()` and `tail()`
 
+```{r}
+head(na_vector, 3)
+tail(na_vector)
+```
+
 5.6) `length()`
+
+```{r}
+length(na_vector)
+```
 
 The situation also gets interesting when logicals come to the picture.
 Consider the following examples:
@@ -686,6 +753,7 @@ You might assume it works like this:
 
 ```{r}
 # try to use a logical comparison to look for NAs
+a_vector == NA
 ```
 
 However, the result is not what we would expect.
@@ -694,10 +762,13 @@ If you hover over the little exclamation mark, it actually tells you what you sh
 
 ```{r}
 # use the correct function to detect NAs
+is.na(a_vector)
 ```
 
 ```{r}
 # use the function to filter a_vector for all elements that are NOT NAs
+a_vector
+a_vector[!is.na(a_vector)]
 ```
 
 Note how I'm filtering for all elements which are **not** `NA` in the last code, effectively getting rid of all missing values in the data.
