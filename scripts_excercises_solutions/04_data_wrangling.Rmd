@@ -480,16 +480,30 @@ We know how to extract a vector from a data frame.
 
 3.1) Quick recap: Save the `age` column into a single vector.
 
+```{r}
+age <- nerd$age
+```
+
 But what if we modified our data frame with a pipe and want to quickly extract one column?
 Sure, we could save the modified data frame and then extract the column.
 
 3.2) Save a data frame where you filter all participants who are younger than 20. Then extract the age column.
+
+```{r}
+nerd_young <- nerd_red %>% 
+  filter(age < 20)
+
+age_young <- nerd_young$age
+```
 
 However, we can do all of this in one go using the `pull()` function.
 
 ```{r}
 # Filter the data frame for participants who are younger than 20 and extract the age 
 # column using pull()
+nerd_red %>% 
+  filter(age < 20) %>% 
+  pull(age)
 ```
 
 You might wonder why we don't just use `select()` to do the job.
@@ -499,8 +513,10 @@ Can you see what the problem is?
 ```{r}
 # Filter the data frame for participants who are younger than 20 and extract the age 
 # column using select()
+nerd_red %>% 
+  filter(age < 20) %>% 
+  select(age)
 ```
-
 
 ## Sorting data
 
@@ -509,23 +525,39 @@ For example, here is how you would sort the data by age:
 
 ```{r}
 # arrange nerd_red by age
+nerd_red %>% 
+  arrange(age)
 ```
 
 We can also arrange the data in descending order by wrapping the respective column in `desc()` (for "descending").
 
 ```{r}
 # arrange nerd_red by age in descending order
+nerd_red %>% 
+  arrange(desc(age))
 ```
 
 Sorting with multiple columns is not a problem:
 
 ```{r}
 # arrange nerd_red by age and gender
+nerd_red %>% 
+  arrange(age, gender)
 ```
 
 4.1) Use the code above, but switch the order of gender and age. What happens?
 
+```{r}
+nerd_red %>% 
+  arrange(gender, age)
+```
+
 4.2) Arrange `nerd_red` by `voted` and `age`. Let `voted` be ascending and `age` descending.
+
+```{r}
+nerd_red %>% 
+  arrange(voted, desc(age))
+```
 
 ## Adding columns
 
@@ -542,6 +574,8 @@ Here is how things would work for our toy example:
 
 ```{r}
 # create a column with the (approximate) birth year - add it before the gender column
+nerd_red %>% 
+  mutate(birthyear = 2018 - age, .before = gender)
 ```
 
 I used the `.before` argument so the new column would be added before the column `gender`.
@@ -552,6 +586,7 @@ Note that `birthyear` has not been saved to `nerd_red` right now:
 
 ```{r}
 # show names of nerd_red
+names(nerd_red)
 ```
 
 In order to do that, we would explicitly need to overwrite `nerd_red`, which we won't do here, because `birthyear` is a very useless column for us.
@@ -563,17 +598,56 @@ That doesn't make sense in this example, but the opposite case is often true, wh
 ```{r}
 # create a column called age_character (the age as character) and put it before the gender column
 # overwrite nerd_red
+nerd_red <- 
+  nerd_red %>% 
+  mutate(age_character = as.character(age), .after = age)
+
+nerd_red
 ```
 
 5.1) By overwriting `nerd_red`, I permanently added the `age_character` column to the data frame. Can you turn it into a numeric column again? You can replace it using the old column name (i.e. `mutate(age_character = ...)`). (Of course, the name will be pretty misleading then.)
 
+```{r}
+nerd_red %>% 
+  mutate(
+    age2 = age - 100, .before = gender,
+    age = age + 1000
+  )
+```
+
+```{r}
+nerd_red %>% 
+  mutate(age_character = as.numeric(age_character))
+```
+
+```{r}
+nerd_red %>% 
+  mutate(age_character = age, .before = gender)
+```
+
 5.2) According to the code book, `gender` as been coded as 1 = Male, 2 = Female, 3 = Other. Assume there has been a mistake and it's actually 0 = Male, 1 = Female, 2 = Other. How can you correct the mistake? Don't overwrite the data frame, because we want to keep the old (correct) `gender` column as it is.
+
+```{r}
+nerd_red %>% 
+  mutate(gender = gender - 1)
+```
 
 Now we still have the useless `age_character` column in our data. If we want to get rid of it, we can do so by simply "deselecting" it:
 
 ```{r}
 # deselect the age_character column
 # overwrite nerd_red
+nerd_red %>% 
+  select(-c(age_character, gender, nerdy))
+```
+
+```{r}
+nerd_red <- nerd_red %>% 
+  select(!age_character)
+```
+
+```{r}
+nerd_red
 ```
 
 ### Sums
