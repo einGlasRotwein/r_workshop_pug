@@ -35,7 +35,7 @@ knitr::opts_chunk$set(
 
 There is more to be said about data wrangling, and we will get back to it, but I want to create some plots first.
 Plots are fun because they give you nice and colourful results, and they are a very important tool for inspecting your data and getting an intuition for it.
-While base `R` has a plotting function, the `tidyverse`'s `ggplot2` is what is partly responsible fpr `R`'s fame.
+While base `R` has a plotting function, the `tidyverse`'s `ggplot2` is what is partly responsible for `R`'s fame.
 
 `ggplot2` is based on the ["Grammar of Graphics" by Leland Wilkinson](https://www.springer.com/de/book/9780387245447), a framework for good data visualisation in data science.
 In a way, `ggplot2` has a grammar of its own, which is something new for us.
@@ -48,11 +48,11 @@ To achieve this, we will go though the file `04_data_wrangling.Rmd` and copy-pas
 
 ```{r}
 library(tidyverse)
-# TO DO: create nerd preprocessing file!
+# Call nerd preprocessing file
 source("nerd_preprocessing.R")
 ```
 
-One basic plot that you will frequently need is a histrogram.
+One basic plot that you will frequently need is a histogram.
 It's a good way to quickly inspect the distribution of your data.
 Below, you see how a simple histogram for the participant age works.
 The concept is pretty simple: We pipe our data, `nerd_red` into the ggplot function.
@@ -66,12 +66,15 @@ Other geoms are for example `geom_point`, `geom_bar` or `geom_boxplot`.
 You can probably guess what they do.
 The special thing is that we don't use a pipe to add the histogram, but a plus sign.
 That is because ggplots work in "layers".
-You might have used an image maniplation program (or something like PowerPoint) that followed the same logic: When you created an image, some elements were behind/in front of each other.
+You might have used an image manipulation program (or something like PowerPoint) that followed the same logic: When you created an image, some elements were behind/in front of each other.
 In ggplot, that's the same.
 We have the plot background as first layer, and then there's our histrogram on top of that.
 
 ```{r}
 # plot a histogram with age on the x axis
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_histogram(bins = 30)
 ```
 
 We can observe the layered structure by leaving out the histogram layer.
@@ -84,6 +87,8 @@ In our previous plot, `geom_histogram` automatically counted how many participan
 
 ```{r}
 # just use ggplot() with age on the x axis, without a geom
+nerd_red %>% 
+  ggplot(aes(x = age))
 ```
 
 Let's check out a different geom.
@@ -92,12 +97,18 @@ It looks a bit weird - what might be the problem here?
 
 ```{r}
 # Try geom_boxplot instead of geom_histogram
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_boxplot()
 ```
 
 The plot will look much better with a different orientation, i.e. the data on the y-axis.
 
 ```{r}
 # Fix the problem from above
+nerd_red %>% 
+  ggplot(aes(y = age)) +
+  geom_boxplot()
 ```
 
 But still, the x-axis looks weird.
@@ -106,6 +117,9 @@ There's still that nasty little x as axis label - we'll talk about how to get ri
 
 ```{r}
 # use a dummy ("") for the x-axis
+nerd_red %>% 
+  ggplot(aes(y = age, x = "")) +
+  geom_boxplot()
 ```
 
 For now, let's try another geom.
@@ -116,6 +130,9 @@ Maybe the nerd score?
 
 ```{r}
 # scatter plot with age in the x axis and nerd score on the y axis
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point()
 ```
 
 How about adding a line to the data, indicating how age and nerd score are associated with each other?
@@ -123,6 +140,10 @@ The corresponding geom is called `geom_smooth`.
 
 ```{r}
 # add a geom_smooth
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point() +
+  geom_smooth()
 ```
 
 The default method for `geom_smooth`, as `R` informs us, is "loess".
@@ -130,6 +151,10 @@ We can also have a plain linear regression line, which we achieve like this:
 
 ```{r}
 # use a linear model instead
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
 ```
 
 We can also split our plot by another variable, e.g. gender.
@@ -137,6 +162,10 @@ Gender is a property of our data, so it also goes into the `aes()` function.
 
 ```{r}
 # same plot as above, but colour by gender
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
 ```
 
 ## Customise things
@@ -148,6 +177,11 @@ We can change that in the following way:
 
 ```{r}
 # customise the y-axis label
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(y = "nerd score")
 ```
 
 Next, let's move the legend to the top of the plot.
@@ -155,6 +189,12 @@ Using `theme()`, we can control **a lot** of things in our plot, like font sizes
 
 ```{r}
 # put the legend on top
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(y = "nerd score") +
+  theme(legend.position = "top")
 ```
 
 This grey plot grid is something ggplot is very famous for.
@@ -163,6 +203,13 @@ You can either set up a completely custom theme using the `theme()` function, or
 
 ```{r}
 # pick a different theme (theme_bw)
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(y = "nerd score") +
+  theme_bw() +
+  theme(legend.position = "top") 
 ```
 
 Much better. How about more fine-grained steps on the x and y axis?
@@ -172,18 +219,31 @@ You give it the start point, the end point, and the stepsize:
 
 ```{r}
 # create a sequence from 1 - 10 in steps of 2
+seq(1, 10, 2)
 ```
 
 It is also possible not to give a step size, but the **number** of steps instead:
 
 ```{r}
 # create steps from 1 - 10 with length.out = 3
+seq(1, 10, length.out = 3)
 ```
 
 So, we can use `seq()` to adjust our axes like this:
 
 ```{r}
 # adjust the steps of the x and y axis
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  
+  scale_x_continuous(breaks = seq(10, 90, 10), limits = c(10, 90)) +
+  scale_y_continuous(breaks = seq(0, 130, 20)) +
+  
+  labs(y = "nerd score") +
+  theme_bw() +
+  theme(legend.position = "top")
 ```
 
 How about some thicker lines for the regression lines?
@@ -192,6 +252,17 @@ Note that all of these things don't go inside the `aes()` function, because thin
 
 ```{r}
 # use alpha and size outside of the aes function
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point(alpha = .4, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, size = 1.5) +
+  
+  scale_x_continuous(breaks = seq(10, 90, 10), limits = c(10, 90)) +
+  scale_y_continuous(breaks = seq(0, 130, 20)) +
+  
+  labs(y = "nerd score") +
+  theme_bw() +
+  theme(legend.position = "top")
 ```
 
 To illustrate this, let's make our first histogram a little bit more beautiful.
