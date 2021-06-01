@@ -270,6 +270,9 @@ Here is what it looked like before:
 
 ```{r}
 # remember what our first histogram looked like
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_histogram()
 ```
 
 Let's change the theme and also add some colour.
@@ -279,7 +282,11 @@ The circles we used before did not have a border, so we could colour the complet
 We can refer to the colour that we want by name, but can also use hex codes.
 
 ```{r}
-# change the fill to"#dca3a3" and the colour to black
+# change the fill to "#dca3a3" and the colour to black
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_histogram(fill = "#dca3a3", colour = "black") +
+  theme_bw()
 ```
 
 How about categorical data?
@@ -293,11 +300,26 @@ I have also added a title.
 # fill by gender
 # set a title
 # use a nice theme and move the legend to the top
+nerd_red %>% 
+  ggplot(aes(x = gender, y = age, fill = gender)) +
+  geom_boxplot() +
+  labs(title = "age by gender") +
+  theme_bw() +
+  theme(
+    legend.position = "top",
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
 ```
 
 How about adding another factor?
 
 1.1) Can you do a boxplot that has the nerd score on the y-axis, gender on the x-axis and is filled with whether the person voted or not?
+
+```{r}
+
+```
 
 ## Detour: Long format
 
