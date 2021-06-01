@@ -318,7 +318,12 @@ How about adding another factor?
 1.1) Can you do a boxplot that has the nerd score on the y-axis, gender on the x-axis and is filled with whether the person voted or not?
 
 ```{r}
-
+nerd_red %>% 
+  ggplot(aes(x = gender, y = nerd_score, fill = voted)) +
+  geom_boxplot() +
+  scale_fill_manual("did people vote", values = c("pink", "blue3")) +
+  theme_bw() +
+  theme(legend.position = "top")
 ```
 
 ## Detour: Long format
