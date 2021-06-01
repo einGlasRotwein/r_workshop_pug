@@ -54,6 +54,7 @@ If you start typing the package name without the quotation marks, `R` will start
 
 ```{r eval=FALSE}
 # install the tidyverse
+# install.packages("tidyverse")
 ```
 
 However, just because you have a package, that does not mean you can use it.
@@ -69,6 +70,7 @@ Let's load the `tidyverse`.[^loading_quotation]
 
 ```{r}
 # load the tidyverse
+library(tidyverse)
 ```
 
 One of the most popular and noticeable features of the `tidyverse` is the pipe operator, which looks like this: `%>%`.[^pipe_shortcut]
@@ -91,18 +93,26 @@ They are then executed from the inside towards the outside.
 
 ```{r}
 # take the mean of the example vector and round the result to two decimal places (base R style)
+round(mean(example_vector), 2)
 ```
 
 We could also do the same thing stepwise (and sometimes this is the best approach if you want your code to be readable).
 
 ```{r}
 # same as above, but in two steps
+mean_example_vector <- mean(example_vector)
+round(mean_example_vector, 2)
 ```
 
 In the tidyverse, we chain those functions together using the pipe operator:
 
 ```{r}
 # this time: tidy style!
+mean(example_vector) %>% round(2)
+```
+
+```{r}
+example_vector %>% mean() %>% round(2)
 ```
 
 Note how we can leave out the actual data argument every time.
@@ -124,6 +134,11 @@ another_vector <- c(3, -2, 5, 99, -132.5)
 
 ```{r}
 # use abs on the vector, then take the mean and transform the result into a character
+as.character(mean(abs(another_vector)))
+```
+
+```{r}
+another_vector %>% abs() %>% mean() %>% as.character()
 ```
 
 1.2) Let's make things a bit trickier with additional arguments.
@@ -135,6 +150,15 @@ vector_with_NAs <- c(3, -2, 5, NA, 99, -132.5, NA)
 ```{r}
 # use abs on the vector, show the first 4 elements with head, take the mean (with na.rm = TRUE)
 # and turn into character
+as.character(mean(head(abs(vector_with_NAs), 4), na.rm = TRUE))
+```
+
+```{r}
+vector_with_NAs %>% 
+  abs() %>% 
+  head(4) %>% 
+  mean(na.rm = TRUE) %>% 
+  as.character()
 ```
 
 1.3) How do we get this into a pipe?
@@ -147,6 +171,10 @@ This does not work:
 
 ```{r}
 another_vector * 2 %>% mean()
+```
+
+```{r}
+(another_vector * 2) %>% mean()
 ```
 
 ## Data wrangling
@@ -169,6 +197,18 @@ I want to keep the participants' age, the gender, whether they're married or not
 
 ```{r}
 # select age, gender, married, and Q1 - Q26
+nerd %>% 
+  select(age, gender, married, Q1:Q26)
+```
+
+```{r}
+nerd %>% 
+  select(age, gender, married, starts_with("Q"))
+```
+
+```{r}
+# the base R way
+nerd[c("age", "gender", "married", paste0("Q", 1:26))]
 ```
 
 A few remarkable things just happened.
@@ -191,12 +231,20 @@ The corresponding code would look like this:
 
 ```{r}
 # select voted, age and then the rest of the data frame
+nerd %>% 
+  select(voted, age, everything())
 ```
 
-Don't forget the `()` behind everything!
+Don't forget the `()` behind `everything`!
 
 1.4) I want to continue working with a reduced version of our data that only contains the columns `age`, `gender`, `married`, `voted`, `nerdy` and also `Q1` - `Q26`.
 Can you select these columns and save this reduced data frame in a variable called `nerd_red` ("nerd reduced")? 
+
+```{r}
+nerd_red <- 
+  nerd %>% 
+  select(age, gender, married, voted, nerdy, Q1:Q26)
+```
 
 There are further options for selecting subsets of data.
 We just made a selection based on columns, but we can also only select certain rows.
@@ -205,30 +253,111 @@ Let's for example only filter out the female participants, which are coded as `2
 
 ```{r}
 # filter participants where the gender is 2
+nerd_red %>% 
+  filter(gender == 2)
 ```
+
+```{r}
+# the base R way
+nerd_red[nerd_red$gender == 2, ]
+```
+
 
 We use the same notation as for logical comparisons, so make sure to use `==` instead of `=`!
 Here, we filter for women below the age of 30.
 
 ```{r}
 # filter for women below the age of 30 - use &
+nerd_red %>% 
+  filter(gender == 2 & age < 30)
 ```
 
 Interestingly, the logical `&` can be replaced with a comma in `filter()`.
 
 ```{r}
 # filter for women below the age of 30 - use ,
+nerd_red %>% 
+  filter(gender == 2, age < 30)
 ```
 
 Filter `nerd_red`. Feel free to look at the code you wrote earlier in the course for the logical comparisons. Choose ...
 
-2.1) ... anyone who is either 22 or 26 years old. There are several ways to achieve this! There is also an interesting `tidyverse` way that I will show you later.
+2.1) ... anyone who is either 22 **or** 26 years old. There are several ways to achieve this!
 
-2.2) ... anyone who is either a man (`gender == 1`) or older than 30.
+```{r}
+nerd_red %>% 
+  filter (age == 22 | age == 26)
+```
 
-2.3) ... anyone who has a non-binary (`gender == 3`) and who is currently married or has previously been (1 = Never married, 2 = Currently married, 3 = Previously married).
+```{r}
+nerd_red %>% 
+  filter(age %in% c(22, 26))
+```
+
+```{r}
+c("tea", "biscuits", "cake") %in% "tea"
+"tea" %in% c("tea", "biscuits", "cake")
+```
+
+2.2) ... anyone who is either a man (`gender == 1`) **or** older than 30.
+
+```{r}
+nerd_red %>% 
+  filter(gender == 1 | age > 30)
+```
+
+2.3) ... anyone who is non-binary (`gender == 3`) and who is currently married or has previously been (1 = Never married, 2 = Currently married, 3 = Previously married).
+
+```{r}
+nerd_red %>% 
+  filter(gender == 3 & married != 1)
+
+nerd_red %>% 
+  filter(gender == 3, !married == 1)
+```
+
+```{r}
+nerd_red %>% 
+  filter(gender == 3 & married == 2 | gender == 3 & married == 3)
+```
+
+```{r}
+nerd_red %>% 
+  filter(gender == 3, married %in% 2:3)
+```
 
 2.4) The column `nerdy` contains the agreement to the statement "I see myself as nerdy" (1 = disagree strongly - 7 = agree strongly). How many women have the highest self-reported nerdiness? How many have the lowest self-reported nerdiness? What about the men? Solve this task using filters, but also try `table()`.
+
+```{r}
+nerd_red %>% 
+  filter(gender == 2, nerdy == 7) %>% 
+  nrow()
+```
+
+```{r}
+nerd_red %>% 
+  filter(gender == 2, nerdy == 1) %>% 
+  nrow()
+```
+
+```{r}
+table(nerd_red$nerdy)
+```
+
+```{r}
+table(nerd_red$nerdy, nerd_red$gender)
+```
+
+```{r}
+nerd_table <- nerd_red %>% 
+  group_by(gender, married) %>% 
+  count(name = "number_of_people")
+```
+
+```{r}
+nerd_table %>% 
+  ungroup()
+```
 
 When looking at the data summary, we already noticed that some of the reported values for age are impossible.
 We want to filter those out - what would you consider to be a good cut-off value?
@@ -237,6 +366,17 @@ We want to exclude these guys as well.
 
 ```{r}
 # table the married column
+table(nerd_red$married)
+```
+
+```{r}
+nerd_red %>% 
+  group_by(married) %>% 
+  count()
+```
+
+```{r}
+summary(nerd_red$age)
 ```
 
 Note that there is no output when I assign something to a variable, so I have to call the variable `nerd_red` again on order to display it.[^display_parentheses]
@@ -246,19 +386,93 @@ Note that there is no output when I assign something to a variable, so I have to
 ```{r}
 # filter out people with implausible marriage status and age
 # overwrite nerd_red
+nerd_red <- 
+  nerd_red %>% 
+  filter(married %in% 1:3,
+         age %in% 0:100)
 ```
+
+```{r}
+nerd_red %>% 
+  filter(married %in% 1:3,
+         between(age, 0, 100))
+```
+
 
 2.4) After filtering, what is the maximum age?
 
+```{r}
+max(nerd_red$age)
+```
+
+```{r}
+nerd_red$age %>% max()
+nerd_red %>% max(.$age)
+```
+
 2.5) How many people of each gender are included in the data?
+
+```{r}
+table(nerd_red$gender)
+```
+
+```{r}
+nerd_red %>% 
+  group_by(gender) %>% 
+  count()
+```
+
+```{r}
+nerd_red %>% 
+  count(gender)
+```
 
 2.6) How many people per marital status do we have?
 
+```{r}
+nerd_red %>% 
+  count(married)
+```
+
 2.7) How many people did we exclude in total?
+
+```{r}
+nerd %>% nrow() - nerd_red %>% nrow()
+```
+
+```{r}
+nrow(nerd) - nerd_red %>% count
+```
+
+```{r}
+nrow(nerd) - nrow(nerd_red)
+```
 
 2.8) Check whether the `nerdy` column has only valid values, i.e. values from 1 - 7. What would your strategy be? Filter out invalid values if necessary.
 
+```{r}
+nerd_red %>% 
+  count(nerdy)
+```
+
+```{r}
+nerd_red <- 
+  nerd_red %>% 
+  filter(nerdy %in% 1:7)
+```
+
 2.9) Check whether the `voted` column has only valid entries (1 or 2). Filter out invalid values if necessary.
+
+```{r}
+nerd_red %>% 
+  count(voted)
+```
+
+```{r}
+nerd_red <- 
+  nerd_red %>% 
+  filter(voted %in% 1:2)
+```
 
 ## Extracting single columns
 
