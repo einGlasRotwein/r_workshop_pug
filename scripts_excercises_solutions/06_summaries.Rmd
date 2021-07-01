@@ -39,7 +39,7 @@ First of all, let's call our preprocessed nerd data again.
 
 ```{r}
 library(tidyverse)
-source("05_nerd_preprocessing.R")
+source("nerd_preprocessing.R")
 ```
 
 ## Grouping and counting
