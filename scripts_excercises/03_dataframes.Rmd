@@ -59,7 +59,7 @@ nerd <- read.csv("./data_sets/nerd_data_short.csv")
 ... when we inspect the data using the `head()` function, it looks very weird:
 
 ```{r}
-# run head() on nerd
+head(nerd)
 ```
 
 If we look into our Environment tab, it says that nerd has 1,000 observations (i.e. rows) of 1 variable - i.e. one column.
@@ -72,14 +72,14 @@ Other common separators are `;`, `,` or `.`.
 The separator argument of the `read.csv()` function is called `sep`.
 
 ```{r}
-# read in nerd again, but this time with sep = "\t
+nerd <- read.csv("./data_sets/nerd_data_short.csv", sep = "\t")
 ```
 
 We can see in our environment that the data now has 80 variables (columns).
 And using `head()`, or data also looks more like a table:
 
 ```{r}
-# run head again
+head(nerd)
 ```
 
 The data comes with a code book, which is called `nerd_data.csv` and can be found in the `data_sets` folder.
@@ -96,20 +96,20 @@ With the data read in correctly, we can see that we have 1,000 observations, i.e
 We can see this in the Environment tab, but we can also ask `R` how many rows our data frame has:
 
 ```{r}
-# check the number of rows of nerd
+nrow(nerd)
 ```
 
 Likewise, we can ask about the number of columns:
 
 ```{r}
-# check the number of columns of nerd
+ncol(nerd)
 ```
 
 You might be tempted to use `length()` to check how many rows a data frame has (at least I make this mistake around once a week), but this is not what `length()` gives us for a data frame.
 Do you see what `length()` does here?
 
 ```{r}
-# use length on nerd
+length(nerd)
 ```
 
 Before we do anything with the data, we want to familiarise ourselves with it.
@@ -124,7 +124,7 @@ Each column has a name, just like columns in an excel file.
 We can quickly take a look at all of the column names using the function `names()`.
 
 ```{r}
-# check the names of nerd
+names(nerd)
 ```
 
 One of the most common ways to access a single column in a data frame is the `$` operator.
@@ -133,15 +133,15 @@ R Studio will already suggest columns to you while you are typing.
 Let's save the age in a variable:
 
 ```{r}
-# save the age column into a variable
-# inspect the variable using head()
+age <- nerd$age
+head(age, 10)
 ```
 
 I am using `head()` to only show the first 10 elements in `age`, because I don't want my console (or this document) to be cluttered with thousands of numbers.
 Of course, you can also apply `head()` directly when using the `$` operator:
 
 ```{r}
-# use head directly on the age column
+head(nerd$age, 10)
 ```
 
 In our console, we can see that `age` does indeed seem to be a vector.
@@ -151,8 +151,11 @@ Think about how you would confirm that `age` (or the column `nerd$age`) is a vec
 
 ```{r}
 # what is the type of the variable that we saved out age column in?
+typeof(age)
 # what is the type of the age column?
+typeof(nerd$age)
 # what is the type of nerd?
+typeof(nerd)
 ```
 
 This does not really give is the answer we want to know.
@@ -160,14 +163,17 @@ But we can ask `R` directly whether something is a vector or a data frame!
 The functions `is.vector()` and `is.data.frame()` do exactly what the name suggest: For a given object, they tell you whether something is a vector/data frame (`TRUE`) or not (`FALSE`).
 
 ```{r}
-# check whether (the variable we saved) the age column in is a vector
+# check whether the age column in is a vector
+is.vector(nerd$age)
 # check whether nerd and the age column are a data frame
+is.data.frame(nerd)
+is.data.frame(nerd$age)
 ```
 
 This general logic exists for many data types in `R`, e.g.
 
 ```{r}
-# check whether something is a character
+is.character("test")
 ```
 
 The `$` operator is probably the most common way to access a column in a data frame, because it is quite quick (due to the autocompletion feature) and rather easy to read.
@@ -183,7 +189,7 @@ The disadvantage is that you have to type the whole column name yourself, but th
 [^4]: You will later see some examples how you might want to use column names that you generated somewhere else. For now, this does not concern us.
 
 ```{r}
-# select the age column using [[]]
+head(nerd[["age"]], 10)
 ```
 
 You can also access any row or column in a data frame using indices.
@@ -193,7 +199,7 @@ This time, it's two numbers: The first for the rows and the second for the colum
 So with this code, we get the first row of `nerd`.
 
 ```{r}
-# select the first row of nerd
+nerd[1, ]
 ```
 
 And with this code, we get the third column.
@@ -201,7 +207,7 @@ Note that we leave the second position blank when we want the whole row, but tha
 (Again, I use `head()` because otherwise, thousands of numbers would be printed.)
 
 ```{r}
-# select the third column of nerd
+head(nerd[ , 3], 10)
 ```
 
 Once again, selecting a single column will give us a vector.
@@ -212,6 +218,7 @@ For example, we can select the number at the third row and the first column like
 
 ```{r}
 # select the value in the third row and the first column
+nerd[3, 1]
 ```
 
 We can also change values in our data frame in the same manner by assigning new values to them.
@@ -221,15 +228,24 @@ So we want to save our `nerd` data into a new variable, so we can mess around wi
 
 ```{r}
 # Save the nerd data into a new variable that you can mess around with
+mess_around <- nerd
 ```
 
 Now, let's overwrite the value in the first row and second column with 999.
 
 ```{r}
-# Overwrite the value in the first row and second column with 999.
+head(mess_around)
 ```
 
-1.1) Select the column `gender` from the `nerd` data frame and save it into a variable. Use three different approaches.
+```{r}
+mess_around[1, 2] <- 999
+```
+
+```{r}
+head(mess_around)
+```
+
+1.1) Select the column `gender` from the `nerd` data frame and save it into a variable. Try out different approaches.
 
 1.2) Select the 10th row of `nerd` and save it into a variable.
 
@@ -239,7 +255,34 @@ Now, let's overwrite the value in the first row and second column with 999.
 
 1.5) Use the "mess around data frame" to overwrite the value in the 10th row and the 70th column with a value of your choice.
 
-1.6) Use the "mess around data frame" to overwrite the entire 70th column. We will solve this task together with the course, but first think about the following questions: How would you, in principle, overwrite the entire 70th column? What would you need to replace it with?
+1.6) Use the "mess around data frame" to overwrite the entire 1st column. We will solve this task together in a second, but first think about the following questions: How would you, in principle, overwrite the entire 1st column? What would you need to replace it with?
+
+<div style="border:5px; border-style:solid; border-color:#cc9393; padding:5px">
+<br>
+<b>ATTENTION<br></b>
+
+The following paragraph will spoiler the solution - try it yourself first!
+</div>
+<br>
+
+The first column of `mess_around` is a vector, so we have to overwrite it with another vector (of the same length).
+
+```{r}
+mess_around[, 1] <- "cake"
+```
+
+```{r}
+head(mess_around)
+```
+
+Note that I only use a single-element vector (the word "cake") to overwrite the entire column.
+Because of `R`'s vectorisation, it automatically repeats `"cake"` 1,000 times to adapt it to the length of the vector it has to fill.
+If we had used `c("cake", "coffee")` to fill the vector, our small replacement vector would have been repeated 500 times.
+The process only fails when the number of elements in the replacement vector is not a multiple of the vector it is supposed to replace, resulting in the very famous error message:
+
+```{r error=TRUE}
+mess_around[, 1] <- c("cake", "coffee", "biscuit")
+```
 
 ## Getting an overview
 
@@ -250,10 +293,10 @@ One of them was `summary()`.
 
 2.2) Use `summary()` on the `country` column. What is different here? Why? (Tip: Inspect `nerd$country`, maybe using `head()`).
 
-2.3) Try `table()` for the `country` column. What is the difference?
+2.3) What we want for columns like this is `table()`. Try it on the `country` column.
 
 2.4) What happens if you use `summary()` on the whole data frame?
 
-2.5) Try `table()` on the gender column. Does this help? Can you find more information in the codebook?
+2.5) Try `table()` on the gender column. Does this help? Can you find more information in the codebook? (Folder: skripts_exercises $\to$ data_sets $\to$ nerd_codebook.txt) By the way, you can just open the codebook from within RStudio!
 
 **THIS IS A GIT PUSH CHECKPOINT!**
