@@ -311,7 +311,7 @@ pre code {
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">10</span>, <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre class="dark-output"><code>## [1] 10  0</code></pre>
 <p>You might also have noticed that in the second vector we looked at (<code>c(2, 6.1, 9.234, 1.23)</code>), all numbers actually got turned into decimals with three decimal places. So beware - a vector forces all elements to be of the same data type!</p>
-<p>Now for the mysterious <code>c</code>. It somehow makes sense to group all elements with parentheses, but why does the <code>c()</code> have to go in front of it? <code>c()</code> is actually a function that combines elements. We will find out about functions later, but even if you learn about them, <code>c()</code> still does not really <em>feel</em> like a function. Still, all we can do is accept that <code>R</code> needs a function to be able to combine elements into a vector. This will not work:</p>
+<p>Now for the mysterious <code>c</code>. It somehow makes sense to group all elements with parentheses, but why does the <code>c()</code> have to go in front of it? <code>c()</code> is actually a function that combines elements. We will find out about functions later, but even if you learn about them, <code>c()</code> still does not really <em>feel</em> like a function. Still, all we can do is accept that <code>R</code> needs a function to be able to combine elements into a vector. This will not work<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a vector without c()</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">10</span>)</span></code></pre></div>
 <pre class="error-output"><code>## Error: &lt;text&gt;:2:3: unexpected &#39;,&#39;
@@ -319,7 +319,7 @@ pre code {
 ## 2: (2,
 ##      ^</code></pre>
 <p>It’s likely that you will forget <code>c()</code> a lot in the beginning, but that will go away.</p>
-<p>Of course, vectors can be saved into variables, just like we did with single elements before<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>:</p>
+<p>Of course, vectors can be saved into variables, just like we did with single elements before<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># store vector in a variable</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>my_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">12</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print vector</span></span>
@@ -481,7 +481,7 @@ pre code {
 <p>The important thing is that <code>NA</code>s will change the behaviour of some functions. For example:</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">20</span>, <span class="cn">NA</span>, <span class="dv">12</span>, <span class="dv">3</span>))</span></code></pre></div>
 <pre class="dark-output"><code>## [1] NA</code></pre>
-<p>The mean of this vector is “not available”, because there is uncertainty due to the missing values. This is a good “safety” behaviour, because you might not be aware that there are missing values in your data. If <code>R</code> just ignored the missing values, you might end up with a biased mean without knowing. However, you can tell <code>R</code> to do just that: Calculate the mean for all the numbers which are not <code>NA</code>s. We can do that by setting the argument <code>na.rm</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> to <code>TRUE</code> (its default value is <code>FALSE</code>).</p>
+<p>The mean of this vector is “not available”, because there is uncertainty due to the missing values. This is a good “safety” behaviour, because you might not be aware that there are missing values in your data. If <code>R</code> just ignored the missing values, you might end up with a biased mean without knowing. However, you can tell <code>R</code> to do just that: Calculate the mean for all the numbers which are not <code>NA</code>s. We can do that by setting the argument <code>na.rm</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> to <code>TRUE</code> (its default value is <code>FALSE</code>).</p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">20</span>, <span class="cn">NA</span>, <span class="dv">12</span>, <span class="dv">3</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre class="dark-output"><code>## [1] 9</code></pre>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">20</span>, <span class="dv">12</span>, <span class="dv">3</span>))</span></code></pre></div>
@@ -545,8 +545,9 @@ pre code {
 <hr />
 <ol>
 <li id="fn1"><p>Remember that logicals have a numeric representation: <code>TRUE</code> equals to 1, and <code>FALSE</code> equals to 0.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>In fact, we worked with vectors before! When we have e.g. <code>&quot;hello&quot;</code>, that is a one-element character vector. And <code>2</code> is a one-element integer vector. We don’t need <code>c()</code> here, because we don’t combine anything.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>Note that we have to explicitly name the argument here, because <code>na.rm</code> is actually the third argument of the <code>mean()</code> function. See <code>?mean</code>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Note that an Rmarkdown file will not run if a chunk contains an error - unless you explicitly tell it that it’s fine and that it is supposed to expect an error here. You can do this by setting the chunk option <code>error = TRUE</code> (see at the top of the chunk). If you ever want to purposely include an error in the code, e.g. for educational purposes, this is what you have to use.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>In fact, we worked with vectors before! When we have e.g. <code>&quot;hello&quot;</code>, that is a one-element character vector. And <code>2</code> is a one-element integer vector. We don’t need <code>c()</code> here, because we don’t combine anything.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Note that we have to explicitly name the argument here, because <code>na.rm</code> is actually the third argument of the <code>mean()</code> function. See <code>?mean</code>.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

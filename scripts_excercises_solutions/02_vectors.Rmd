@@ -130,12 +130,14 @@ It somehow makes sense to group all elements with parentheses, but why does the 
 `c()` is actually a function that combines elements.
 We will find out about functions later, but even if you learn about them, `c()` still does not really *feel* like a function.
 Still, all we can do is accept that `R` needs a function to be able to combine elements into a vector.
-This will not work:
+This will not work[^run_error]:
 
 ```{r error = TRUE}
 # a vector without c()
 (2, 5, 10)
 ```
+
+[^run_error]: Note that an Rmarkdown file will not run if a chunk contains an error - unless you explicitly tell it that it's fine and that it is supposed to expect an error here. You can do this by setting the chunk option `error = TRUE` (see at the top of the chunk). If you ever want to purposely include an error in the code, e.g. for educational purposes, this is what you have to use.
 
 It's likely that you will forget `c()` a lot in the beginning, but that will go away.
 
