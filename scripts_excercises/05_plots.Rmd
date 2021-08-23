@@ -346,11 +346,31 @@ nerd_red %>%
   theme_bw()
 ```
 
+1.1) Try to switch around `fill` and `colour` in the plot above, so that the colour is `"#dca3a3"` and the fill is `"black"`. What happens?
+
 You might be a bit confused now, because for our previous scatter plot, we used colour to change the colour of the circles, not of the **border** of the circles.
 That is because the circles we used before don't have a border - or rather, they only consist of a border.
 There are several different shapes that we can use in our scatter plot, and we address them by different numbers using the `shape` argument.
 [Here](http://www.sthda.com/english/wiki/ggplot2-point-shapes) is a list of all available shapes.
 Shapes 21 - 25 respond to `colour` **and** `fill`.
+
+Compare these two plots. The first one uses shape 20, the other shape 21.
+For the first plot, all the points are black, meaning they responded to the `colour` argument in our plot.
+However, `fill = "red"` does nothing.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point(alpha = .7, size = 3.5, shape = 20, fill = "red", colour = "black")
+```
+
+In the second plot, shape number 21 responds to both `fill` and `colour`, with `fill` determining the colour of the inside of the circles, and `colour` determining the colour of the border.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point(alpha = .7, size = 2, shape = 21, fill = "red", colour = "black")
+```
 
 Here is the same scatter plot as above, but using shape number 25 with the colour black.
 Note that we now use `fill = gender` instead of `colour = gender`!
@@ -358,9 +378,10 @@ Note that we now use `fill = gender` instead of `colour = gender`!
 ```{r}
 # Shape doesn't have anything to do with our data, so it goes outside of
 # the aes function!
+# (I also increased alpha a bit)
 nerd_red %>% 
   ggplot(aes(x = age, y = nerd_score, fill = gender)) +
-  geom_point(alpha = .4, size = 2, shape = 25, colour = "black") +
+  geom_point(alpha = .7, size = 2, shape = 25, colour = "black") +
   geom_smooth(method = "lm", se = FALSE, size = 1.5) +
   
   scale_x_continuous(breaks = seq(10, 90, 10), limits = c(10, 90)) +
@@ -391,27 +412,30 @@ nerd_red %>%
   theme(legend.position = "top")
 ```
 
+## Elements of the theme
 
-
-
-
-
-
-How about categorical data?
-Let's have a boxplot for age that is grouped by gender.
-Here, I use gender on both the x-axis and for the colour.
-That's a bit redundant, but we can hide the x-axis if we want, so only the legend carries the information.
-I have also added a title.
+We can control basically everything in our plot by interacting with its `theme`.
+To illustrate that, let's do a box plot again, but this time, grouped by gender.
+Here, I use gender on both the x-axis **and** for the colour.
 
 ```{r}
-# create a box plot with y = age and x = gender.
-# fill by gender
-# set a title
-# use a nice theme and move the legend to the top
 nerd_red %>% 
   ggplot(aes(x = gender, y = age, fill = gender)) +
   geom_boxplot() +
-  labs(title = "age by gender") +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+Having gender coded by both the colour **and** the x-axis is a bit redundant.
+We can use the `theme()` function to hide the x-axis.
+To do that, we have to keep in mind that the x-axis as a whole consists of several elements: The axis title ("gender"), the axis text ("female", "male", "other") and the axis ticks.
+The axis line is also part of the axis, but this is something we want to keep.
+We can hide the different parts of the x-axis by telling `ggplot()` that they are an `element_blank()` - we turn them into "blank elements".
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = gender, y = age, fill = gender)) +
+  geom_boxplot() +
   theme_bw() +
   theme(
     legend.position = "top",
@@ -421,98 +445,87 @@ nerd_red %>%
   )
 ```
 
-How about adding another factor?
+We used `element_blank()` to hide the axis text, but we can also control it in different ways.
+Normally, the axis text is an `element_text()`, which responds to commands like `size` and `colour`, as it does in your favourite text editor.
+We can change the appearance of the axis text like this:
 
-1.1) Can you do a boxplot that has the nerd score on the y-axis, gender on the x-axis and is filled with whether the person voted or not?
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = gender, y = age, fill = gender)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(
+    legend.position = "top",
+    axis.text.x = element_text(size = 20, colour = "red")
+  )
+```
+
+You can toy around with different components of the plot theme.
+Just run `?theme` in the console and take a look at all the elements of your plot that you can potentially control.
+Try them out to find out what they are doing.
+It's also worth to google a bit if there is something particular that you want to change in your plot.
+99% of the time, someone on the internet had the same question and someone posted an answer to it.
+
+2.1) In the boxplot above, add a title (hint: use `labs(title = "...")`). Use `?theme` in the console (or Google!) to find out how to change the title's colour and its size. Bonus: Can you center the title?
+
+## More grouping
+
+In a lot of cases, you want your plot to be grouped by several variables.
+For example, we could do a boxplot of the nerd score as a function of gender and whether people voted or not.
+On the x-axis, we have gender, but for each category on the x-axis, there are two boxplots - one for people who voted in blue, and one for people who did not vote in red.
 
 ```{r}
 nerd_red %>% 
   ggplot(aes(x = gender, y = nerd_score, fill = voted)) +
   geom_boxplot() +
-  scale_fill_manual("did people vote", values = c("pink", "blue3")) +
-  theme_bw() +
+  theme_classic() +
   theme(legend.position = "top")
 ```
 
-## Detour: Long format
-
-What if we wanted do a boxplot for each of the nerdy items, `Q1` - `Q2` next to each other?
-We run into a problem: Each item is stored in a separate column, but we can only put **one** column on the x-axis.
-That is because `ggplot2` (and in fact, a lot of `tidyverse` functions) require the "long format".
-The long format means that we deviate from the classical data format where every participant has a single row.
-In the long format, one participant can take up several rows.
-Consider this simplified example of a data frame with two participants and three items:
+3.1) Change the y-axis title to "nerd score" (without the underscore) and increase the font size for: a) the legend title, b) the legend text, c) the axis title, d) the axis text.
 
 ```{r}
-wide_format <- 
-  data.frame(
-    participant = 1:2,
-    item_1 = c(1, 4),
-    item_2 = c(5, 10),
-    item_3 = c(11, 2)
-  )
-
-wide_format
+nerd_red %>% 
+  ggplot(aes(x = gender, y = nerd_score, fill = voted)) +
+  geom_boxplot() +
+  labs(y = "nerd score") +
+  theme_classic() +
+  theme(
+    legend.position = "top",
+    legend.title = element_text(size = 20),
+    legend.text = element_text(size = 18),
+    axis.title = element_text(size = 16),
+    axis.text = element_text(size = 14)
+    )
 ```
 
-We want to "pivot" the data, so we end up with a situation like this (only observe the output for now, not the code):
+We can also customise the colour (or rather: the fill!) of our boxplots by using the function `scale_fill_manual()`.
+In the first argument, I pick the legend's name (observe the legend on top of the plot!), and with the argument `values`, I specify the colours I want to use.
+Because there are two colours in the plot, I need to provide two colours - the plot won't work with less.
 
 ```{r}
-wide_format %>% 
-  pivot_longer(
-    item_1:item_3,
-    names_to = "item",
-    values_to = "score"
-  )
+nerd_red %>% 
+  ggplot(aes(x = gender, y = nerd_score, fill = voted)) +
+  geom_boxplot() +
+  scale_fill_manual("did people vote", values = c("orange", "blue3")) +
+  theme_classic() +
+  theme(legend.position = "top")
 ```
 
-As you can see, each participant now takes up three rows (one for each item), and the corresponding score is stored in a single, separate column.
-This would now e.g. allow us to build a plot where we put the item on the x-axis and the score on the y-axis.
-
-You may know this transformation from other programmes like SPSS.
-In the `tidyverse`, we achieve this by using the `pivot_longer()` function.
-Here is how it works: First, we tell it which columns should be part of the pivot, in our case, `item1` - `item3`.
-You may think: Wait a minute. But the whole data frame is being transformed, aren't all columns part of the pivot?
-Think of it like this: We provide the columns that should be gone in the resulting "long" data frame, and replaced by other columns.
-In our case, we want to get rid of the individual item columns, but turn them into a column coding which item we have and a corresponding score column.
-Next, we use the argument `names_to` to name our "naming" column.
-This column will hold the old column names.
-And lastly, we use the argument `values_to` to name the column that holds the values that were previously scored in the three different item columns.
-
-`pivot_longer()` is a very powerful function that can handle much more complicated cases where multiple columns are turned into multiple naming columns, but this does not concern us for now.
-However, one handy trick is to clean up the naming column a little bit:
+3.2) Create a scatter plot with age on the x-axis and the nerd score on the y-axis. Colour the points by whether people are married or not and let the size of the points vary as a function of self-reported nerdiness (column `nerdy`). (Note that both of these aesthetics - the colour and the size - depend on what's in your data, so put them inside of the `aes()` function!)
+It's easier to see what's happening when there are not that many data points, so here is a tiny portion of `nerd_red`, only containing the first 100 participants (i.e. the first 100 rows).
+Use it to create your plot.
 
 ```{r}
-wide_format %>% 
-  pivot_longer(
-    item_1:item_3,
-    names_to = "item",
-    values_to = "score",
-    names_prefix = "item_"
-  )
+nerd_tiny <- nerd_red[1:100, ]
 ```
 
-Let's practice this a little bit.
-
-1.2) Select the items from the Ten Item Personality Inventory from the `nerd` data (**not** `nerd_red`!). Those are named `TIPI1` - `TIPI10`. Also store the `age` column and create a column with a participant id. Save the resulting data frame into a new variable. Then, pivot the data into the long format, with a column called `TIPI_item` that stores the item name, and a column called `score` that stores the participants' response.
 
 ```{r}
-# Select the age column and the items from the Ten Item Personality Inventory from the `nerd` data 
-# (**not** `nerd_red`!). Those are named `TIPI1` - `TIPI10`.
-# Create a column with a participant id.
-# Save the resulting data frame into a new variable.
-# Then, pivot the data into the long format, with a column called `TIPI_item` that stores the 
-# item name, and a column called `score` that stores the participants' response.
+nerd_tiny %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = married, size = nerdy)) +
+  geom_point(position = position_dodge(width = .5), alpha = .4) +
+  theme_classic()
 ```
-
-1.3) Now back to our initial plan. Take `nerd_red` and transform it into the long format in such a way that you end up with a column storing the nerd item name (`Q1`- `Q26`) and another column storing the response to each item.
-
-1.4) Create a boxplot with each nerd item on the x-axis and the score on the y-axis.
-
-## Free solo
-
-Now it's time to brain storm some plot ideas together.
-Which plots do you want to see?
-You suggest a plot, and then we will discuss together how we can build that plot.
 
 **THIS IS A GITHUB PUSH CHECKPOINT**
