@@ -24,7 +24,10 @@ knitr::opts_chunk$set(echo = FALSE)
 - Anything else?
 
 ## I REALLY like R
-![](pics/rniversary1.jpg) ![](pics/rniversary2.jpg) ![](pics/rniversary3.jpg)
+![](pics/rniversary1.jpg) ![](pics/rniversary2.jpg)
+
+## I REALLY like R
+![](pics/rniversary3.jpg) ![](pics/rniversary4.jpg) 
 
 ## About R
 <center>
@@ -44,19 +47,19 @@ knitr::opts_chunk$set(echo = FALSE)
 <center>
 ![](pics/hex_stickers.jpg)
 
-<br><font size="3">@JonTheGeek - https://twitter.com/juli_tkotz/status/1363236862094172162</font>
+<br>
+<font size="3">@JonTheGeek - https://twitter.com/juli_tkotz/status/1363236862094172162</font>
 </center>
 
 - R is open source, with tons of additional packages that are developing rapidly.
 - Managing your "dependencies" can be a bit overwhelming.
-- Don't avoid updating your R and all the packages.
 - Embrace the quirkiness :-)
 
 ## What can you expect?
 <div class="columns-2">
   ![](pics/programming_learning_curve.jpg)
 
-- You can't learn to code in 2 days.
+- You can't learn a language in 2 days.
 - **But** you will acquire the basic skills for the journey ahead.
 - Learning is only possible by doing. **No excuses: Start. Using. Code. Now!**
 </div>
@@ -72,7 +75,7 @@ knitr::opts_chunk$set(echo = FALSE)
   ![](pics/stack_overflow.jpg)
 
 - You don't need to know how to do it - but you need to know where to look.
-- We will use Google and the R documentation along the way.
+- Googling, browsing Stack Overflow etc. will be part of your workflow.
 </div>
 
 ---
@@ -85,9 +88,3 @@ knitr::opts_chunk$set(echo = FALSE)
 - Your experience with `R`.
 - Your expectations for this course.
 - Your favourite cake.
-
-
-## Let's dive in!
-- They already forked their GitHub repo?
-- Open script whatever ...
-
