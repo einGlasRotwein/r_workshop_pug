@@ -1,0 +1,405 @@
+---
+title: "03 Vectors and functions"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+---
+
+```{css, echo=FALSE}
+/* This code is used to turn the html output into "dark mode" */
+.dark-output {
+background-color: #5a5a5a;
+color: white;
+}
+
+.error-output {
+background-color: #cc9393;
+color: black;
+}
+
+.warning-output {
+background-color: #c0c537;
+color: black;
+}
+
+.message-output {
+background-color: #5a5a5a;
+color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output", class.warning = "warning-output"
+)
+```
+
+## Hotdog data
+
+In the following exercises, we will work with vectors some more. We will also get to know some functions.
+For these exercises, I have some actual data for you: It's from [Nathan's Hotdog Eating Contest](https://nathansfamous.com/hot-dog-eating-contest/hall-of-fame/).
+This is not the full data - we only look at the data of a few contestants for this example.
+We'll look at bigger data sets shortly.
+
+I have saved the data in an `.RData` file for you.
+In an `.RData` file, you can save data in the same form it takes in your environment, i.e. as different variables etc.
+Technically, you could save your entire environment and load it whenever you open your `R` project (and `RStudio` will ask you to do this unless you tell it to shut up about it), but most of the time, this is bad practice that might lead to errors in your code.
+
+You can read in data from an `.RData` file using the `load()` function.
+All it needs to know is the path where the `.RData` file we want to read in is stored.
+The data for this workshop are all stored in a folder called `"data_sets"`, and we want to read in the data file called `"hotdog.RData"`, so we load in the data like this:
+
+```{r}
+load("exercises_solutions/data_sets/hotdog.RData")
+
+# Should the paths above return an error for you, try going to
+# Tools -> Global Options -> R Markdown
+# and set "evaluate chunks in directory:" to "Project"
+```
+
+Check out the "optional" section at the end of this chapter if you're not familiar with file paths and how to know which one to use for reading in a specific data file.
+
+Four vectors have appeared in your environment.
+
+This is a vector containing the number of hot dogs the contestants ate in 2018:
+
+```{r}
+hotdog_2018
+```
+
+And these are the results of the same contestants in 2019:
+
+```{r}
+hotdog_2019
+```
+
+Here is another vector that contains their names:
+
+```{r}
+hotdog_names
+```
+
+Here is information about their sex, i.e. which category they compete in:
+
+```{r}
+hotdog_sex
+```
+
+Actually, this data would be better represented in a table than in a bunch of vectors, but we need to spend a little more time with vectors.
+
+### Optional
+
+When we read in the data above, we used the file path `"exercises_solutions/data_sets/hotdog.RData"`.
+Or, more precisely, we would say `"./exercises_solutions/data_sets/hotdog.RData"`.
+This is called a **relative path** - it is the path that we need to take from our current location to reach the file we want to use.
+When using RStudio, our current position is that of the `R` project file (in our case, it's located where `exercises_solutions` is).
+The **absolute path** on the other hand would be `"C:/Users/julit/Documents/r_stuff/r_workshop_pug/scripts_exercises_solutions/data_sets/hotdog.RData"`.
+This is not only an annoyingly long path, it is also dangerous for reproducibility:
+This path only exists on my computer (you won't even have a folder called `julit` in your Users folder - or at least that would be very surprising).
+If I had put this path into the script, you could not run it, because this path does not exist on your computer.
+Each of you would have to put in their own user name, the name of their workshop folder and so on.
+The relative path, however, works relative to my `R` project.
+If you want a more thorough explanation, watch this [video](https://www.youtube.com/watch?v=BMT3JUWmqYY).
+It is explaining absolute and relative paths in the context of web development, but the principle is the same.
+
+## Some simple functions
+
+Let's find out how many contestants we have by using the function `length()`.
+
+```{r}
+length(hotdog_names)
+```
+
+A function in `R` always comes with parentheses.
+We need to fill these parentheses with **arguments** (most of the time), and then the function will **return** something, i.e. give us a result.
+Here, `hotdog_names` is the argument, and `11` is the return value or **output**.
+
+Try out a few other functions. Here are some you could try:
+
+3.1) `max()` gives you the maximum value in a vector. What do you think `min()` does? Use both on `hotdog_2018` and/or `hotdog_2019`.
+
+3.2) Use `table()` on `hotdog_sex`. What do you get?
+
+3.3) Try `mean()` and `sd()` - those return the mean and the standard deviation.
+
+3.4) Use `summary()` on `hotdog_2018` and `hotdog_2019`. What is the difference to using `mean()` and `sd()`?
+
+3.5) Use `head()` and `tail()` on either of the vectors. What do these functions do?
+
+3.6) How many hotdogs were eaten in total in the year 2019? Use the function `sum()`.
+
+A lot of functions can take more than one argument.
+For example, you can control the behaviour of `head()` and `tail()` with an additional argument.
+
+3.7) Can you find out what the second argument in `head()` (and `tail()`) does? The second argument is a number - try changing it.
+
+```{r}
+head(hotdog_names, 3)
+```
+
+We can see that arguments have a **position** in the function - for `head()`, the data belongs at the first position, and the number of elements we want to display comes second.
+`head()` will be unhappy if we just switch the order around:
+
+```{r error = TRUE}
+head(2, hotdog_names)
+```
+
+The function expects some data at the first position, and an integer at the second position.
+However, we don't need to memorise the order of arguments for every function.
+You can also address arguments **by name**, which gives us the freedom to switch the order around.
+
+```{r}
+head(n = 2, x = hotdog_names)
+```
+
+It is common in `R` that the data input of a function is simply called `x`.
+That violates the rule to use self-explanatory names in good coding practice, but it is a handy convention.
+
+In general, you can see which arguments a function takes by reading the documentation of that function.
+Just type a question mark, and the the function name (without parentheses!), e.g. `?head`.
+Often, the documentation is a bit overwhelming and gives you much more than you need.
+In a lot of cases, you can just scroll down to the examples and see how the function should be used.
+
+## Indexing
+
+We will now learn how to access specific elements in a vector via so called **indexing**.
+Let us bring up the names of the contestants again.
+To get only the name of the third contestant, we do this:
+
+```{r}
+hotdog_names[3]
+```
+
+4.1) Can you find the name of the 5th contestant?
+
+What if we wanted to find the names of the 3rd **and** the 5th contestant?
+We can use another vector for indexing!
+
+```{r}
+hotdog_names[c(3, 5)]
+```
+
+It is important to use `c()` for this - `c()` puts 3 and 5 into the same vector.
+If we write `[3, 5]`, we're trying to use two vectors at the same time (3 is the first, 5 is the second), and that won't work:
+
+```{r error = TRUE}
+hotdog_names[3, 5]
+```
+
+4.2) What if we want to see the first 3 contestants? (There are several ways to achieve this.)
+
+We can re-assign elements in a vector using indexing.
+For example, let's replace the third element in this vector of numbers:
+
+```{r}
+numbers <- 1:4
+numbers
+```
+
+```{r}
+numbers[3] <- 111
+numbers
+```
+
+Note how this re-assignment permanently changes the vector.
+
+4.3) Can you change the third and fourth element of `numbers` with different numbers? Can you achieve that in a single assignment (i.e. using `<-` only once)?
+
+4.4) Numbers only has four elements - what happens if you try to assign a fifth one?
+
+In most cases, we use logical comparison for indexing.
+Here is how this works: Say we have a vector called `numbers` that contains the number 1 - 4.
+We have another vector, a logical one, called `index`.
+If we use this logical vector as an index, this is what happens:
+
+```{r}
+numbers <- 1:4
+index <- c(TRUE, TRUE, FALSE, TRUE)
+numbers[index]
+```
+
+Remember how we can create logical vectors.
+This line of code, for example, returns a logical vector that is `TRUE` for every element in `numbers` that is smaller than 3, and `FALSE` for every element in `numbers` that is equal to or larger than 3.
+
+```{r}
+numbers < 3
+```
+
+Let's apply this to our `numbers` vector:
+
+```{r}
+index <- numbers < 3 # store index in a variable
+numbers[index] # apply it to numbers
+```
+
+What happened?
+
+We can achieve the same thing without saving the index in a variable:
+
+```{r}
+numbers[numbers < 3]
+```
+
+It feels a little bit weird that we have to call `numbers` twice.
+Why can't we simply write something like `numbers[<3]`?
+
+```{r error = TRUE}
+numbers[< 3]
+```
+
+Programming languages want us to be precise.
+They want us to specify **what** should be smaller than three.
+As humans, we would say something like: "Show me all elements in numbers smaller than 3."
+What a computer wants is a statement like this: "Show me all of the elements in `numbers`, where `numbers` is smaller than 3.
+
+4.5) Write code that gives you all elements larger than 6 in the vector `1:10`.
+
+4.6) Write code that replaces all elements larger than 6 in the vector `1:10` with the number 666.
+
+Let's apply indexing with logical vectors to our hotdog data.
+
+In our previous example, we used `numbers` twice: Once as the vector we were indexing, and once the vector we created the index from (i.e. we used `numbers` inside and outside of `[]`).
+That is not always the case; we can use a different vector for indexing, which is exactly why we always need to specify which vector we refer to both inside **and** outside of the `[]`.
+
+For example, I can get the names of the female hotdog contestants like this:
+
+```{r}
+hotdog_names[hotdog_sex == "female"]
+```
+
+4.7) Which contestants improved, i.e. who ate more hotdogs in 2019 than in 2018?
+
+4.8) Get the name of the person who ate the most hot dogs in 2019. Hint: You can use functions inside `[]` - try using `max()`!
+
+4.9) Can you find the name of the contestant who ate exactly the same number of hot dogs in 2018 and 2019?
+
+4.10) Remember that you can combine logical comparisons using `&` ("and") and `|` ("or"). Can you get the names of the contestants that ate more than 25 hot dogs in 2019, but less than 30?
+
+### Optional
+
+4.11) Any function that returns a number or a logical can be used for indexing.
+Assume you want to get the last element in a vector, but you don't know how long it is.
+Try using `length()` inside of `[]` to get the last contestant in `hotdog_names`.
+
+4.12) **Super bonus exercise** (more of a brain puzzle than a coding exercise): Can you find a way to get the name of the **woman** who ate the **most hot dogs in 2019**? This can be achieved in a single (very long) line of code, but you can also solve it in several steps, saving intermediate results into variables.
+
+## Missing values
+
+There is one last data type that I want to show you, because you will meet it frequently and it changes the way some functions work.
+I'm talking about missing values, which are typically indicated with `NA` ("not available").
+Technically, there are different types of `NA`, depending on which data type it is supposed to mark as missing (i.e., a "character NA", an "integer NA" etc.).
+However, in 99.99% of the cases, all you will need is `NA`.
+It will turn into the "correct" type of `NA` when used in context.
+Let's see some examples.
+
+```{r}
+c(1, 20, NA, 12, 3)
+```
+
+```{r}
+c("test", NA, "more test")
+```
+
+The important thing is that `NA`s will change the behaviour of some functions.
+For example:
+
+```{r}
+mean(c(1, 20, NA, 12, 3))
+```
+
+The `mean()` function returns a missing value because there's uncertainty about the result.
+Depending on which number the missing value would actually be, `mean()` would give us a different result.
+It's useful that `mean()` acts this way - first of all, you might not be aware that there are missing values in your data, and a return value of `NA` will make you double-check your data.
+If `R` just ignored the missing values, you might end up with a biased mean without knowing.
+You as the data analyst are in charge of deciding what to do with the missing values.
+A common option is to tell `R` to ignore the missing values, i.e. let it calculate the mean for all the numbers which are not `NA`s.
+We can do that by setting the argument `na.rm`[^narm_position] to `TRUE` (its default value is `FALSE`).
+
+[^narm_position]: Note that we have to explicitly name the argument here, because `na.rm` is actually the third argument of the `mean()` function. See `?mean`.
+
+```{r}
+mean(c(1, 20, NA, 12, 3), na.rm = TRUE)
+mean(c(1, 20, 12, 3))
+```
+
+You can see that `mean()` really **ignored** the missing values, i.e. even though there are five values (one of them missing), it calculated the mean based on the four values that are not missing.
+(In other words, the missing value was truly treated as missing, and not e.g. replaced with another number.)
+
+The same logic applies for a lot of different functions.
+For the following functions, examine how they behave when there is an `NA` in the vector.
+Can you use `na.rm = TRUE` to change their behaviour?
+
+Create a vector that has one or more missing values. Then examine the behaviour of the following functions:
+
+5.1) `sd()`
+
+5.2) `min()` and `max()`
+
+5.3) `summary()`
+
+5.4) `table()`
+
+5.5) `head()` and `tail()`
+
+5.6) `length()`
+
+### Optional
+
+Remember how we added a fifth element to a vector that only had four elements:
+
+```{r}
+numbers <- 1:4
+numbers[5] <- 10
+numbers
+```
+
+5.7) Examine what happens if you add a 7th element to a vector that only has four elements.
+
+The situation with `NA`s gets interesting when logicals are added.
+Consider the following examples:
+
+```{r}
+TRUE & NA
+FALSE & NA
+TRUE | NA
+FALSE | NA
+```
+
+Can you see what is happening here?
+
+When we are using logical comparisons for indexing, you also need to watch out for `NA`s.
+
+Here, we create an index that shows us all elements of `a_vector` that are larger than 10:
+
+```{r}
+a_vector <- c(1, 12, 14, NA, 12)
+a_vector[a_vector > 10]
+```
+
+The output contains all numbers > 10, just as we wanted - but it also includes the `NA`.
+
+Which brings us to the next point: How do you actually check for `NA`s?
+You might assume it works like this:
+
+```{r}
+a_vector == NA
+```
+
+However, the result is not what we would expect.
+This is such a common mistake that RStudio even warns you that you probably did something wrong here.
+If you hover over the little exclamation mark, it actually tells you what you should do instead, which is using the function `is.na()`:
+
+```{r}
+is.na(a_vector)
+```
+
+I can for example use `is.na()` to filter for all elements which are **not** `NA`, effectively dropping of all missing values in the data.
+
+```{r}
+a_vector
+a_vector[!is.na(a_vector)]
+```
+
+**THIS IS A GIT PUSH CHECKPOINT!**

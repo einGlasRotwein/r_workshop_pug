@@ -1,0 +1,147 @@
+---
+title: "06 Plots - Long Format"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+    df_print: paged
+---
+
+```{css, echo=FALSE}
+.dark-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+
+.error-output {
+  background-color: #cc9393;
+    color: black;
+}
+
+.message-output {
+  background-color: #5a5a5a;
+    color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output", fig.align = "center"
+)
+```
+
+We can do tons of plots with the nerd data as it is, but in a lot of cases, our data is just not in the right format to plot it, at least when if we want to use `ggplot2`.[^we_want_ggplot]
+That would e.g. be the case if we wanted do a boxplot for each of the nerdy items, `Q1` - `Q26`, next to each other.
+The problem is: Each item is stored in a separate column, but we can only put **one** column on the x-axis.
+
+[^we_want_ggplot]: And we **do** want to use `ggplot2`. Of course, you can technically achieve everything by using base `R` plotting methods (which we won't get into here), but it is usually much more tedious. `ggplot2` offers a lot of functionalities and if vanilla `ggplot2` doesn't do the job, there's loads of expansion packages that can e.g. create "publication ready plots" for you (this is e.g. how `ggpubr` is described).
+
+Before we tackle the issue, clear your work space using `rm(list = ls())` in case you still have stuff in there from the previous exercises.
+Then, load the `tidyverse` and our preprocessed nerd data:
+
+```{r}
+library(tidyverse)
+source("nerd_preprocessing.R")
+```
+
+Back to our problem - we want the items 1 - 26 to be on the x-axis, which are all stored in different columns, but we can only put one column on the x-axis.
+What we would need is one column, e.g. called "item", that contains the item numbers, and then another column, e.g. "score", that contains the score a participant got for the respective item.
+Here's a comparison of the two formats only taking into account four participants and three items.
+Don't look at the code for now, we'll get to that.
+Only wrap your head around what's different in the output!
+
+```{r}
+# Wide format
+nerd_red[1:4, ] %>% 
+  select(id, Q1:Q3)
+```
+
+```{r}
+# Long format
+nerd_red[1:4, ] %>% 
+  select(id, Q1:Q3) %>%
+  pivot_longer(
+    Q1:Q3,
+    names_to = "item",
+    values_to = "score"
+  )
+```
+
+In the first example, each participant takes up exactly one row in the data, a very common data format.
+Each item lives in a different column, which is why the data is very "wide" (if there were more items, you would need to scroll horizontally through the data).
+For this reason, this format is called "wide format".
+
+In the second example, each participant takes up several rows in the data.
+Three, to be precise: One for each item.
+The data aren't "wide" anymore, but instead, it got "longer" (you need to scroll horizontally), which is why this format is called the "long format".
+`ggplot2` (and in fact, a lot of `tidyverse` functions) require the "long format".
+
+You may know the transformation from wide to long format (or the other way around) other programmes like SPSS.
+Within the `tidyverse`, this transformation is referred to as "pivoting" the data, which is why the function that turns "wide" data into "long" data is called `pivot_longer()`.
+Let's see how it works in the example from above.
+Here is the tiny portion of the nerd data (three items, four participants) we will work with:
+
+```{r}
+wide_format <- 
+  nerd_red[1:4, ] %>% 
+  select(id, Q1:Q3)
+
+wide_format
+```
+
+Note how important it is that the data has an id column.
+If we didn't have a participant id, it would be really hard to tell which data belongs to which participant after pivoting.
+
+Let's put our wide data into the `pivot_longer()` function.
+First, we tell `pivot_longer()` which columns should be pivoted, in our case, items 1 - 3, i.e. `Q1` - `Q3`.
+You may think: Wait a minute. But the whole data frame is being transformed, aren't **all** columns part of the pivot?
+In a way, that's true: The whole data frame is affected by the pivoting.
+However, there are some columns that will not exist anymore after we've pivoted them (or rather, they've been transformed into a bunch of different columns).
+For example, our new long data frame will not have the columns `Q1` - `Q3` anymore.
+Those are the columns we specify in the `pivot_longer()` function.
+
+The next part we need is a column where the names of our old columns go, i.e. the column that will contain the information "Q1", "Q2" and "Q3" (in our example above, we called this column "item").
+We provide the name for
+
+Next, we use the argument `names_to` to name our "naming" column.
+This column will hold the old column names.
+And lastly, we use the argument `values_to` to name the column that holds the values that were previously scored in the three different item columns.
+
+`pivot_longer()` is a very powerful function that can handle much more complicated cases where multiple columns are turned into multiple naming columns, but this does not concern us for now.
+However, one handy trick is to clean up the naming column a little bit:
+
+```{r}
+wide_format %>% 
+  pivot_longer(
+    item_1:item_3,
+    names_to = "item",
+    values_to = "score",
+    names_prefix = "item_"
+  )
+```
+
+Let's practice this a little bit.
+
+1.2) Select the items from the Ten Item Personality Inventory from the `nerd` data (**not** `nerd_red`!). Those are named `TIPI1` - `TIPI10`. Also store the `age` column and create a column with a participant id. Save the resulting data frame into a new variable. Then, pivot the data into the long format, with a column called `TIPI_item` that stores the item name, and a column called `score` that stores the participants' response.
+
+```{r}
+# Select the age column and the items from the Ten Item Personality Inventory from the `nerd` data 
+# (**not** `nerd_red`!). Those are named `TIPI1` - `TIPI10`.
+# Create a column with a participant id.
+# Save the resulting data frame into a new variable.
+# Then, pivot the data into the long format, with a column called `TIPI_item` that stores the 
+# item name, and a column called `score` that stores the participants' response.
+```
+
+1.3) Now back to our initial plan. Take `nerd_red` and transform it into the long format in such a way that you end up with a column storing the nerd item name (`Q1`- `Q26`) and another column storing the response to each item.
+
+1.4) Create a boxplot with each nerd item on the x-axis and the score on the y-axis.
+
+## Free solo
+
+Now it's time to brain storm some plot ideas together.
+Which plots do you want to see?
+You suggest a plot, and then we will discuss together how we can build that plot.
+
+**THIS IS A GITHUB PUSH CHECKPOINT**
