@@ -52,7 +52,7 @@ All it needs to know is the path where the `.RData` file we want to read in is s
 The data for this workshop are all stored in a folder called `"data_sets"`, and we want to read in the data file called `"hotdog.RData"`, so we load in the data like this:
 
 ```{r}
-load("exercises_solutions/data_sets/hotdog.RData")
+load("exercises/data_sets/hotdog.RData")
 
 # Should the paths above return an error for you, try going to
 # Tools -> Global Options -> R Markdown

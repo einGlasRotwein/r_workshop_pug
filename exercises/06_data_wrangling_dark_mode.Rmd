@@ -42,7 +42,7 @@ Furthermore, the `tidyverse` offers a lot of functions for "data wrangling", i.e
 Let's load in the nerd data again.
 
 ```{r}
-nerd <- read.csv("exercises_solutions/data_sets/nerd_data_short.csv", sep = "\t")
+nerd <- read.csv("exercises/data_sets/nerd_data_short.csv", sep = "\t")
 
 # Should the paths above return an error for you, try going to
 # Tools -> Global Options -> R Markdown

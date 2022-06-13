@@ -46,8 +46,8 @@ It takes the path to the file you would like to run as it's first argument.
 
 ```{r}
 # Read in data and preprocess it
-nerd <- read.csv("exercises_solutions/data_sets/nerd_data_short.csv", sep = "\t")
-source("exercises_solutions/nerd_preprocessing.R")
+nerd <- read.csv("exercises/data_sets/nerd_data_short.csv", sep = "\t")
+source("exercises/nerd_preprocessing.R")
 
 # Should the paths above return an error for you, try going to
 # Tools -> Global Options -> R Markdown

@@ -41,7 +41,7 @@ SWe try to read in our data and assign it to a variable called `nerd`.
 This code runs fine, but ...
 
 ```{r}
-nerd <- read.csv("exercises_solutions/data_sets/nerd_data_short.csv")
+nerd <- read.csv("exercises/data_sets/nerd_data_short.csv")
 
 # Should the paths above return an error for you, try going to
 # Tools -> Global Options -> R Markdown
@@ -64,7 +64,7 @@ So, we need to tell `read.csv()` what the correct separator is via the argument 
 [^sep]: `read.csv()` is just a special case of the function `read.table()`. In principle, `read.table()` can be used to read in any form of data (table), as long as you specify a couple of things, e.g. how the columns are separated, whether there is a header with column names etc. Because it's very annoying to type out all these options every time, there is a bunch of functions that different versions of `read.table()`. All that is different between these functions is that they come with different preset options, tailored to different file types. Technically, the `read.delim()` function is the one that works for our tab-separated data, but in a lot of cases, you won't know the separator of your data before you try to read it in. For `.csv` files, I tend to start with `read.csv()` and then figure out the correct separator.
 
 ```{r}
-nerd <- read.csv("./data_sets/nerd_data_short.csv", sep = "\t")
+nerd <- read.csv("exercises/data_sets/nerd_data_short.csv", sep = "\t")
 ```
 
 We can see in our environment that the data now has 80 variables (columns).
