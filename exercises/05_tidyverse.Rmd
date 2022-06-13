@@ -1,0 +1,131 @@
+---
+title: "05 The Tidyverse"
+output: 
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In case you still have stuff in your environment from the previous exercises, this is a reminder to clear your environment with `rm(list = ls()`.
+
+## The tidyverse
+
+For the next steps, I would like to introduce you to the `tidyverse`.
+The  `tidyverse` is an `R` package - a collection of `R` packages, in fact, that come with many handy functions for data wrangling and visualisation.
+It is perfectly normal to use various `R` packages for additional functions and you will "collect" a lot of them over time.
+
+The `tidyverse` is a little bit different, because it has its own "coding style" which varies a bit from what we've seen so far.
+This has lead to a whole war between "base `R`" and "the `tidyverse`", with some hardliners on both sides.
+Sometimes, the `tidyverse` is described as being especially beginner friendly and, well ... tidy.
+Personally, I use both base `R` and the `tidyverse` - whatever works best for the task at hand.
+They both have their pros and cons.
+However, for this course, I have to make decisions about what to teach you, and especially for all things data wrangling, I will mainly show you the `tidyverse` way.
+
+Let's install the `tidyverse` together.
+
+Just uncomment the line below - the code is commented out so it isn't run every time you run this Rmarkdown file.
+
+```{r eval=FALSE}
+# install.packages("tidyverse")
+```
+
+We have installed our package, but we can't use its functions yet.
+Packages only become "active" if you load them with the function `library()`.
+(`rmarkdown` was an exception - we have been using it all this time without loading it.)
+Loading a package every time you want to use it seems like a bit of effort, but actually has good reasons: Because there are so many packages, a lot of the use the same names for different functions.
+One function in one package can do an entirely different thing than a function with the same name in a different package!
+If you would load every package that you have installed, it would be really hard to track which functions of the same name are currently "active".
+This is why you only load the packages that you need for a given script.
+Once a package is loaded, it stays loaded throughout the entire `R` session.
+Let's load the `tidyverse`.
+
+```{r}
+# load the tidyverse
+library(tidyverse)
+```
+
+I'm a bit of a hypocrite here, because when loading the `tidyverse`, I am loading a bunch of packages, not just the ones I absolutely need for this script.
+However, the `tidyverse` is intended to be used as a "package family", so it isn't so bad.
+(And it's quite common not to know which specific package functions from the `tidyverse` are from.)
+
+One of the most popular and noticeable features of the `tidyverse` is the pipe operator, which looks like this: `%>%`.[^pipe_shortcut]
+
+[^pipe_shortcut]: If you try typing this by hand, you will lose your sanity at some point. Promise. I strongly recommend creating a shortcut. You can do this via Tools $\to$ modify keyboard shortcuts. Look for "insert pipe operator" in the search bar. I chose "alt + ." to add the pipe, simply because "alt + -" inserts the assignment operator `<-` per default. This way, I have my two most important shortcuts "next to each other".
+
+It is used to create chains of functions, which means that you put functions after each other, linking them with the pipe operator.
+In base `R`, you achieve the same thing with a more "onion-like approach".
+Let me show you what I mean by this.
+Let's create an example vector:
+
+```{r}
+example_vector <- c(1, 3, 33, 50, 5, 1, 2)
+```
+
+We want to take the mean of this vector (using the `mean()` function), and then round the result to two decimal places (using the function `round()`).
+In base `R`, we would stack the functions into each other.[^base_pipe]
+They are then executed from the inside towards the outside.
+
+[^base_pipe]: In fact, a brand new pipe operator has just been added to base `R`, which looks like this: `|>`. It works much like the `tidyverse` pipe, but not quite. You can't exchange one for the other, at least not at the time of writing. The base `R` people is officially available since 18.05.2021 (since version 4.1.0), so it will probably face some developments during the next years.
+
+```{r}
+# base R style
+round(mean(example_vector), 2)
+```
+
+In the tidyverse, we chain those functions together using the pipe operator:
+
+```{r}
+# tidyverse style
+example_vector %>% mean() %>% round(2)
+```
+
+Note how we can leave out the actual data argument every time.
+`mean()` doesn't use any arguments at all - the parentheses just stay empty.
+That is because the pipe "delivers" `example_vector` to the `mean()` function.
+That means, `mean()` **does** get an argument, only that it's not coming from within the brackets, but from the pipe to its left.
+We see that `round()` still has the 2 (the number of digits we want to round to) as its second argument.
+It looks like `2` is the second argument, but that's just because the first argument has been omitted.
+That's again because the data - the mean of `example_vector` in this case - is coming from the left.
+Let's practice chaining some functions.
+
+Turn these layered base `R` function calls into a `tidyverse` chain.
+
+1.1) Before you transform this one to the `tidyverse`, find out what the function `abs()` does.
+
+```{r}
+example_vector <- c(3, -2, 5, 99, -132.5)
+as.character(mean(abs(example_vector)))
+```
+
+1.2) Let's make things a bit trickier with additional arguments.
+
+```{r}
+example_vector <- c(3, -2, 5, NA, 99, -132.5, NA)
+as.character(mean(head(abs(example_vector), 4), na.rm = TRUE))
+```
+
+### Optional
+
+1.3) How do we get this into a pipe? Hint: Use parentheses!
+
+```{r}
+example_vector <- c(3, -2, 5, 99, -132.5)
+mean(example_vector * 2)
+```
+
+This does not work:
+
+```{r}
+example_vector * 2 %>% mean()
+```
+
+PS: Since `*` is also a function (it's just not written in the usual syntax), we can also pipe the data into `*`, with 2 as its argument. For this to work, we need to use backticks.
+
+```{r}
+example_vector %>% `*`(2) %>% mean()
+```
+
+**THIS IS A GITHUB PUSH CHECKPOINT**

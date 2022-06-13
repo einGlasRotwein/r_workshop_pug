@@ -1,0 +1,313 @@
+---
+title: "04 Data Frames"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+---
+
+```{css, echo=FALSE}
+.dark-output {
+  background-color: #5a5a5a;
+  color: white;
+}
+
+.error-output {
+  background-color: #cc9393;
+  color: black;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output"
+  )
+```
+
+Most likely, the most frequent data format you will encounter during data analysis is the **data frame**.
+It is more or less a table, similar to the data structure you would use in Excel or SPSS.
+
+To explore data frames, we will use data from the "Nerdy Personality Attributes Scale", a fun scale that was developed to quantify what "nerdiness" is.
+You can take the test online at [Open Psychometrics](https://openpsychometrics.org/tests/NPAS/).
+The data for the test (and many others) is also freely available [here](https://openpsychometrics.org/_rawdata/).
+
+The nerd data are stored in a .csv file - .csv and text files are really easy to read into `R`.
+If we want to read in data from excel files or SPSS files, we need to install additional packages.
+The function `read.csv()` does exactly what the name suggests: It reads in a .csv file.
+Just like with the `load()` function in the previous chapter, it takes the path of the file we want to read in as its first argument.
+Once again, you can find the data in the folder `"data_sets"`, under the name `"nerd_data.csv"`.
+
+SWe try to read in our data and assign it to a variable called `nerd`.
+This code runs fine, but ...
+
+```{r}
+nerd <- read.csv("exercises_solutions/data_sets/nerd_data_short.csv")
+
+# Should the paths above return an error for you, try going to
+# Tools -> Global Options -> R Markdown
+# and set "evaluate chunks in directory:" to "Project"
+```
+
+... when we inspect the data using the `head()` function, it looks very weird:
+
+```{r}
+head(nerd)
+```
+
+If we look into our environment tab in the top right corner, it says that `nerd` has 1,000 observations (i.e. rows) of 1 variable - i.e. 1 column.
+This is not the nice data table we expected.
+That's because `R` didn't know how to separate the data into columns.
+It put all of the information it found into one single column.
+By default, `read.csv()` thinks the data are separated by a comma, (see `?read.csv`), but in our case, the columns are separated by a tab (indicated by a `\t`).
+So, we need to tell `read.csv()` what the correct separator is via the argument `sep`.[^sep]
+
+[^sep]: `read.csv()` is just a special case of the function `read.table()`. In principle, `read.table()` can be used to read in any form of data (table), as long as you specify a couple of things, e.g. how the columns are separated, whether there is a header with column names etc. Because it's very annoying to type out all these options every time, there is a bunch of functions that different versions of `read.table()`. All that is different between these functions is that they come with different preset options, tailored to different file types. Technically, the `read.delim()` function is the one that works for our tab-separated data, but in a lot of cases, you won't know the separator of your data before you try to read it in. For `.csv` files, I tend to start with `read.csv()` and then figure out the correct separator.
+
+```{r}
+nerd <- read.csv("./data_sets/nerd_data_short.csv", sep = "\t")
+```
+
+We can see in our environment that the data now has 80 variables (columns).
+And using `head()`, or data also looks more like a table:
+
+```{r}
+head(nerd)
+```
+
+The data comes with a code book, which is called `nerd_data.csv` and can be found in the `data_sets` folder.
+We see that the nerd questionnaire contains 26 questions, represented in the columns `Q1` - `Q26` in the data.
+There is also a personality questionnaire (`TIPI1`-`TIPI10`), a test about word definition knowledge (`VCL1` - `VCL16`) and various demographic information.
+Each row represents a participant.
+
+## Working with data frames
+
+With the data read in correctly, we can see that we have 1,000 observations, i.e. 1,000 participants.[^shortened]
+
+[^shortened]: The actual data set has around 15,000 participants, but for the purpose of this course, I created a smaller data set with only the first 1,000 participants.
+
+We can see this in the environment tab, but we can also ask `R` how many rows our data frame has:
+
+```{r}
+nrow(nerd)
+```
+
+Likewise, we can ask about the number of columns:
+
+```{r}
+ncol(nerd)
+```
+
+Each column has a name, just like columns in an excel file.
+We can quickly take a look at all of the column names using the function `names()`.
+
+```{r}
+names(nerd)
+```
+
+The good news is: Each column in a data frame is a vector[^2], just like the ones we've worked with before!
+
+[^2]: Technically, a column in a data frame can also be a list, but this is rather rare and doesn't need to concern us now.
+
+One of the most common ways[^access_columns] to access a single column in a data frame is the `$` operator.
+For example, let's save the column `age` in a variable:
+
+```{r}
+age <- nerd$age
+head(age, 10)
+```
+
+I am using `head()` to only show the first 10 elements in `age`, because I don't want my console (or this document) to be cluttered with thousands of numbers.
+You can see that by extracting the column `age`, we ended up with a vector.
+
+[^access_columns]: There is another way to access columns in a data frame (using `[[ ]]`), and there are scenarios where you will **need** to use it.
+It is not part of the data frame chapter, but when you continue your `R` journey later, you will want to check out alternative ways to access columns in a data frame in the "optional" section at the end of this document.
+
+You can also access any row or column in a data frame using indices, just like we did with vectors.
+Only this time, we have two dimensions (rows and columns).
+As with the vectors, we use square brackets (`[]`) for indices.
+This time, it's two number, separated by a comma: The first number is for the rows, and the second for the columns.
+Here is how we get the element in the third row and the first column in `nerd`.
+
+```{r}
+nerd[3, 1]
+```
+
+If we want to get an entire column, you just leave the rows empty:
+
+```{r}
+head(nerd[ , 3], 10)
+```
+
+(Again, I use `head()` because otherwise, thousands of numbers would be printed.)
+
+Once again, the single column we selected has been turned into a vector.
+
+Likewise, if we want to get a single row of our data frame, with all its columns, we just leave the columns empty.
+
+```{r}
+nerd[3, ]
+```
+
+Here, we don't receive a vector as output, but a data frame with a single row (note the column names above).
+
+Just like with vectors, we can change values in our data frame using indexing.
+Again, this will permanently overwrite our data, which we don't actually want.
+This is why we'll create a copy of `nerd` with a different name that we can mess around with, while the old `nerd` data will stay untouched.
+(Of course, the data file itself will still be intact, not matter what happens to the variables inside of `R`. 
+So if we make a mistake, we could just load in the data again.)
+
+```{r}
+mess_around <- nerd
+```
+
+Now, let's overwrite the value in the first row and second column with 999.
+
+```{r}
+mess_around[1, 2] <- 999
+```
+
+In principle, we can also overwrite entire rows or columns.
+The only requirement is that the replacement matches the data structure.
+E.g., since our column has 1,000 elements, we need to replace it with a vector that also has 1,000 elements.
+Or rather, as `R` phrases it in a common error message that you receive if you get it wrong: The "number of items to replace" needs to be "a multiple of replacement length".
+In other words, if we replace the 1,000 elements in our column with a vector that has a number of elements we could divide 1,000 by, the replacement vector will be repeated until it has 1,000 elements.
+For example, this is what the `age` column currently looks like:
+
+```{r}
+head(mess_around$age, 10)
+```
+
+Trying to overwrite it like this won't work:
+
+```{r error = TRUE}
+mess_around$age <- c(2, 4, 6)
+```
+
+This, however, will work, because 1,000 can be divided by two.
+Examine what happened to the `age` column.
+
+```{r}
+mess_around$age <- c(2, 4)
+head(mess_around$age, 10)
+```
+
+1.1) Select the column `gender` from the `nerd` data frame and save it into a variable.
+
+1.2) Select the 10th row of `nerd` and save it into a variable.
+
+1.3) Select row 10 - 13 from `nerd` and save it into a variable.
+
+1.4) Extract the value in the 10th row and the 70th column.
+
+1.5) Use the "mess around data frame" to overwrite the value in the 10th row and the 70th column with a value of your choice.
+
+1.6) Use the "mess around data frame" to overwrite the entire 1st column with a single value of your choice.
+
+### Optional
+
+1.7) When we changed entire columns of our data frame, we took advantage of the fact that `R` is vectorised and e.g. "repeats" a single value for us so it can fill an entire column. What if we wanted to be explicit about the length of our replacement - e.g. if we want to replace the `age` column in our data frame with a vector that has 1,000 elements? Here, the `rep()` function comes in handy.
+
+Take a look at what it does:
+
+```{r}
+rep(2, 4)
+rep(c(1, 222), 3)
+```
+You can either specify the number of repetitions using the `each` or the `times` argument.
+(If you use the second argument, without providing a name, you are using the `times` argument by default).
+Observe the difference between the two:
+
+```{r}
+rep(1:3, times = 2)
+rep(1:3, each = 2)
+```
+
+1.8) Can you replace the `age` column in `mess_around` with a vector where the first 500 elements are 1 and the second 500 elements are 2?
+
+#### Create a data frame
+
+We already know how to create vectors - here is how you create a data frame using the `data.frame()` function.
+
+```{r}
+# Note: These aren't actual recipes and I wouldn't attempt to make them
+cake_recipes <- 
+  data.frame(
+    eggs = c(2, 4, 6, 10),
+    flour = c(400, 500, 200, 100),
+    butter = c(50, 150, 100, 100),
+    milk = c(20, 0, 120, 50),
+    baking_soda = c(rep(TRUE, 3), FALSE),
+    difficulty = c("easy", "medium", "difficult", "easy")
+  )
+
+cake_recipes
+```
+
+#### Alternative ways of accessing columns
+
+The `$` operator is probably the most common way to access a column in a data frame, because it is quick to type (due to the autocompletion feature in RStudio) and rather easy to read.
+However, other approaches have advantages because they allow us to create code that is more flexible.
+
+For example, we can use `[["column_name"]]`, i.e. the column name as a string in double square brackets.
+
+```{r}
+cake_recipes[["difficulty"]]
+```
+
+The disadvantage is that you have to type the whole column name yourself.
+But the advantage is that you can use strings to access columns, and you can change these strings dynamically in your code.
+
+```{r}
+column_we_want <- "eggs"
+cake_recipes[[column_we_want]]
+
+column_we_want <- "flour"
+cake_recipes[[column_we_want]]
+```
+
+The name if the column we want was stored in a variable.
+When we changed the content of the variable, it gave us access to a different column.
+This comes in very handy if we want to write flexible code - e.g. when we want to write a function that works on a column of which we don't know the name yet, because the user provides the column name as an argument.
+
+Another advantage is that this approach is a little bit less "dangerous".
+When using `$`, there is this feature called "partial matching".
+It's a bit like autocomplete on steroids.
+Even if you don't type the full column name, `R` will still identify a column that matches what you've written so far (unless there is ambiguity).
+In very unfortunate cases, this can lead to silent errors (errors that don't give you an error message) when you have a typo in your column name.
+I this all sounds a bit vague, here is a [tiny post with examples](https://einglasrotwein.github.io/debugging_hell/incomplete_colnames) that I've written.
+This kind of problem doesn't happen when you access columns using `[[]]`, because every typo will throw an error.
+
+### Summaries
+
+We've used table on single vectors in the "Vectors and Functions" script.
+But `table()` can also be used on several vectors at once (even more than two - try it out!).
+With this code, we get an overview about how many people from which gender choose which nerdiness-category:
+
+```{r}
+table(nerd$nerdy, nerd$gender)
+```
+
+2.1) We've also used `summary()` on vectors - what happens if you use `summary()` on the whole data frame?
+
+When we used `summary()` on the entire data frame, the output was a bit overwhelming.
+The package `skimr` can help us out here, because it produces very elegant summaries.
+If you want to give it a spin, you have to install it first (run the line that is currently commented out).
+
+```{r}
+# install.packages("skimr")
+
+# Usually, I would first load the package like this: library(skimr)
+# Here, I quickly use the skim() function from skimr by telling R that I'm referring
+# to the skimr package using ::
+# You can use any function from a package with this notation without having to
+# the package first.
+skimr::skim(nerd)
+
+# The output might be easier to read if you run it in the console.
+# It works best when combined with the view function from the package "tibble".
+# "tibble" is part of the tidyverse we will get to know later.
+```
+
+Because `nerd` is quite large, the summary is still a little overwhelming, but much easier to digest than the classic `summary()` output. Also note that `skim()` gives you a tiny histrogram for each column, giving you a very basic first overview about the distribution of your variables.
+
+**THIS IS A GIT PUSH CHECKPOINT!**

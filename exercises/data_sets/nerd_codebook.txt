@@ -1,7 +1,7 @@
 This data was collected through an interactive online test, the Nerdy Personality Attributes Scale
 http://openpsychometrics.org/tests/NPAS/development/
 
-Note from Juli: Row 13506 has been deleted from the original data set because it contained an entry with more than 1 million characters, potentially causing crashes.
+Note from Juli: Row 13506 has been deleted because it contained an entry with more than 1 million characters, potentially causing crashes.
 
 Data collection occured December 2015 - December 2018.
 

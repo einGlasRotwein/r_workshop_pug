@@ -1,0 +1,406 @@
+---
+title: "06 Data Wrangling"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+    df_print: paged
+---
+
+```{css, echo=FALSE}
+.dark-output {
+background-color: #5a5a5a;
+color: white;
+}
+
+.error-output {
+background-color: #cc9393;
+color: black;
+}
+
+.message-output {
+background-color: #5a5a5a;
+color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output"
+)
+```
+
+```{r}
+library(tidyverse)
+```
+
+## Selecting and filtering
+
+The pipes of the `tidyverse` are all fun and games for vectors, but they unlock their true potential when applied to data frames.
+Furthermore, the `tidyverse` offers a lot of functions for "data wrangling", i.e. cleaning, formatting and processing data.
+Let's load in the nerd data again.
+
+```{r}
+nerd <- read.csv("exercises_solutions/data_sets/nerd_data_short.csv", sep = "\t")
+
+# Should the paths above return an error for you, try going to
+# Tools -> Global Options -> R Markdown
+# and set "evaluate chunks in directory:" to "Project"
+```
+
+Since the data contains a lot of information we are not interested in right now, we would like to select only the columns we want to work with right now?
+This is what the `select()` function does.
+I want to keep the participants' age, the gender, whether they're married or not, and all the questions from the nerd questionnaire, e.g. `Q1` - `Q26`.
+
+```{r}
+nerd %>% 
+  select(age, gender, married, Q1:Q26)
+```
+
+A few remarkable things just happened.
+First of all, look at how I'm accessing the columns: I'm just using their names, without writing the name of the data frame again.
+That is, I'm writing `age` instead of `nerd$age`.
+That is not self-evident at all and a feature of the `tidyverse`'s "tidy evaluation", called "data masking".
+The data source (`nerd`) is "masked" and only the column names are visible.
+The `tidyerse` "knows" what you are referring to because you piped the main data source into the `select()` function.
+That makes the code more readable.
+
+And then there's the fact that we don't have to type out all of the columns from `Q1` to `Q26`.
+When we write `Q1:Q26`, this lets the `tidyverse` know that we want to select all columns from `Q1` to `Q26`.
+
+Also note how the columns are now displayed in the order we typed them.
+That means that select can also be used to re-order your data.
+`select()` also comes with a lot of "helper functions" that make it even more useful.
+For example, imagine you want to bring one of the columns to the front of the data frame, and the rest of the data frame should come afterwards.
+You don't feel like typing all the other column names, and luckily, there's a shortcut for that: `everything()`.
+It does exactly what the name suggests: It selects **everything** in your data frame (except for the things you already selected).
+Say that, for some reason, we wanted the column `voted` (whether or not someone voted in the past election) to go first, then the age, and then all the rest.
+The corresponding code looks like this:
+
+```{r}
+nerd %>% 
+  select(voted, age, everything())
+```
+
+Don't forget that `everything` needs to be used with parentheses!
+
+2.1) I want to continue working with a reduced version of our data that only contains the columns `age`, `gender`, `married`, `voted`, `nerdy` and also `Q1` - `Q26`.
+Select these columns and save this reduced data frame in a variable called `nerd_red` ("nerd reduced").
+
+`select()` gets you a subset of the columns in your data frame, but often, you want to filter out specific rows in your data that fulfill certain criteria.
+This can be achieved with the `filter()` function.
+Let's for example only filter out the female participants, which are coded as `2` in the `gender` column.
+
+```{r}
+
+```
+
+With `filter()`, you can use all of the logical comparisons we've seen before.
+Here, we filter for women below the age of 30.
+
+```{r}
+
+```
+
+Interestingly, the logical `&` and a simple comma are equivalent in `filter()`.
+
+```{r}
+
+```
+
+Practice filtering on the `nerd_red` data. Filter ...
+
+2.2) ... anyone who is either 22 **or** 26 years old. 
+
+2.3) ... anyone who is either a man (`gender == 1`) **or** older than 30.
+
+2.4) ... anyone who is non-binary (`gender == 3`) and who is currently married or has previously been (1 = Never married, 2 = Currently married, 3 = Previously married).
+
+2.5) The column `nerdy` contains the agreement to the statement "I see myself as nerdy" (1 = disagree strongly - 7 = agree strongly). How many women have the highest self-reported nerdiness? How many have the lowest self-reported nerdiness? What about the men? Solve this task using filters.
+
+## Summaries
+
+Of course, if we want to know how many people have the highest nerdiness, there are much more elegant ways to achieve this.
+Here is how we can use the `count()` function to see how many rows (here: participants) we have for each nerdiness response
+
+```{r}
+nerd_red %>% 
+  count(nerdy)
+```
+
+3.1) How many people of each gender are included in the data? Use the codebook to find out what the values represent.
+
+3.2) How many people per marital status do we have? Use the codebook for help.
+
+3.3) How many people voted in the last election, how many people didn't? Use the codebook for help.
+
+## Data cleaning 
+
+Seems like there are few implausible values in our data - and these are not the only columns that are affected.
+
+4.1) What is wrong with the `age` column?
+
+We should filter out all participants whose data are implausible.[^exclusion]
+
+[^exclusion]: Of course, it is bad to come up with exclusion criteria **after** looking at the data and ideally, the online form would have prevented people from entering implausible age values or excluded them right away. But we're just practicing to code, so we can take a break from caring about data quality.
+
+If you have time and want to get a little bit of practice, you can examine each column in the data and take a look at the codebook to find out which values are valid.
+For the purpose of the workshop, I'll give you a summary of what's wrong with the data.
+If you don't want any spoilers, stop reading here.
+
+Here are the issues we can identify in our `nerd` data:
+
+- Some people provided an implausibly high `age`.
+- One person has a value of 0 in the `nerdy` column, but values shouldn't go lower than 1.
+- For `married` valid values are 1 - 3 should be possible (1 = Never married, 2 = Currently married, 3 = Previously married), but there are some 0s in the data.
+- For `voted` valid values are 1 or 2 ("Have you voted in a national election in the past year?", 1 = Yes, 2 = No), but there are some 0s in the data.
+
+4.2) Filter the `nerd_red` so it only contains the data with valid values. (For age, a range from 18 - 100 might be good.) Overwrite `nerd_red` with the filtered version.
+
+4.3) Confirm that the filtering worked by running checks on `nerdy`, `married`, `voted` and `age`.
+
+## Mutating columns
+
+We can add or modify columns in our data using the `mutate()` function.
+Since columns are just vectors, we can work with them in the same way.
+For example, making all of our participants 10 years older would work like this:
+
+```{r}
+nerd_red %>% 
+  mutate(ten_years_older = age + 10)
+```
+
+Within `mutate()`, I specify the new column name `ten_years_older`, and after an `=`, I give instructions about how the content of the new column should be calculated (`age + 10`).
+If I use `age` as the column name, the `age` column will be overwritten:
+
+```{r}
+nerd_red %>% 
+  mutate(age = age + 10)
+```
+
+Note, however, that the column is only overwritten in the output - `nerd_red` is still intact.
+If I want to add a column permanently to the data frame, I need to overwrite the data frame.
+(This is different in base `R` - when I a column in base `R`, that changes the data frame immediately.)
+
+### Recoding data 
+
+We can also modify columns using functions.
+For example, remember that `voted` is currently coded as `1` ("yes") and `2` ("no").
+We had to consult the codebook to see what the numbers stand for, so we could make things clearer and convert `voted` into a column that contains the values "yes" and "no" as characters.
+
+For this task, the function `ifelse()` can help us.
+It takes three arguments:
+
+1) A condition.
+2) What should happen when the condition is true.
+3) What should happen when the condition is false.
+
+For example, if we want to classify these numbers into "one digit" or "more than one digit", it looks like this:
+
+```{r}
+some_numbers <- c(2, 24, 12, 5, 1, 353, 1)
+
+ifelse(
+  some_numbers < 10, 
+  "one", 
+  "more than one"
+)
+```
+
+5.1) Recode `voted`. Turn 1 into "yes" and 2 into "no". Use `ifelse()` inside of `mutate()` to overwrite the `voted` column so it is **permanently** added to `nerd_red`.
+
+```{r}
+
+```
+
+Note that `ifelse()` only works when we have two conditions: One where the logical comparison is `TRUE` and one where it's `FALSE`.
+For more complicated cases, `ifelse()` can't help us.
+This is why it was so important that we got rid of the cases where `voted` was 0.
+See what would have happened if we would have used `ifelse()` on `voted` when it still contained 0s:
+
+```{r}
+voted_example <- c(1, 2, 2, 1, 2, 0, 0, 1)
+
+ifelse(
+  voted_example == 1,
+  "yes",
+  "no"
+)
+```
+
+What if we have more than two cases, as for example in the `gender` column (1 = "male", 2 = "female", 3 = "other")?
+In this scenario, we use `case_when()`.
+It takes several logical comparisons as argument - one for every case that we want to cover in our data.
+For each of these cases, we tell `case_when()` what to do using the `~` sign.
+Take a look at this example:
+
+```{r}
+gender_example <- c(1, 2, 3, 3, 1, 1, 2, 2, 2)
+
+case_when(
+  gender_example == 1 ~ "male",
+  gender_example == 2 ~ "female",
+  gender_example == 3 ~ "other"
+)
+```
+
+Whenever the `gender_example` is 1, we insert "male", when it is 2, we put in "female", and when it is 3, we put in "other".
+Note that it is important to specify all possible cases.
+If we only had put in values for the cases 1 and 2 (so, male and female), every occurrence of 3 would have been left blank (`NA`).
+
+```{r}
+case_when(
+  gender_example == 1 ~ "male",
+  gender_example == 2 ~ "female",
+)
+```
+
+Here is how we can use `case_when()` to recode the `gender` column in our data.
+Note that we overwrite the `gender` column in `nerd_red` - to achieve this, we set `gender` as the new column name (which will overwrite the old `gender` column), and also overwrite `nerd_red` with the new, modified version of `nerd_red`.
+
+```{r}
+nerd_red <- 
+  nerd_red %>% 
+  mutate(
+    gender = case_when(
+      gender == 1 ~ "male",
+      gender == 2 ~ "female",
+      gender == 3 ~ "other"
+    )
+  )
+
+nerd_red 
+```
+
+### Sums
+
+In a lot of cases, we want to calculate the sum of columns, e.g. to get a sum score for one of our questionnaires.
+Adding two columns together is pretty straightforward - you probably already know how to do this.
+
+5.2) Create a column called `sum_Q1_Q2` that is the sum of `Q1` and `Q2`. (Don't overwrite `nerd_red`.)
+
+Unfortunately, calculating the sum score across the entire questionnaire from `Q1` - `Q26` is a little bit more complicated, at least if we don't want to type **all** of the column names from `Q1` - `Q26`.
+
+```{r}
+nerd_red %>% 
+  rowwise() %>% 
+  mutate(
+    nerd_score = sum(across(Q1:Q26))
+    ) %>% 
+  ungroup()
+```
+
+First, let's take a look at what's going on inside of the `mutate()` function.
+We created a new column `nerd_score` - that part is familiar.
+Next, we use the `sum()` function, because we want to calculate a sum - that makes sense.
+The part `Q1:Q26` is also something you've seen before - we used it to select the columns `Q1` - `Q26`.
+What is new is `across()`.
+This is another "helper function" that is only used inside of `mutate()`.
+We can use it to let `mutate()` work on several columns at once.
+If you read the code from left to right, it actually is a nice representation of our everyday language: We calculate the `sum()` `across()` columns `Q1:Q26`.
+
+Another crucial piece of code that is new to us is the `rowwise()` function before using `mutate()`.
+It does exactly what the name suggests: It causes all following functions to be executed separately on every single row of a data frame.
+That is, we calculate the sum for every row (= participant).
+This might seem slightly confusing because usually, calculations are performed rowwise anyways (you just saw that when we simply added `Q1` and `Q2`).
+`sum()`, however, is an exception - we have to force it to work on each row individually.
+As a last step, we `ungroup()` the data.
+`rowwise()` permanently groups the data (each row is a group), and that might have unintended consequences for other functions later.
+
+### Optional
+
+#### The %in% function
+
+A useful function for filtering is `%in%` (at first glance, it's easily confused with the pipe).
+`%in%` tells you for each element on the left whether it also exists on the right.
+Check out this code to see how it works:
+
+```{r}
+c("tea", "biscuits", "cake") %in% "tea"
+"tea" %in% c("tea", "biscuits", "cake")
+```
+
+Looking back at the exercise where we wanted to filter for all participants who were either 22 or 26 years old, we can use `%in%` like this:
+
+```{r}
+nerd_red %>% 
+  filter(age %in% c(22, 26))
+```
+
+#### Sorting data
+
+Another thing that is very useful is `arrange()` which lets you sort your data easily.
+For example, here is how you would sort the data by age:
+
+```{r}
+nerd_red %>% 
+  arrange(age)
+```
+
+We can also arrange the data in descending order by wrapping the respective column in `desc()` (for "descending").
+
+```{r}
+nerd_red %>% 
+  arrange(desc(age))
+```
+
+Sorting by multiple columns also works (try switching the order and examine the result):
+
+```{r}
+nerd_red %>% 
+  arrange(age, gender)
+```
+
+#### Extracting single columns
+
+We know how to extract a vector from a data frame.
+
+```{r}
+age <- nerd$age
+```
+
+But how can we extract a single column at the end of a chain of pipes?
+This is what the `pull()` function is for.
+
+```{r}
+nerd_red %>% 
+  filter(age < 20) %>% 
+  pull(age)
+```
+
+You might wonder why we don't just use `select()` to do the job.
+Here, we try to use select for the same purpose.
+Can you see what the problem is?
+
+```{r}
+nerd_red %>% 
+  filter(age < 20) %>% 
+  select(age)
+```
+
+When using `pull()`, what we get back is a vector. When using select, what we get back is a data frame with one column.
+
+#### Control where to add a column
+
+I can control where the new column is added using the `.before` (or `.after`) argument.[^dot_reason].
+
+[^dot_reason]: The reason is that inside the `mutate()` function, anything that looks like `something = whatver` would create a column of the name "something". That means if we just wrote `before = gender`, `mutate()` would create a column called "before", that is a duplicate of "gender".
+
+```{r}
+nerd_red %>% 
+  mutate(
+    ten_years_older = age + 10,
+    .after = age
+  )
+```
+
+```{r}
+nerd_red %>% 
+  mutate(
+    ten_years_older = age + 10,
+    .before = gender
+  )
+```
+
+**THIS IS A GITHUB PUSH CHECKPOINT**

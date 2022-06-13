@@ -1,0 +1,468 @@
+---
+title: "07 Plots"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+    df_print: paged
+---
+
+```{css, echo=FALSE}
+.dark-output {
+background-color: #5a5a5a;
+color: white;
+}
+
+.error-output {
+background-color: #cc9393;
+color: black;
+}
+
+.message-output {
+background-color: #5a5a5a;
+color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output", fig.align = "center"
+)
+```
+
+Plotting is probably one of the most fun things to do in `R`, because you get a lot of "visual feedback" - if your code is correct, you are rewarded with a nice plot.
+While base `R` has a plotting function, the `tidyverse`'s `ggplot2` is a much more advanced package for plotting.
+It has helped `R` to achieve its reputation as a great tool for data visualisation.
+`ggplot2` is based on the ["Grammar of Graphics" by Leland Wilkinson](https://www.springer.com/de/book/9780387245447), a framework for good data visualisation in data science.
+
+## Call other scripts
+
+First, we need some data.
+If the data from previous exercises is still in your environment, use this opportunity to clear your workspace using `rm(list = ls())`.
+We want to start with a clean slate.
+However, the work we did in the previous data wrangling script should not go to waste.
+Luckily, we can "call" other scripts from within the script we are currently working in.
+That means, we could run `06_data_wrangling.Rmd` where all of the data cleaning was done, and would end up with a cleaned version of our nerd data.
+In fact, it's good practice to distribute your code across several scripts so you know where to find what.
+The preprocessing could e.g. go into one script, the analysis into another one and then you could have a separate script for plots or tables.
+
+However, `06_data_wrangling.Rmd` does not only contain the code to clean the nerd data, but much more other code that we don't need right now.
+It is also an R Markdown file, and we don't want to render the entire file into an html.
+At this point, we will use a "normal" `R` script that contains nothing but the code that cleans our nerd data.
+Unlike an `.Rmd` file, it will not create a nice document with descriptions and results - it will simply run the preprocessing in the background.
+
+I put all the preprocessing we did in the previous exercise into a script called `"nerd_preprocessing.R"` that is lying in this folder.
+Open it and take a look at what's happening at each step in the script.
+
+Before we run our preprocessing script, we still need to load the libraries we want to use.
+We could also load our libraries in the preprocessing script, but then it's less obvious which libraries we are using, because they are "hidden" in a different script.
+I like to list all of my libraries at the top of in the main document.
+
+```{r}
+library(tidyverse)
+```
+
+We can call other scripts using the function `source()`.
+It takes the path to the file you would like to run as it's first argument.
+
+```{r}
+# Read in data and preprocess it
+nerd <- read.csv("exercises_solutions/data_sets/nerd_data_short.csv", sep = "\t")
+source("exercises_solutions/nerd_preprocessing.R")
+
+# Should the paths above return an error for you, try going to
+# Tools -> Global Options -> R Markdown
+# and set "evaluate chunks in directory:" to "Project"
+```
+
+## Simple plots
+
+One basic plot that you will frequently need is a histogram.
+It's a good way to quickly inspect the distribution of your data.
+Below, you see how a simple histogram for the participant age works.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_histogram()
+```
+
+The concept is pretty simple: We pipe our data, `nerd_red` into the `ggplot()` function.
+Within the function, we use the `aes()` function, which stands for "aesthetics".
+The aesthetic function is used to tell `ggplot()` all the information that is related to the data (as opposed to things that have nothing to do with the data, e.g. overall plot colour).
+It will make more sense once we see which things belong into `aes()` and which things belong outside of it.
+Unsurprisingly, the argument `x` is what we want to put on the x-axis, which is the age of our participants in this case.
+Lastly, we tell `ggplot()` to make a histogram from our data.
+`ggplot2` uses different "geoms", which you can imagine as different "geometric" plot shapes.
+Here, we use a geom called `geom_histogram`.
+Other geoms are for example `geom_point`, `geom_bar` or `geom_boxplot`.
+You can probably guess what they do.
+Note that we don't use a pipe to add the histogram, but a plus sign.
+That is because `ggplot()` works with "layers".
+It's a bit like using PowerPoint: When you created a slide, some elements are behind/in front of each other.
+In `ggplot2`, it's the same principle.
+Here, we already use two layers: The plot background as first layer (created by the `ggplot()` function), and then our histogram on top of that.
+
+To get a feeling for how layers in a plot work, we'll create the layers from the previous plot one by one.
+As soon as we pipe our data into the `ggplot()` function, the background of a plot is drawn, even though we don't plot any data:
+
+```{r}
+nerd_red %>% 
+  ggplot()
+```
+
+If we additionally tell it that `age` will go on the x-axis, `ggplot()` will draw an axis for is, because it now knows the scale of the data.
+Because it doesn't know which information will go on the y-axis, no y-axis is created.
+There is also no data that get's plotted, because `ggplot()` doesn't know how in which form to plot it (as histogram? as scatter plot?).
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age))
+```
+
+In our final histogram, you probably noted the warning message "`stat_bin()` using `bins = 30`. Pick better value with `binwidth`."
+It tells us that our histogram used a default for the width of the bars (bins) in our histogram, but it might be better to pick a different one.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age)) +
+  geom_histogram()
+```
+
+1.1) Use the `bins` argument in `geom_histogram()` to try out different bin widths.
+
+Let's try another geom - `geom_point`, which will give us a scatter plot.
+It requires information on the x **and** y axis.
+(In our previous example, `geom_histogram` automatically calculated what to put on the y-axis.)
+Here is an example:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point()
+```
+
+When we think about scatter plots, we usually think about regression lines.
+How about adding a line to the data, indicating how age and nerd score are associated with each other?
+The corresponding geom is called `geom_smooth`.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point() +
+  geom_smooth()
+```
+
+The default method for `geom_smooth`, as `R` informs us, is "loess".
+It "[fits] a polynomial surface determined by one or more numerical predictors, using local fitting." (Run`?loess` in the console for more information.)
+You see that it does not produce a straight line - if we want a plain linear regression, we have to set the argument `method` to `"lm"`.
+With the argument `se = FALSE` we can get rid of the grey confidence interval around the data. 
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+1.2) Use `geom_boxplot()` to plot participants' marital status on the x axis, and the age on the y axis.
+
+1.3) Create a scatter plot that displays the relationship between the `nerdy` question and the `nerd_score`.
+
+## Building plots
+
+It is worth pointing out that you can
+
+a) save plots into variables just like anything else and
+b) add layers to existing plots that are stored in variables.
+
+For example, we could save the first layer of our plot in a variable:
+
+```{r}
+my_scatter_plot <- 
+  nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score))
+```
+
+... which we can then use to call the plot:
+
+```{r}
+my_scatter_plot
+```
+
+We can then simply add layers to the existing plot like this:
+
+```{r}
+my_scatter_plot +
+  geom_point()
+```
+
+This leaves the original plot intact.
+I didn't overwrite `my_scatter_plot`, so it is unchanged:
+
+```{r}
+my_scatter_plot
+```
+
+Building plots in separate steps like this can have advantages, for example when you want to have some structure in your code (e.g., first create your basic plot, and fine tune its appearance in a different step), or if you are building several similar plots with the same underlying structure.
+During this workshop, however, I will mostly avoid building plots like this.
+This has the advantage that whenever you see a plot, you will see the entire code that was used to create it.
+You won't have to look for other layers that are "hidden" in different variables, which makes it easier to miss parts of a plot.
+
+## Adding aesthetics
+
+It is very easy to split our data into different subgroups in our plot.
+For example, we could examine what the relationship between age and nerd score looks like as a function of gender.
+We can use a different colour for each group in `gender` by using the `colour` argument inside of `aes()` (both `colour` and `color` will work).
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Note how `colour` worked on both `geom_point` and `geom_smooth`.
+
+3.1) Create a more complex version of the plot from 1.2). Use `geom_boxplot()` to plot participants' marital status on the x axis, and the age on the y axis. Colour the boxplots based on gender.
+
+3.2) In the plot from 3.1), rename the argument `colour` to `fill`. What's the difference?
+
+3.3) Create a scatter plot with `nerd_score` and `age`. Use the argument `shape` within `aes()` to group the data by marital status. Additionally, colour the data by marital status.
+
+3.4) Create a scatter plot with `nerd_score` and `age`. Try using the argument `size = nerdy` within `aes()`. What happens if you use `colour` instead of size (or maybe even both)?
+Tip: It's a bit easier to see what's going on when you only use the first 50 rows or so of `nerd_red`.
+
+## Customise your plot
+
+There are still a lot of things we can improve in the plots we created so far.
+For example, because `ggplot()` uses the column names it finds in the data, the y-axis in this plot is labelled with "nerd_score".
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point()
+```
+
+We can change the axis label using the function `labs()`.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  labs(y = "sum score nerdiness questionnaire")
+```
+
+4.1) `labs()` can also change other labels of your plot. Run `?labs` and read the description of the function to find out which other labels it can change. Try all of them (except for `alt` and `alt_insight` - these only work for web-pages).
+
+The legend would look better if it was at the top of our plot.
+In general, many things about our plot's appearance can be controlled using the `theme()` function, such as like font sizes, what the grid lines and axes look like and much, much more.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  labs(y = "sum score nerdiness questionnaire") +
+  theme(legend.position = "top")
+```
+
+You can see all the different options of `theme()` by taking a look at `?theme`.
+Because there are so many things you can change, the options are a bit overwhelming.
+I normally prefer the [web version](https://ggplot2.tidyverse.org/reference/theme.html) of the documentation of `theme()`, because it's easier to read.
+
+Speaking of themes, the grey background with the white grid is the default theme `ggplot2` is very famous for.
+However, it is certainly not the most beautiful and modern plot appearance anymore.
+We could set up a custom theme by manually changing all the things we don't like about the current theme using the `theme()` function, but we can also use a different pre-defined theme.
+You can find a list of themes [here](https://ggplot2.tidyverse.org/reference/ggtheme.html).
+
+Adding one of these themes works like this:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  labs(y = "sum score nerdiness questionnaire") +
+  theme_classic() + # change theme
+  theme(legend.position = "top")
+```
+
+Note that we have to put in `theme(legend.position = "top")` **after** `theme_classic()`.
+That is because `theme_classic()` has a predefined position for the legend (at the right side of the plot).
+If we use `theme_classic()` after `theme(legend.position = "top")`, it will overwrite the legend position we previously set:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = gender)) +
+  geom_point() +
+  labs(y = "sum score nerdiness questionnaire") +
+  theme(legend.position = "top") + # is overwritten by the theme
+  theme_classic() # overwrites the previous setting
+```
+
+4.2) Try a different theme!
+
+Lastly, let's change the steps on the x and y axis.
+For this task, the function `seq()` comes in handy, which generates a sequence of numbers.
+The arguments it takes are where the sequence begins, where it ends and how big the steps in between should be:
+
+```{r}
+# A sequence from 1 - 10 in steps of 2
+seq(1, 10, 2)
+```
+
+It is also possible not to give a step size, but the **number** of steps (i.e. the length of the output) instead:
+
+```{r}
+seq(1, 10, length.out = 3)
+```
+
+Now we can use `seq()` to adjust our y axis like this:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = nerd_score, y = age)) +
+  geom_point() +
+  scale_x_continuous(breaks = seq(0, 130, 10))
+```
+
+4.3) You can probably guess what the function for adjusting the y axis is called like. Use it to change the steps on the y-axis.
+
+Note that the argument `breaks` only controls the size of the **steps** on an axis, but not the **limits**.
+In this example, we used breaks from 0 - 200, but the last label that is printed is 130.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = nerd_score, y = age)) +
+  geom_point() +
+  scale_x_continuous(breaks = seq(0, 200, 10))
+```
+
+4.4) You can control the limits of an axis using the argument `limits` inside of `scale_x_continuous()`. It requires a vector with two elements as input: The first element controls the lower limit of the axis, the second element controls the upper limit of the axis. Try different limits for the x and y axis!
+
+# Beyond aes()
+
+So far, when we used different colours our shapes to plot our data, we did that inside of the `aes()` function.
+You might have wondered why we even need to wrap our code in an additional function.
+Here's why: When we put something inside the `aes()` function, we are using the underlying data to control our plot's appearance.
+When we use the same argument outside of `aes()`, we are controlling our plot's appearance irrespective of the underlying data.
+
+For example, here we colour the points in our scatter plot depending on our participants' marital status.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = married)) +
+  geom_point()
+```
+
+Used outside of `aes()`, the colour argument affects all data points.
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point(colour = "dark green")
+```
+
+We can refer to the colour that we want by name (i.e. `"black"`, or `"dark red"` - find a full list [here](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf)), but can also use hex codes (e.g. `"#2d82b7"`).
+
+Note that we have to use `colour` inside of `geom_point` - it won't work in the `ggplot()` function:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score), colour = "green") +
+  geom_point()
+```
+
+It helps to understand the difference between `colour` inside vs. outside of `aes()` if we use `colour = "green"` inside of `aes()`:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score, colour = "green")) +
+  geom_point()
+```
+
+4.5) Optional: Take a moment to think about what is going on here.
+
+4.6) Try the arguments `size` and `alpha` outside of `aes()`. If you want to, you can use other geoms and try out how these arguments affect them.
+
+## Custom colours
+
+Outside of `aes()`, we can simply tell `R` which colours or shapes to use.
+But if we e.g. colour our data inside of `aes()`, we get default colours.
+Here's how we change them:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = gender, y = nerd_score, fill = married)) +
+  scale_fill_manual(values = c("yellow", "pink", "purple")) + # custom colours
+  geom_boxplot()
+```
+
+Using the `values` argument in `scale_fill_manual()`, we can provide `R` with a vector of custom colours we want to use in our plot.
+Note that we need to specify a value for each colour in the plot, i.e. if there are three different colours (groups) in the plot, we need to provide three colour values.
+
+Changing other aesthetics works in the same way - the functions are just called slightly different.
+E.g. there's `scale_colour_manual()` or `scale_shape_manual()`.
+
+5.1) Create your own plot with custom aesthetics. Try out what happens if you change the order of the values in the vector.
+
+## Facets
+
+We can also split our data into different facets, which creates plot panels based on groups in the data.
+Here is an example - the variable which the facets should be based on is provided after a little `~`:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point(alpha = .4) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ gender)
+```
+
+You can also create facets based on two variables by specifying a variable on each side of the `~`:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point(alpha = .4) +
+  geom_smooth(method = "lm") +
+  facet_wrap(voted ~ gender)
+```
+
+There is also the very similar `facet_grid()` function that basically does the same thing, but with a slightly different result:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point(alpha = .4) +
+  geom_smooth(method = "lm") +
+  facet_grid(voted ~ gender)
+```
+
+6.1) Create a plot with facets yourself. Try to additionally add some aesthetics that are based on the data (i.e. that work inside of `aes()`).
+
+### Optional
+
+Earlier, we saw that `fill` controls the colour a geom (e.g. a boxplot) is filled with, while `colour` controls the colour of the outline.
+So, it seems odd that we use colour to control the **filling** of the points in a scatter plot.
+That is because by default, the scatter plot uses a shape (the points) that don't have a filling.
+There are other shapes that have both a filling and a border.
+Compare the following examples:
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point(size = 2, colour = "red", fill = "green", shape = 20)
+```
+
+```{r}
+nerd_red %>% 
+  ggplot(aes(x = age, y = nerd_score)) +
+  geom_point(size = 2, colour = "red", fill = "green", shape = 21)
+```
+
+There are several different shapes that we can use in our scatter plot, and we address them by different numbers using the `shape` argument.
+[Here](http://www.sthda.com/english/wiki/ggplot2-point-shapes) is a list of all available shapes.
+Shapes 21 - 25 respond to `colour` **and** `fill`.
+
+**THIS IS A GITHUB PUSH CHECKPOINT**

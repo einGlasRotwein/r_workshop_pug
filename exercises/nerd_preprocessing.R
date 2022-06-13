@@ -1,7 +1,4 @@
 
-# read in data
-nerd <- read.csv("./data_sets/nerd_data_short.csv", sep = "\t")
-
 # Reduce data to some of the columns
 nerd_red <- 
   nerd %>% 
@@ -12,7 +9,7 @@ nerd_red <-
   nerd_red %>% 
   filter(
     married %in% 1:3,
-    age %in% 0:100,
+    age %in% 18:100,
     nerdy %in% 1:7,
     voted %in% 1:2
   )
@@ -41,8 +38,3 @@ nerd_red <-
     
     voted = ifelse(voted == 1, "yes", "no")
   )
-
-# add row id
-nerd_red <- 
-  nerd_red %>% 
-  rowid_to_column(var = "id")

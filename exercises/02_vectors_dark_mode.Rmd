@@ -1,0 +1,189 @@
+---
+title: "02 Vectors"
+output: 
+  html_document:
+    theme: dark
+    highlight: zenburn
+---
+
+```{css, echo=FALSE}
+/* This code is used to turn the html output into "dark mode" */
+.dark-output {
+background-color: #5a5a5a;
+color: white;
+}
+
+.error-output {
+background-color: #cc9393;
+color: black;
+}
+
+.warning-output {
+background-color: #c0c537;
+color: black;
+}
+
+.message-output {
+background-color: #5a5a5a;
+color: white;
+}
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output", class.warning = "warning-output"
+)
+```
+
+## Vectors 
+
+This is what a "vector" looks like:
+
+```{r}
+c(1, 7, 12, 4, 2)
+```
+
+You can see that this vector contains five numbers.
+Those numbers are separated with commas and wrapped in parentheses - but at the beginning, there is an ominous `c`.
+If you run this code, however, it just shows the numbers next to each other, without the `c()` and without the commas.
+
+Here is another example of a vector:
+
+```{r}
+c(2, 6.1, 9.234, 1.23)
+```
+
+And another one:
+
+```{r}
+c("hello", "cake", "biscuit")
+```
+
+And another one:
+
+```{r}
+c(TRUE, FALSE, FALSE, TRUE)
+```
+
+We see that a vector is a collection of elements, and it can consist of all the data types we previously got to know.
+There is only one rule: You can't mix data types in a vector.
+
+This does not work:
+
+```{r}
+c(10, "biscuit", TRUE)
+```
+
+It **seems** like it worked, but the quotation marks around every element indicate that everything has just been turned into a character!
+
+Look at what happens when we mix integers and logicals [^logical_numbers]:
+
+```{r}
+c(10, FALSE)
+```
+
+[^logical_numbers]: Logicals have a numeric representation: `TRUE` equals 1, and `FALSE` equals 0.
+
+You might also have noticed that in the second vector we looked at (`c(2, 6.1, 9.234, 1.23)`), all numbers were displayed with the same number of decimal places when you ran the code.
+So beware - a vector forces all elements to be of the same data type!
+
+Now for the mysterious `c`.
+It's easy to understand why we wrap our vector in parentheses to define a group of elements, but why does the `c()` have to go in front of it?
+`c()` is actually a function that combines elements (more about functions later).
+In `R`, you need this function to be able to combine elements into a vector.
+This will not work[^run_error]:
+
+```{r error = TRUE}
+(2, 5, 10)
+```
+
+[^run_error]: Note that an Rmarkdown file will not run if a chunk contains an error - unless you explicitly tell it that it's fine and that it is supposed to expect an error here. You can do this by setting the chunk option `error = TRUE` (see at the top of the chunk). If you ever want to purposely include an error in the code, e.g. for educational purposes, this is what you have to use.
+
+In the beginning, you will probably forget about the `c()` a lot, but you'll get used to it soon.
+
+Of course, vectors can be saved into variables, just like we did with single elements before:
+
+```{r}
+my_vector <- c(1, 4, 9, 12) # store vector in a variable
+my_vector # print vector
+```
+
+1.1) Create some vectors. Create one vector with characters, one with numbers, and one with logicals. Save them all into different variables.
+
+1.2) We saw that the `c()` function combines elements into a vector, but it can also combine vectors! Try to combine some of the vectors you previously created using the `c()` function.
+
+### Optional
+
+This isn't the first time you've used a vector. In fact, everything we did in "basics" exercises was about vectors. E.g., `2` is a one-element vector, just like `"hello"`. For one-element vectors, we don't need `c()`, because there isn't anything that needs to be combined.
+We can check whether something is a vector using the function `is.vector()`. It returns `TRUE` when something is a vector.
+This is how we can confirm that single elements are also a (very short) vector.
+We will later get to know data types that are not a vector.
+
+```{r}
+is.vector(c(1, 2, 3))
+is.vector("test")
+is.vector(FALSE)
+```
+
+1.3) Actually, there was a vector in the "basics" exercises that had more than one element (but it didn't use `c()`). Can you find it?
+
+## Mathematical operations
+
+The important thing about vectors is that you can do mathematical operations with them.
+
+2.1) Can you figure out what happens here?
+
+```{r}
+c(1, 2, 5) + 1
+```
+
+What do you expect the following code will produce?
+
+2.2) `c(1, 2, 5) - 1`
+
+2.3) `c(1, 2, 5) * 2`
+
+2.4) `c(1, 2, 5) / 2`
+
+Vectors are one of the most important concepts of `R`.
+Sure, other programming languages have similar concepts, but in `R`, vectors are really powerful.
+A lot of things are "vectorised", that means that functions work on entire vectors, or that clever combinations of vectors can be used to produce the desired results.
+
+As usual, it is easier to look at it than to describe it:
+
+```{r}
+c(2, 4, 6) + c(1, 0, 2)
+```
+
+Now, you can infer what these lines of code will do:
+
+2.5) `c(2, 4, 6) - c(1, 0, 1)`
+
+2.6) `c(2, 4, 6) * c(1, 0, 1)`
+
+2.7) `c(2, 4, 6) / c(1, 2, 1)`
+
+However, things get *really* wild when we use vectors that don't have the same length.
+
+Can you see what happened here?
+
+```{r}
+c(2, 4, 6, 5, 0, 0) + c(1, 10)
+```
+
+Let's look at this concept some more.
+
+2.8) Can you multiply **every other** element of `c(2, 4, 6, 4, 9, 12)` with 2? (I.e. only 4, 4 and 12 should be multiplied with 2 - the other elements should be left unchanged.)
+
+### Optional
+
+2.9) Given `c(2, 4, 6, 4, 9, 12)`, subtract 1 from the first element, 2 from the second, 3 from the third, then again 1 from the fourth, 2 from the second and so on.
+
+2.10) Run the following code cell. What happened here? Is that bad?
+
+```{r}
+c(2, 4, 6, 4, 9, 12) + c(1, 2, 3, 4)
+```
+
+**THIS IS A GIT PUSH CHECKPOINT!**
