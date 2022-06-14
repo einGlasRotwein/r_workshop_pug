@@ -51,7 +51,7 @@ It **seems** like it worked, but the quotation marks around every element indica
 Look at what happens when we mix integers and logicals [^logical_numbers]:
 
 ```{r}
-c(10, FALSE)
+c(10, TRUE, FALSE)
 ```
 
 [^logical_numbers]: Logicals have a numeric representation: `TRUE` equals 1, and `FALSE` equals 0.
@@ -65,7 +65,7 @@ It's easy to understand why we wrap our vector in parentheses to define a group 
 In `R`, you need this function to be able to combine elements into a vector.
 This will not work[^run_error]:
 
-```{r error = TRUE}
+```{r error=TRUE}
 (2, 5, 10)
 ```
 
@@ -82,7 +82,18 @@ my_vector # print vector
 
 1.1) Create some vectors. Create one vector with characters, one with numbers, and one with logicals. Save them all into different variables.
 
+```{r}
+coffee_break <- c("coffee", "cake", "biscuits")
+favourite_numbers <- c(12, 3, 42, 666)
+some_decimals <- c(1.11, 2.22, 3.33)
+best_animal <- "owl"
+```
+
 1.2) We saw that the `c()` function combines elements into a vector, but it can also combine vectors! Try to combine some of the vectors you previously created using the `c()` function.
+
+```{r}
+c(coffee_break, best_animal)
+```
 
 ### Optional
 
@@ -113,9 +124,21 @@ What do you expect the following code will produce?
 
 2.2) `c(1, 2, 5) - 1`
 
+```{r}
+c(1, 2, 5) - 1
+```
+
 2.3) `c(1, 2, 5) * 2`
 
+```{r}
+c(1, 2, 5) * 2
+```
+
 2.4) `c(1, 2, 5) / 2`
+
+```{r}
+c(1, 2, 5) / 2
+```
 
 Vectors are one of the most important concepts of `R`.
 Sure, other programming languages have similar concepts, but in `R`, vectors are really powerful.
@@ -131,21 +154,38 @@ Now, you can infer what these lines of code will do:
 
 2.5) `c(2, 4, 6) - c(1, 0, 1)`
 
+```{r}
+c(2, 4, 6) - c(1, 0, 1)
+```
+
 2.6) `c(2, 4, 6) * c(1, 0, 1)`
 
+```{r}
+c(2, 4, 6) * c(1, 0, 1)
+```
+
 2.7) `c(2, 4, 6) / c(1, 2, 1)`
+
+```{r}
+c(2, 4, 6) / c(1, 2, 1)
+```
 
 However, things get *really* wild when we use vectors that don't have the same length.
 
 Can you see what happened here?
 
 ```{r}
-c(2, 4, 6, 5, 0, 0) + c(1, 10)
+c(2, 4, 6, 5, 0, 0) + c(1, 60)
 ```
 
 Let's look at this concept some more.
 
 2.8) Can you multiply **every other** element of `c(2, 4, 6, 4, 9, 12)` with 2? (I.e. only 4, 4 and 12 should be multiplied with 2 - the other elements should be left unchanged.)
+
+```{r}
+c(2, 4, 6, 4, 9, 12) * c(1, 2, 1, 2, 1, 2)
+c(2, 4, 6, 4, 9, 12) * c(1, 2)
+```
 
 ### Optional
 
