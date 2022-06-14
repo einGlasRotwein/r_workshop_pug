@@ -35,10 +35,10 @@ This creates an error when you try to run it.
 
 # So, commenting out a line prevents it from being run. If you want to comment
 # out larger chunks of text (or code), highlight everything  you want to comment
-# out, and hit ctrl + shift + c. The same shortcut uncomments multiple lines at 
+# out, and hit ctrl + shift + c. The same shortcut uncomments multiple lines at
 # once.
-# Usually, there won't be as many comments in a script as in this one, but 
-# during this workshop, I will use comments a lot to explain things. If you want 
+# Usually, there won't be as many comments in a script as in this one, but
+# during this workshop, I will use comments a lot to explain things. If you want
 # to make some notes during the course, you should use comments, too!
 
 ## 2 DATA TYPES ----------------------------------------------------------------
@@ -84,15 +84,26 @@ typeof(3.2)
 # Let's take a look at how we can "produce" logicals.
 
 # 3.1) Run 12 > 3.
+12 > 3
 
 # 3.1) Run 12 == 12. What does it do? What happens if you try 12 = 12 instead?
+12 == 12
+12 = 12
 
 # 3.2) What is "cat" != "dog"?
+"cat" != "dog"
+!12 == 12
 
 # 3.3) Try out: FALSE & FALSE, then FALSE & TRUE and finally, TRUE & TRUE. 
 #      What happens?
+FALSE & FALSE
+FALSE & TRUE
+TRUE & TRUE
 
 # 3.4) Try the same as above, but replace & with | (alt gr + <). What does | do?
+FALSE | FALSE
+FALSE | TRUE
+TRUE | TRUE
 
 ## OPTIONAL --------------------------------------------------------------------
 
@@ -133,6 +144,8 @@ single_number <- 7
 single_number <- 2
 
 # 4.3) Assign something to a variable with a name of your choice.
+this_is_a_string <- "hello world"
+a_sequence <- 1:5
 
 # 4.4) Examine what happens here. What is the result? What do you think will 
 #      single_number contain now? 2 or 6? Run single_number in the console to 
