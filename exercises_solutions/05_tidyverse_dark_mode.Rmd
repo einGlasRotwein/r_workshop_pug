@@ -36,7 +36,7 @@ In case you still have stuff in your environment from the previous exercises, th
 ## The tidyverse
 
 For the next steps, I would like to introduce you to the `tidyverse`.
-The  `tidyverse` is an `R` package - a collection of `R` packages, in fact, that come with many handy functions for data wrangling and visualisation.
+The `tidyverse` is an `R` package - a collection of `R` packages, in fact, that come with many handy functions for data wrangling and visualisation.
 It is perfectly normal to use various `R` packages for additional functions and you will "collect" a lot of them over time.
 
 The `tidyverse` is a little bit different, because it has its own "coding style" which varies a bit from what we've seen so far.
@@ -122,11 +122,26 @@ example_vector <- c(3, -2, 5, 99, -132.5)
 as.character(mean(abs(example_vector)))
 ```
 
+```{r}
+example_vector %>% 
+  abs() %>% 
+  mean() %>% 
+  as.character()
+```
+
 1.2) Let's make things a bit trickier with additional arguments.
 
 ```{r}
 example_vector <- c(3, -2, 5, NA, 99, -132.5, NA)
 as.character(mean(head(abs(example_vector), 4), na.rm = TRUE))
+```
+
+```{r}
+example_vector %>% 
+  abs() %>% 
+  head(4) %>% 
+  mean(na.rm = TRUE) %>% 
+  as.character()
 ```
 
 ### Optional
