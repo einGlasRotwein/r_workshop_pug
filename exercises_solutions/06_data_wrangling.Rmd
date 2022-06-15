@@ -2,11 +2,33 @@
 title: "06 Data Wrangling"
 output: 
   html_document:
+    theme: dark
+    highlight: zenburn
     df_print: paged
 ---
 
+```{css, echo=FALSE}
+.dark-output {
+background-color: #5a5a5a;
+color: white;
+}
+
+.error-output {
+background-color: #cc9393;
+color: black;
+}
+
+.message-output {
+background-color: #5a5a5a;
+color: white;
+}
+```
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE, class.output = "dark-output", class.error = "error-output",
+  class.message = "message-output"
+)
 ```
 
 ```{r}
@@ -66,36 +88,97 @@ Don't forget that `everything` needs to be used with parentheses!
 2.1) I want to continue working with a reduced version of our data that only contains the columns `age`, `gender`, `married`, `voted`, `nerdy` and also `Q1` - `Q26`.
 Select these columns and save this reduced data frame in a variable called `nerd_red` ("nerd reduced").
 
+```{r}
+nerd_red <- 
+  nerd %>% 
+  select(age, gender, married, voted, nerdy, Q1:Q26)
+```
+
 `select()` gets you a subset of the columns in your data frame, but often, you want to filter out specific rows in your data that fulfill certain criteria.
 This can be achieved with the `filter()` function.
 Let's for example only filter out the female participants, which are coded as `2` in the `gender` column.
 
 ```{r}
-
+nerd_red %>% 
+  filter(gender == 2)
 ```
 
 With `filter()`, you can use all of the logical comparisons we've seen before.
 Here, we filter for women below the age of 30.
 
 ```{r}
-
+nerd_red %>% 
+  filter(gender == 2 & age < 30)
 ```
 
 Interestingly, the logical `&` and a simple comma are equivalent in `filter()`.
 
 ```{r}
-
+nerd_red %>% 
+  filter(gender == 2, age < 30)
 ```
 
 Practice filtering on the `nerd_red` data. Filter ...
 
 2.2) ... anyone who is either 22 **or** 26 years old. 
 
+```{r}
+nerd_red %>% 
+  filter(age == 22 | age == 26)
+```
+
 2.3) ... anyone who is either a man (`gender == 1`) **or** older than 30.
+
+```{r}
+nerd_red %>% 
+  filter(gender == 1 | age > 30)
+```
 
 2.4) ... anyone who is non-binary (`gender == 3`) and who is currently married or has previously been (1 = Never married, 2 = Currently married, 3 = Previously married).
 
+```{r}
+nerd_red %>% 
+  filter(gender == 3 & married != 1)
+```
+
+```{r}
+nerd_red %>% 
+  filter(gender == 3 & married %in% 2:3)
+```
+
 2.5) The column `nerdy` contains the agreement to the statement "I see myself as nerdy" (1 = disagree strongly - 7 = agree strongly). How many women have the highest self-reported nerdiness? How many have the lowest self-reported nerdiness? What about the men? Solve this task using filters.
+
+```{r}
+nerd_red %>% 
+  filter(gender == 2, nerdy == 7) %>% 
+  nrow()
+```
+
+```{r}
+nerd_red %>% 
+  filter(gender == 2, nerdy == 1) %>% 
+  nrow()
+```
+
+```{r}
+nerd_red %>% 
+  filter(gender == 1, nerdy == 7) %>% 
+  nrow()
+```
+
+```{r}
+nerd_red %>% 
+  filter(gender == 1, nerdy == 1) %>% 
+  nrow()
+```
+
+Sidenote: Larger or equal works like this:
+
+```{r}
+nerd %>% 
+  filter(age >= 20)
+```
+
 
 ## Summaries
 
@@ -109,15 +192,34 @@ nerd_red %>%
 
 3.1) How many people of each gender are included in the data? Use the codebook to find out what the values represent.
 
+```{r}
+nerd_red %>% 
+  count(gender)
+```
+
 3.2) How many people per marital status do we have? Use the codebook for help.
 
+```{r}
+nerd_red %>% 
+  count(married)
+```
+
 3.3) How many people voted in the last election, how many people didn't? Use the codebook for help.
+
+```{r}
+nerd_red %>% 
+  count(voted)
+```
 
 ## Data cleaning 
 
 Seems like there are few implausible values in our data - and these are not the only columns that are affected.
 
 4.1) What is wrong with the `age` column?
+
+```{r}
+summary(nerd_red$age)
+```
 
 We should filter out all participants whose data are implausible.[^exclusion]
 
@@ -136,7 +238,29 @@ Here are the issues we can identify in our `nerd` data:
 
 4.2) Filter the `nerd_red` so it only contains the data with valid values. (For age, a range from 18 - 100 might be good.) Overwrite `nerd_red` with the filtered version.
 
+```{r}
+nerd_red <-
+  nerd_red %>%
+  filter(
+    age >= 18,
+    age <= 100,
+    married %in% 1:3,
+    voted %in% 1:2,
+    nerdy %in% 1:7
+  )
+```
+
 4.3) Confirm that the filtering worked by running checks on `nerdy`, `married`, `voted` and `age`.
+
+```{r}
+summary(nerd_red$age)
+```
+
+```{r}
+table(nerd_red$voted)
+table(nerd_red$married)
+table(nerd_red$nerdy)
+```
 
 ## Mutating columns
 
@@ -189,7 +313,11 @@ ifelse(
 5.1) Recode `voted`. Turn 1 into "yes" and 2 into "no". Use `ifelse()` inside of `mutate()` to overwrite the `voted` column so it is **permanently** added to `nerd_red`.
 
 ```{r}
-
+nerd_red <- 
+  nerd_red %>% 
+  mutate(
+    voted = ifelse(voted == 1, "yes", "no")
+  )
 ```
 
 Note that `ifelse()` only works when we have two conditions: One where the logical comparison is `TRUE` and one where it's `FALSE`.
@@ -230,7 +358,7 @@ If we only had put in values for the cases 1 and 2 (so, male and female), every 
 ```{r}
 case_when(
   gender_example == 1 ~ "male",
-  gender_example == 2 ~ "female",
+  gender_example == 2 ~ "female"
 )
 ```
 
@@ -258,6 +386,11 @@ Adding two columns together is pretty straightforward - you probably already kno
 
 5.2) Create a column called `sum_Q1_Q2` that is the sum of `Q1` and `Q2`. (Don't overwrite `nerd_red`.)
 
+```{r}
+nerd_red %>% 
+  mutate(sum_Q1_Q2 = Q1 + Q2)
+```
+
 Unfortunately, calculating the sum score across the entire questionnaire from `Q1` - `Q26` is a little bit more complicated, at least if we don't want to type **all** of the column names from `Q1` - `Q26`.
 
 ```{r}
@@ -265,8 +398,14 @@ nerd_red %>%
   rowwise() %>% 
   mutate(
     nerd_score = sum(across(Q1:Q26))
-    ) %>% 
+  ) %>% 
   ungroup()
+```
+
+```{r}
+# The base R way
+nerd_red$nerd_score <- 
+  rowSums(nerd_red[paste0("Q", 1:26)])
 ```
 
 First, let's take a look at what's going on inside of the `mutate()` function.
