@@ -1,0 +1,281 @@
+---
+title: "08 Simple Stats"
+output: 
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+# Read in data and preprocess it
+nerd <- read.csv("exercises_solutions/data_sets/nerd_data_short.csv", sep = "\t")
+source("exercises_solutions/nerd_preprocessing.R")
+
+# Should the paths above return an error for you, try going to
+# Tools -> Global Options -> R Markdown
+# and set "evaluate chunks in directory:" to "Project"
+```
+
+Now that we've visualised our data, it's time to run some statistical tests.
+Before we do that, I would like to start with some summary statistics.
+One reason is that you will need those a lot, and the other is that we can learn some more "tidy" grouping tricks.
+
+## Descriptive statistics
+
+The `summarise()` provides summaries of our data within the `tidyverse`.
+Don't confuse it with the `summary()` function!
+Will `summary()` gives you a bunch of stats for your data (mean, median, quartiles etc.), `summarise()` lets you pick a function you want to summarise your data with.
+For example, we could get the mean `age` like this:
+
+```{r}
+nerd_red %>% 
+  summarise(mean_age = mean(age))
+```
+
+Within `summarise()`, we call the `mean()` on the `age` column.
+On the left side of the `=`, we provide a name for the new column that's created.
+It doesn't seem to make a lot of sense that an entire column is created, because the output is just a single value.
+Why is it in a data frame?
+
+The reason is that `summarise()` is rarely used to calculate a single value.
+Together with the function `group_by()`, it creates summaries for different subgroups of the data.
+Here, we calculate the age for each category in the `gender` column:
+
+```{r}
+nerd_red %>% 
+  group_by(gender) %>% 
+  summarise(mean_age = mean(age))
+```
+
+Now it makes sense to have a data frame as output.
+Note that the line with `summarise()` didn't change in comparison to our previous example - all we added was the line `group_by(gender)` before calling `summarise()`.
+`group_by()` can be used to apply any function to subgroups of the data, i.e. each function will work on each group separately (instead of on the whole data).
+We won't go into all of its applications in this chapter, but it's a really powerful function you should keep in mind for the future.
+
+We can easily group our data by several columns:
+
+```{r}
+nerd_red %>% 
+  group_by(gender, voted) %>% 
+  summarise(mean_age = mean(age))
+```
+
+Note that `R` informs you:
+"`summarise()` has grouped output by 'gender'. You can override using the `.groups` argument."
+By default, `summarise()` will "drop" the last group you entered (here: `voted`) - if there are any remaining higher-level groups, the output will still be grouped by these variables (here: `gender`).
+Keep that in mind should you want to do any further calculations on these data, because grouping will affect how functions work on your data frame.[^tibble]
+
+[^tibble]: Technically, it's not a data frame, but a tibble, which is the `tidyverse`'s own data structure. Except for very few exceptions, it is identical to a data frame. Most differences are a matter of appearance: tibbles are e.g. printed to the console in a nicer way than data frames.
+
+If you want to get rid of any groups in your data, run `ungroup()`:
+
+```{r}
+nerd_red %>% 
+  group_by(gender, voted) %>% 
+  summarise(mean_age = mean(age)) %>% 
+  ungroup()
+```
+
+Alternatively, you can tell `summarise()` what to do with the groups after its done, as the message `R` gave us suggested:
+
+```{r}
+nerd_red %>% 
+  group_by(gender, voted) %>% 
+  summarise(
+    mean_age = mean(age),
+    .groups = "drop"
+  )
+```
+
+Note that the `.groups` argument needs to start with a `.`, otherwise, so `summarise` knows it's not just another column you want to create in your data:
+
+```{r}
+nerd_red %>% 
+  group_by(gender, voted) %>% 
+  summarise(
+    mean_age = mean(age),
+    groups = "drop"
+  )
+```
+
+That means that you can create multiple columns at once in `summarise()`:
+
+```{r}
+nerd_red %>% 
+  group_by(gender, voted) %>% 
+  summarise(
+    mean_age = mean(age),
+    sd_age = sd(age),
+    .groups = "drop"
+  )
+```
+
+1.1) Get the mean and standard deviation of the `nerd_score`, grouped by whether people voted or not.
+
+1.2) Get the **median** of `nerdy` and `age`, grouped by marital status and gender.
+
+1.3) Use the same code from 1.1), but round the mean and standard deviation to two decimal places.
+
+### Optional
+
+When using `summary()` on multiple columns, we can use `across()`, just like we did to calculate the sum across multiple columns.
+Here, we calculate the mean across several columns at once:
+
+```{r}
+nerd_red %>% 
+  group_by(married) %>% 
+  summarise(
+    across(
+      c(age, nerdy, nerd_score), 
+      mean
+    )
+  )
+```
+
+You can also control the name of the columns using the `.names` argument.
+`{.col}` is just a place holder for the original column name.
+
+```{r}
+nerd_red %>% 
+  group_by(married) %>% 
+  summarise(
+    across(
+      c(age, nerdy, nerd_score), 
+      mean,
+      .names = "mean_{.col}"
+    )
+  )
+```
+
+Likewise, you can run several functions on multiple columns at once:
+
+```{r}
+nerd_red %>% 
+  group_by(married) %>% 
+  summarise(
+    across(
+      c(age, nerdy, nerd_score), 
+      list(mean = mean, sd = sd)
+    )
+  )
+```
+
+If you want to know more about this powerful function, check out its [documentation](https://dplyr.tidyverse.org/reference/across.html).
+
+## t-tests
+
+Let's start with a classic t-test.[^fishing]
+
+[^fishing]: By the way, I am sorry for this wild data fishing and multiple-testing expedition. I want to emphasise this is merely a coding exercise, not an example for good analysis practice.
+
+For this part, I want to leave the `tidyverse` for little bit.
+The base `R` functions for statistical tests are not pipe-friendly, and even though there are packages that offer pipe-friendly versions, those also have their own downsides.
+(They e.g. require transforming your data into the "long format", which we haven't talked about yet.)
+
+Let's check for gender differences in the nerd score first.
+Since a t-test is a comparison between **two** groups, we filter the data again so we only have the men and women.
+Since we will be using this data some more, we save it in a separate variable.
+
+2.1) Create a filtered data set that only contains the data of the `"male"` and `"female"` participants. Save it in a variable with a meaningful name.
+
+`R`'s native t-test function is `t.test()`.
+We have several ways of entering our data into our t-test, and one of them is the formula notation.
+First, we define what the outcome variable is: `nerd_score`.
+After a `~`, we enter our grouping variable, `gender`, in this case.
+So we calculate a t-test on the nerd score, grouped by gender.
+In other words, we compare the `nerd_score` between `"male"` and `"female"` participants.
+Since we're not within the `tidyverse`, we have to explicitly refer to the data source for each column.
+Which means we're back to our good old `$`.
+
+```{r}
+
+```
+
+As you can see, the results are a little bit messy - but we get a lot of information.
+
+You may be wondering why the degrees of freedom are not an even number.
+That is because within the `R` community, the default t-test option is the Welch's t-test.
+Unlike the standard t-test, it does not assume equal variances (in which case the pooled variance is used to estimate the variance).
+In the Welch's t-test, the Welch (or Satterthwaite) approximation to the degrees of freedom is used, hence the "weird" degrees of freedom.
+If you don't want that, you can get a "SPSS-like" t-test by setting `var.equal = TRUE`:
+
+```{r}
+# run the same t-test with var.equal = TRUE
+t.test(nerd_fm$nerd_score ~ nerd_fm$gender, var.equal = TRUE)
+```
+
+In most cases, this won't drastically change the interpretation of our data.
+
+This was a t-test for two independent groups.
+The same function can also calculate a paired t-test for dependent groups.
+For example, if we wanted to test whether people score higher on item `Q1` than on `Q2`, that is a within-subject comparison.
+But how do we do that?
+We don't have a grouping variable - `Q1` and `Q2` are separate columns.
+Luckily, the base `R` t-test also accepts two separate vectors as argument.
+For a paired t-test, we just add the argument `paired = TRUE`.
+
+```{r}
+
+```
+
+2.2) An independent t-test also works with two vectors as input - you don't have to use the formula notation. Run the independent t-test between men and women again. But this time, use two separate vectors, i.e. one vector for the women and one for the men. Use indexing (`[]`) and logical comparisons - take a look at the exercises with vectors for inspiration.
+
+```{r}
+t.test(nerd_fm$nerd_score[nerd_fm$gender == "male"],
+       nerd_fm$nerd_score[nerd_fm$gender == "female"])
+```
+
+2.3) Compare the nerd score between people who voted and people who didn't vote.
+
+2.4) Is there a significant difference between items `Q1` and `Q10`?
+
+Of course, we cn also do a one-sample t-test.
+For example, we could check whether people score significantly higher than the middle option on the nerd questionnaire.
+If you always pick the middle option (4) across the 26 items of the questionnaire, you'd score 104 points in total.
+Our hypothesis is directed: That the participants' score is greater than what you would get if you always choose the middle option - so we use a one-sided t-test.
+Using the argument `alternative`, we can specify whether the t-test should be `"two.sided"` (which is the default), or whether we have a directed hypothesis (`"greater"`, or `"less"`).
+With the argument `mu`, we can specify which value to test against.
+
+```{r}
+t.test(nerd_fm$nerd_score, mu = 104, alternative = "greater")
+```
+
+The mean score of our participants is lower than 104, so it's not surprising that it is not significantly higher than that.
+
+2.5) Test the hypothesis that all women in the sample are significantly younger than 30.
+
+## Extracting the relevant values
+
+The output of a t-test is quite a lot to take in - and we certainly don't want to copy-paste our p-values from the console.
+Luckily, we can extract the individual values form our t-test them using the dollar operator.
+
+3.1) Run the t-test from above that compared the nerd score between men and women. Save it into a variable. Then type the variable name with the dollar operator at the end of it and explore the autocomplete options RStudio provides you. What information can you extract?
+
+## Effect sizes
+
+You probably want to report effect sizes along with your t-test.
+For this, we need an additional package, which is conveniently named `effectsize`.
+
+3.1) Install and load the package `effectsize`.
+
+3.2) The function `cohens_d()` from the package follows exactly the same logic as the `t.test()` function. Run the corresponding effect size for a dependend and an independent t-test from before.
+
+3.3) Extract the effect size and save the number into a variable.
+
+## Correlations
+
+Correlations follow a very similar logic as the functions we saw above.
+To test a correlation, we use the function `cor.test()`.
+
+4.1) I bet you are able to use `cor.test()` without me having to tell you how. Test whether there is a correlation between age and nerd score. (Use `?cor.test` or Google if necessary.)
+
+4.3) Test the correlation between self-reported nerdiness (`nerdy`) and nerd score.
+
+**THIS IS A GITHUB PUSH CHECKPOINT**
