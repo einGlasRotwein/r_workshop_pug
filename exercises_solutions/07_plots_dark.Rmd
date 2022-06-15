@@ -2,33 +2,11 @@
 title: "07 Plots"
 output: 
   html_document:
-    theme: dark
-    highlight: zenburn
     df_print: paged
 ---
 
-```{css, echo=FALSE}
-.dark-output {
-background-color: #5a5a5a;
-color: white;
-}
-
-.error-output {
-background-color: #cc9393;
-color: black;
-}
-
-.message-output {
-background-color: #5a5a5a;
-color: white;
-}
-```
-
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE, class.output = "dark-output", class.error = "error-output",
-  class.message = "message-output", fig.align = "center"
-)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Plotting is probably one of the most fun things to do in `R`, because you get a lot of "visual feedback" - if your code is correct, you are rewarded with a nice plot.
